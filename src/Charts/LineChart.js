@@ -39,7 +39,7 @@ export default function LineChart(props) {
       .append("text")
         .attr("class", "y_label_vm")
         .attr("text-anchor", "end")
-        .attr("y", 0)
+        .attr("y", - (props.margin.left))
         .attr("x", - (innerHeight/2))
         .attr("dy", "1.5em")
         .attr("transform", "rotate(-90)");
@@ -49,18 +49,19 @@ export default function LineChart(props) {
     title_vm.text("Voltage magnitude")
 
     // organize data
-    data_vm = []
-    // props.data.buses.forEach((d, i) => {
-    //     d["phases"].forEach((d2, i2) => {
-    //         data_vm.push(d.vm[d2.toString()].map((d3, i3) =>({
-    //             "time": props.dateParser(props.data['time'][i3]),
-    //             "val": +d3 / (+d.kV_base * 1000),
-    //             "phase": d2.toString(),
-    //             "bus": d.uid,
-    //             "uid": d.uid + "." + d2.toString(),
-    //         })));
-    //     })
-    // })
+    const data_vm = []
+
+    props.data.bus.forEach((d, i) => {
+        d["phases"].forEach((d2, i2) => {
+            data_vm.push(d.vm[d2.toString()].map((d3, i3) =>({
+                "time": props.dateParser(props.data['time'][i3]),
+                "val": +d3 / (+d.kV_base * 1000),
+                "phase": d2.toString(),
+                "bus": d.uid,
+                "uid": d.uid + "." + d2.toString(),
+            })));
+        })
+    })
 
     // // push lower limit 
     // const vm_lb = 1 - (isNaN(props.data["ansi"]) ? 0.05 : +props.data["ansi"])
@@ -82,45 +83,45 @@ export default function LineChart(props) {
     //         "phase": "4",
     //         "uid": "ub" + "." + "0",
     //     });
-    // // vertical scale 
-    // y_vm.domain([vm_lb-0.01, vm_ub+0.01]);
-    // x_vm.domain(props.time_extent);   
 
-    // const sumstat = d3.group(data_vm.flat(), d => d.uid);
+    // vertical scale 
+    y_vm.domain([0.94, 1.06]);
+    x_vm.domain(props.time_extent);   
 
-    // // update axis text
-    // xLabel_vm.text("Time [h]")
+    const sumstat = d3.group(data_vm.flat(), d => d.uid);
 
-    //  // Draw the line
-    // LineChartContainer
-    //   .selectAll(".line")
-    //     .data(sumstat)
-    //     .join("path")
-    //       .attr("fill", "none")
-    //       .attr("stroke", d => props.colorScale(d[1][0].phase)) // first element of sumstat is the phase
-    //       .attr("stroke-width", 1.5)
-    //       .attr("d", function(d){
-    //       return d3.line()
-    //         .x(d => x_vm(d.time))
-    //         .y(d => y_vm(+d.val))
-    //         (d[1])
-    //       })   
+    // update axis text
+    xLabel_vm.text("Time [h]")
 
-    // // Axis
-    // LineChartContainer
-    //   .append("g")
-    //     .attr("class", "xaxis")
-    //     .attr('transform', `translate(0, ${innerHeight})`)
-    //     .call(d3.axisBottom(x_vm))
-    //     .selectAll("text")
-    //     .attr("transform", "translate(-10,0)rotate(-45)")
-    //     .style("text-anchor", "end");
+     // Draw the line
+    LineChartContainer
+      .selectAll(".line")
+        .data(sumstat)
+        .join("path")
+          .attr("fill", "none")
+          .attr("stroke", d => props.colorScale(d[1][0].phase)) // first element of sumstat is the phase
+          .attr("stroke-width", 1.5)
+          .attr("d", function(d){
+          return d3.line()
+            .x(d => x_vm(d.time))
+            .y(d => y_vm(+d.val))
+            (d[1])
+          })   
 
-    // LineChartContainer
-    //   .append("g")
-    //     .attr("class", "yaxis")
-    //     .call(d3.axisLeft(y_vm));
-    // })
+    // Axis
+    LineChartContainer
+      .append("g")
+        .attr("class", "xaxis")
+        .attr('transform', `translate(0, ${innerHeight})`)
+        .call(d3.axisBottom(x_vm))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end");
+
+    LineChartContainer
+      .append("g")
+        .attr("class", "yaxis")
+        .call(d3.axisLeft(y_vm));
   }, [innerWidth, innerHeight, props]);
 
   return(

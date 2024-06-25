@@ -20,14 +20,15 @@ export default function Charts(props) {
             margin={margin} 
             data={props.data} 
             colorScale={colorScale}
-            dataParser={dateParser}
           />
         </div>
         <div className='two'>
           <LineChart 
             margin={margin} 
             data={props.data} 
+            colorScale={colorScale}
             time_extent={time_extent}
+            dateParser={dateParser}
           />
         </div>
       </div>
