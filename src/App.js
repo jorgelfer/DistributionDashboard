@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import * as d3 from 'd3';
-import './App.css';
+import Charts from './Charts/Charts';
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
    useEffect(() => {
-    const dataURL = "https://github.com/jorgelfer/IEEETestCases/blob/main/case3/qsts.json";
+    const dataURL = "https://jorgelfer.github.io/IEEETestCases/123Bus/qsts.json";
     
     let mounted = true;
     d3.json(dataURL).then(data => {
@@ -26,7 +25,7 @@ function App() {
   return (
     <div className="container">
       {loading && <div className="loading">Loading...</div>}
-      {/* {!loading && <Charts data={data} />} */}
+      {!loading && <Charts data={data} />}
     </div>
   );
 }
