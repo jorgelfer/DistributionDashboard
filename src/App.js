@@ -11,7 +11,7 @@ function App() {
     
     let mounted = true;
     d3.json(dataURL).then(data => {
-      console.log("data", data);
+      // console.log("data", data);
 
       if (mounted) {
         setData(data);
