@@ -10,16 +10,53 @@ export default function LineChart(props) {
   const innerWidth = width - props.margin.left - props.margin.right;
   const innerHeight = height - props.margin.top - props.margin.bottom;
 
+  // organize data
+  const data_vm = []
+  props.data.bus.forEach((d, i) => {
+      d["phases"].forEach((d2, i2) => {
+          data_vm.push(d.vm[d2.toString()].map((d3, i3) =>({
+              "time": props.dateParser(props.data['time'][i3]),
+              "val": +d3 / (+d.kV_base * 1000),
+              "phase": d2.toString(),
+              "bus": d.uid,
+              "uid": d.uid + "." + d2.toString(),
+          })));
+      })
+  })
+  // push lower limit 
+  const vm_lb = 1 - (isNaN(props.data["ansi"]) ? 0.05 : +props.data["ansi"])
+  props.data["time"].forEach((d, i) => {
+      data_vm.push({
+          "time": props.dateParser(d),
+          "val":  vm_lb,
+          "phase": "0",
+          "uid": "lb" + "." + "0",
+      });
+  })
+  // push upper limit 
+  const vm_ub = 1 + (isNaN(props.data["ansi"]) ? 0.05 : +props.data["ansi"])
+  props.data["time"].forEach((d, i) => {
+      data_vm.push({
+          "time": props.dateParser(d),
+          "val": vm_ub,
+          "phase": "4",
+          "uid": "ub" + "." + "0",
+      });
+  })
+  const sumstat = d3.group(data_vm.flat(), d => d.uid);
+
   const LineChartRef = useRef();
   useEffect(() => {
     const LineChartContainer = d3.select(LineChartRef.current);
 
     // scales 
     const x_vm = d3.scaleTime()   
-        .range([0, innerWidth])
+      .domain(props.time_extent)   
+      .range([0, innerWidth]);
 
     const y_vm = d3.scaleLinear()
-        .range([innerHeight, 0])
+      .domain([0.94, 1.06])
+      .range([innerHeight, 0]);
 
     // vm line chart axis text
     const title_vm = LineChartContainer
@@ -48,47 +85,6 @@ export default function LineChart(props) {
     yLabel_vm.text("Voltage [p.u.]")
     title_vm.text("Voltage magnitude")
 
-    // organize data
-    const data_vm = []
-
-    props.data.bus.forEach((d, i) => {
-        d["phases"].forEach((d2, i2) => {
-            data_vm.push(d.vm[d2.toString()].map((d3, i3) =>({
-                "time": props.dateParser(props.data['time'][i3]),
-                "val": +d3 / (+d.kV_base * 1000),
-                "phase": d2.toString(),
-                "bus": d.uid,
-                "uid": d.uid + "." + d2.toString(),
-            })));
-        })
-    })
-
-    // // push lower limit 
-    // const vm_lb = 1 - (isNaN(props.data["ansi"]) ? 0.05 : +props.data["ansi"])
-    // props.data["time"].forEach((d, i) => {
-    //     data_vm.push({
-    //         "time": props.dateParser(d),
-    //         "val":  vm_lb,
-    //         "phase": "0",
-    //         "uid": "lb" + "." + "0",
-    //     });
-    // })
-
-    // // push upper limit 
-    // const vm_ub = 1 + (isNaN(props.data["ansi"]) ? 0.05 : +props.data["ansi"])
-    // props.data["time"].forEach((d, i) => {
-    //     data_vm.push({
-    //         "time": props.dateParser(d),
-    //         "val": vm_ub,
-    //         "phase": "4",
-    //         "uid": "ub" + "." + "0",
-    //     });
-
-    // vertical scale 
-    y_vm.domain([0.94, 1.06]);
-    x_vm.domain(props.time_extent);   
-
-    const sumstat = d3.group(data_vm.flat(), d => d.uid);
 
     // update axis text
     xLabel_vm.text("Time [h]")
@@ -122,7 +118,7 @@ export default function LineChart(props) {
       .append("g")
         .attr("class", "yaxis")
         .call(d3.axisLeft(y_vm));
-  }, [innerWidth, innerHeight, props]);
+  }, [innerWidth, innerHeight, sumstat, props]);
 
   return(
     <Card>
