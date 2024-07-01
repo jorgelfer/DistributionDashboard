@@ -82,11 +82,8 @@ export default function LineChart(props) {
         .attr("transform", "rotate(-90)");
 
     // update axis text
-    yLabel_vm.text("Voltage [p.u.]")
     title_vm.text("Voltage magnitude")
-
-
-    // update axis text
+    yLabel_vm.text("Voltage [p.u.]")
     xLabel_vm.text("Time [h]")
 
      // Draw the line
