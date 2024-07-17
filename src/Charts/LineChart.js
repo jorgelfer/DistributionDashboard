@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 
 import ChartContainer from '../ChartComponents/ChartContainer';
-import Card from '../UI/Card';
+import Card from '../UI/Card/Card';
 
 export default function LineChart(props) {
   const width = 700;

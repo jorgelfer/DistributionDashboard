@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 
-import Card from '../UI/Card';
+import Card from '../UI/Card/Card';
 import ChartContainer from '../ChartComponents/ChartContainer';
 
 export default function NetworkGraph(props) {
