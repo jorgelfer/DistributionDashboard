@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 
 import LineChart from './LineChart';
 import NetworkGraph from './NetworkGraph';
+import Header from '../UI/Header';
 
 export default function Charts(props) {
   const margin = {top: 30, right: 10, bottom: 50, left: 60};
@@ -13,6 +14,9 @@ export default function Charts(props) {
 
   return (
     <>
+      <div className="main">
+        <Header />
+      </div>
       <h1>Distribution Dashboard</h1>
       <div className='wrapper'>
         <div className='one'>
