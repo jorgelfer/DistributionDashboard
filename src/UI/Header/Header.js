@@ -20,7 +20,9 @@ export default function Header() {
   const [selectedValue, setSelectedValue] = useState('vm');
 
   function handleClick(selectedButton) {
-    setSelectedValue(selectedButton);
+    if (selectedValue !== selectedButton) {
+      setSelectedValue(selectedButton);
+    }
   }
 
   return (

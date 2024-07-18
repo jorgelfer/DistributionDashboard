@@ -5,11 +5,10 @@ import NetworkGraph from './NetworkGraph';
 import Header from '../UI/Header/Header';
 
 export default function Charts(props) {
-  const margin = {top: 30, right: 10, bottom: 50, left: 60};
 
+  const margin = {top: 30, right: 10, bottom: 50, left: 60};
   const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
   const dateParser = d3.timeParse("%Y-%m-%dT%H:%M");
-
   const time_extent = d3.extent(props.data["time"], d => dateParser(d))
 
   return (

@@ -1,15 +1,31 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 
 import Card from '../UI/Card/Card';
 import ChartContainer from '../ChartComponents/ChartContainer';
+import Layers from '../Interactions/Layers';
+
+const layers = [
+  { id: "bus_coordinates", label: "Bus Coordinates" },
+  { id: "map", label: "Map" },
+  { id: "link_force", label: "Link Force" },
+];
 
 export default function NetworkGraph(props) {
+
+  const [activeLayer, setActiveLayer] = useState("bus_coordinates");
+
   const width = 700;
   const height = 500;
   const innerWidth = width - props.margin.left - props.margin.right;
   const innerHeight = height - props.margin.top - props.margin.bottom;
   const originalNodeSize = 4;
+
+  const layerSelectionHandler = (id) => {
+    if (activeLayer !== id) {
+      setActiveLayer(id);
+    }
+  };
 
   const networkRef = useRef();
   useEffect(() => {
@@ -98,6 +114,11 @@ export default function NetworkGraph(props) {
   return(
     <Card>
       <h2>Network</h2>
+      <Layers
+        layers={layers}
+        activeLayer={activeLayer}
+        onLayerSelection={layerSelectionHandler}
+      />
       <ChartContainer
         width={width}
         height={height}
