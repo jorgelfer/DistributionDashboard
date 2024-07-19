@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import * as d3 from 'd3';
 
+import Circle from '../ChartComponents/Circle';
 import Card from '../UI/Card/Card';
 import ChartContainer from '../ChartComponents/ChartContainer';
 import Layers from '../Interactions/Layers';
@@ -22,14 +23,20 @@ export default function NetworkGraph(props) {
   const innerHeight = height - props.margin.top - props.margin.bottom;
   const originalNodeSize = 4;
 
-  // initialize scales
-  const x_net = d3.scaleLinear()
+  const xScale = d3.scaleLinear()
+    .domain([0, d3.max(props.data.bus, d => d.x)])
     .range([0, innerWidth]);
 
-  const y_net = d3.scaleLinear()
+  const yScale = d3.scaleLinear()
+    .domain([0, d3.max(props.data.bus, d => d.y)])
     .range([innerHeight, 0]);
 
-  const layerSelectionHandler = (id) => {
+  // scales
+  const linkScale = d3.scaleSqrt()
+    .domain(d3.extent(props.data.branch, function (d) { return d.phases.length; }))
+    .range([3, 7]);
+
+  function layerSelectionHandler(id) {
     if (activeLayer !== id) {
       setActiveLayer(id);
     }
@@ -53,8 +60,9 @@ export default function NetworkGraph(props) {
           colorScale={props.colorScale}
           activeLayer={activeLayer}
           originalNodeSize={originalNodeSize}
-          x_net={x_net}
-          y_net={y_net}
+          xScale={xScale}
+          yScale={yScale}
+          linkScale={linkScale}
         />
       </ChartContainer> 
     </Card>

@@ -7,37 +7,22 @@ export default function Net(props) {
   useEffect(() => {
     const networkContainer = d3.select(networkRef.current);
 
-    // scales
-    const linkScale = d3.scaleSqrt()
-      .domain(d3.extent(props.data.branch, function (d) { return d.phases.length; }))
-      .range([3, 7]);
-
     // initialize simulation
     const simulation = d3.forceSimulation()
       .alpha(1).restart()
-      .force('link', d3.forceLink().id(function (d) { return d.uid; }))
+      .force('link', d3.forceLink().id(d => d.uid))
       .force('charge', d3.forceManyBody());
 
-    // Create a group for links
-    const linkG = networkContainer
-      .append('g')
-        .attr('class', 'linksGroup');
-
-    // create a group for the the nodes
-    const nodeG = networkContainer
-      .append('g')
-        .attr('class', 'nodeGroup');
-
     // Append weighted lines for each link in network
-    const linkEnter = linkG 
+    const linkEnter = networkContainer 
       .selectAll('.link')
       .data(props.data.branch)
         .join('line')
           .attr('class', 'link')
-          .attr('stroke-width', d => linkScale(d.phases.length));
+          .attr('stroke-width', d => props.linkScale(d.phases.length));
 
     // Append circles for each node in the graph
-    const nodeEnter = nodeG 
+    const nodeEnter = networkContainer 
     .selectAll('.node')
       .data(props.data.bus)
       .join('circle')
@@ -62,26 +47,21 @@ export default function Net(props) {
         // Stop link simulation (to keep original node positons)
         simulation.force("link", null);
         simulation.force("charge", null);
-    } else if (props.activeLayer === 'force') {
+    } else {
         // stop node charge 
         simulation.force("charge", null);
     }
 
-    // Update network after forces have been applied 
-    props.x_net.domain([0, d3.max(props.data.bus, function (d) { return d.x; } )]);
-    props.y_net.domain([0, d3.max(props.data.bus, function (d) { return d.y; } )]);
-
     function tickSimulation() {
-
       linkEnter
-        .attr('x1', function (d) { return props.x_net(d.source.x); })
-        .attr('y1', function (d) { return props.y_net(d.source.y); })
-        .attr('x2', function (d) { return props.x_net(d.target.x); })
-        .attr('y2', function (d) { return props.y_net(d.target.y); });
+        .attr('x1', d => props.xScale(d.source.x))
+        .attr('y1', d => props.yScale(d.source.y))
+        .attr('x2', d => props.xScale(d.target.x))
+        .attr('y2', d => props.yScale(d.target.y));
 
       nodeEnter
-        .attr('cx', function (d) { return props.x_net(d.x); })
-        .attr('cy', function (d) { return props.y_net(d.y); });
+        .attr('cx', d => props.xScale(d.x))
+        .attr('cy', d => props.yScale(d.y));
     }
 
   }, [props]);
