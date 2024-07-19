@@ -7,12 +7,6 @@ export default function Net(props) {
   useEffect(() => {
     const networkContainer = d3.select(networkRef.current);
 
-    // initialize simulation
-    const simulation = d3.forceSimulation()
-      .alpha(1).restart()
-      .force('link', d3.forceLink().id(d => d.uid))
-      .force('charge', d3.forceManyBody());
-
     // Append weighted lines for each link in network
     const linkEnter = networkContainer 
       .selectAll('.link')
@@ -30,28 +24,6 @@ export default function Net(props) {
         .style('fill', d => props.colorScale(d.phases.length))
         .attr('class', 'node');
 
-    // Set up the nodes for the simulation
-    // Note this has to be done before we set up the links in the next block
-    simulation
-      .nodes(props.data.bus)
-      .on('tick', tickSimulation);
-
-    // Set up the links and what type of force will be used for the simulation
-    // Again note that this has to be done in a separate block from above
-    simulation
-      .force('link')
-      .links(props.data.branch);
-
-    // Different layers
-    if (props.activeLayer === 'coordinates') {
-        // Stop link simulation (to keep original node positons)
-        simulation.force("link", null);
-        simulation.force("charge", null);
-    } else {
-        // stop node charge 
-        simulation.force("charge", null);
-    }
-
     function tickSimulation() {
       linkEnter
         .attr('x1', d => props.xScale(d.source.x))
@@ -62,6 +34,25 @@ export default function Net(props) {
       nodeEnter
         .attr('cx', d => props.xScale(d.x))
         .attr('cy', d => props.yScale(d.y));
+    }
+    
+    // initialize simulation
+    var simulation = d3.forceSimulation()
+      .alpha(1).restart()
+      .force("charge", d3.forceManyBody())
+      .force('link', d3.forceLink().id(d => d.uid))
+      .nodes(props.data.bus)
+      .on('tick', tickSimulation);
+
+    // Set up the links and what type of force will be used for the simulation
+    // Again note that this has to be done in a separate block from above
+    simulation
+      .force('link')
+      .links(props.data.branch);
+
+    if (props.activeLayer === 'coordinates') {
+      simulation.force("link", null);
+      simulation.force("charge", null);
     }
 
   }, [props]);

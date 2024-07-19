@@ -21,7 +21,7 @@ export default function NetworkGraph(props) {
   const height = 500;
   const innerWidth = width - props.margin.left - props.margin.right;
   const innerHeight = height - props.margin.top - props.margin.bottom;
-  const originalNodeSize = 4;
+  const originalNodeSize = 6;
 
   const xScale = d3.scaleLinear()
     .domain([0, d3.max(props.data.bus, d => d.x)])
@@ -34,13 +34,17 @@ export default function NetworkGraph(props) {
   // scales
   const linkScale = d3.scaleSqrt()
     .domain(d3.extent(props.data.branch, function (d) { return d.phases.length; }))
-    .range([3, 7]);
+    .range([2, 6]);
 
   function layerSelectionHandler(id) {
     if (activeLayer !== id) {
       setActiveLayer(id);
     }
   };
+
+  // The force simulation mutates links and nodes,
+  // so, make a deep copy of the dataset 
+  const original_network = JSON.parse(JSON.stringify(props.data));
 
   return(
     <Card>
@@ -56,7 +60,7 @@ export default function NetworkGraph(props) {
         margin={props.margin}
       >
         <Net
-          data={props.data}
+          data={original_network}
           colorScale={props.colorScale}
           activeLayer={activeLayer}
           originalNodeSize={originalNodeSize}
