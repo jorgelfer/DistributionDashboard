@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import * as d3 from 'd3';
 
-import Circle from '../ChartComponents/Circle';
 import Card from '../UI/Card/Card';
 import ChartContainer from '../ChartComponents/ChartContainer';
 import Layers from '../Interactions/Layers';
 import Net from '../ChartComponents/Net';
+import MapLeaflet from '../ChartComponents/MapLeaflet';
+import MapMapbox from '../ChartComponents/MapMapbox';
 
 const layers = [
   { id: "coordinates", label: "Coordinates" },
-  { id: "map", label: "Map" },
+  { id: "leaflet", label: "Leaflet" },
+  { id: "mapbox", label: "Mapbox" },
   { id: "force", label: "Force" },
 ];
 
@@ -44,7 +46,7 @@ export default function NetworkGraph(props) {
 
   // The force simulation mutates links and nodes,
   // so, make a deep copy of the dataset 
-  const original_network = JSON.parse(JSON.stringify(props.data));
+  const network = JSON.parse(JSON.stringify(props.data));
 
   return(
     <Card>
@@ -54,13 +56,23 @@ export default function NetworkGraph(props) {
         activeLayer={activeLayer}
         onLayerSelection={layerSelectionHandler}
       />
-      <ChartContainer
+      {activeLayer === "leaflet" && <MapLeaflet
+          data={network}
+          colorScale={props.colorScale}
+          activeLayer={activeLayer}
+          originalNodeSize={originalNodeSize}
+          xScale={xScale}
+          yScale={yScale}
+          linkScale={linkScale}
+      />}
+      {activeLayer === "mapbox" && <MapMapbox/>}
+      {activeLayer === "coordinates" && <ChartContainer
         width={width}
         height={height}
         margin={props.margin}
       >
         <Net
-          data={original_network}
+          data={network}
           colorScale={props.colorScale}
           activeLayer={activeLayer}
           originalNodeSize={originalNodeSize}
@@ -68,7 +80,7 @@ export default function NetworkGraph(props) {
           yScale={yScale}
           linkScale={linkScale}
         />
-      </ChartContainer> 
+      </ChartContainer>}
     </Card>
   );
 }
