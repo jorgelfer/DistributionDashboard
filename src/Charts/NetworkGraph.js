@@ -7,12 +7,14 @@ import Layers from '../Interactions/Layers';
 import Net from '../ChartComponents/Net';
 import MapLeaflet from '../ChartComponents/MapLeaflet';
 import MapMapbox from '../ChartComponents/MapMapbox';
+import MapGeojson from '../ChartComponents/MapGeojson';
 
 const layers = [
   { id: "coordinates", label: "Coordinates" },
+  { id: "force", label: "Force" },
   { id: "leaflet", label: "Leaflet" },
   { id: "mapbox", label: "Mapbox" },
-  { id: "force", label: "Force" },
+  { id: "geojson", label: "Geojson" },
 ];
 
 export default function NetworkGraph(props) {
@@ -66,21 +68,28 @@ export default function NetworkGraph(props) {
           linkScale={linkScale}
       />}
       {activeLayer === "mapbox" && <MapMapbox/>}
-      {activeLayer === "coordinates" && <ChartContainer
-        width={width}
-        height={height}
-        margin={props.margin}
-      >
-        <Net
-          data={network}
-          colorScale={props.colorScale}
-          activeLayer={activeLayer}
-          originalNodeSize={originalNodeSize}
-          xScale={xScale}
-          yScale={yScale}
-          linkScale={linkScale}
+      {["coordinates", "force"].includes(activeLayer) &&
+        <ChartContainer
+          width={width}
+          height={height}
+          margin={props.margin}
+          >
+          <Net
+            data={network}
+            colorScale={props.colorScale}
+            activeLayer={activeLayer}
+            originalNodeSize={originalNodeSize}
+            xScale={xScale}
+            yScale={yScale}
+            linkScale={linkScale}
+          />
+        </ChartContainer>}
+      {activeLayer === "geojson" &&
+        <MapGeojson
+          width={width}
+          height={height}
         />
-      </ChartContainer>}
+      }
     </Card>
   );
 }
