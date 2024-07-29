@@ -24,6 +24,21 @@ export default function Net(props) {
         .style('fill', d => props.colorScale(d.phases.length))
         .attr('class', 'node');
 
+    // Append icons for each node in the graph
+    const pathEnter = networkContainer 
+    .selectAll('.symbol')
+        .data(props.data.bus)
+        .join("g")
+            .call(g => g.append("use")
+              .attr("href", d=>`#0`)
+              .attr('class', 'symbol')
+              .attr("width", 20)
+              .attr("height", 20)            
+              .attr("stroke", "#000")
+              .attr("fill", "#000"))
+              .style("visibility", "visible")
+              // .lower();
+
     function tickSimulation() {
       linkEnter
         .attr('x1', d => props.xScale(d.source.x))
@@ -34,6 +49,9 @@ export default function Net(props) {
       nodeEnter
         .attr('cx', d => props.xScale(d.x))
         .attr('cy', d => props.yScale(d.y));
+
+      pathEnter
+          .attr('transform', d => `translate(${props.xScale(d.x)}, ${props.yScale(d.y)})`);
     }
     
     // initialize simulation

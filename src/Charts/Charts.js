@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 
 import LineChart from './LineChart';
 import NetworkGraph from './NetworkGraph';
-// import Header from '../UI/Header/Header';
+import Symbol from '../ChartComponents/Network/Symbol';
 
 
 // Header
@@ -13,14 +13,12 @@ import './Charts.css';
 import { DATADISPLAY } from "./data.js";
 
 function DataDisplay({children, onClick, isSelected}) {
-
   return (
     <li className={isSelected ? "main-tab active" : "main-tab"} onClick={onClick}>
       <img src={children.image} alt={children.title} />
       <p>{children.title}</p>
     </li>
   );
-
 }
 
 export default function Charts(props) {
@@ -58,6 +56,7 @@ export default function Charts(props) {
             margin={margin} 
             data={props.data} 
             colorScale={colorScale}
+            selectedValue={selectedValue}
           />
         </div>
         <div className='two'>
@@ -67,9 +66,15 @@ export default function Charts(props) {
             colorScale={colorScale}
             time_extent={time_extent}
             dateParser={dateParser}
+            selectedValue={selectedValue}
           />
         </div>
       </div>
+        <svg xmlns="http://www.w3.org/2000/svg">
+          <Symbol
+          selectedValue={selectedValue}
+          />
+        </svg>
     </>
   )
 };
