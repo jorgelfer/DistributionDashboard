@@ -124,6 +124,7 @@ export default function LineChart(props) {
         width={width}
         height={height}
         margin={props.margin}
+        className="line-chart"
       >
         <g ref={LineChartRef} />
       </ChartContainer> 

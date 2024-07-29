@@ -8,6 +8,8 @@ import Net from '../ChartComponents/Network/Net';
 import MapLeaflet from '../ChartComponents/Mapping/MapLeaflet';
 import MapMapbox from '../ChartComponents/Mapping/MapMapbox';
 import MapGeojson from '../ChartComponents/Mapping/MapGeojson';
+import Symbol from '../ChartComponents/Network/Symbol';
+
 
 const layers = [
   { id: "coordinates", label: "Coordinates" },
@@ -73,6 +75,7 @@ export default function NetworkGraph(props) {
           width={width}
           height={height}
           margin={props.margin}
+          className="network-graph"
           >
           <Net
             data={network}
@@ -82,7 +85,12 @@ export default function NetworkGraph(props) {
             xScale={xScale}
             yScale={yScale}
             linkScale={linkScale}
+            selectedValue={props.selectedValue}
+            margin={props.margin}
           />
+          {/* <Symbol
+          selectedValue={props.selectedValue}
+          /> */}
         </ChartContainer>}
       {activeLayer === "geojson" &&
         <MapGeojson

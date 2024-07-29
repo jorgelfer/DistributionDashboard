@@ -7,6 +7,35 @@ export default function Net(props) {
   useEffect(() => {
     const networkContainer = d3.select(networkRef.current);
 
+    // Handlers for drag events on nodes
+    // Drag events adjust the [fx,fy] of the nodes to override the simulation
+    function dragstarted(event,d) {
+      d3.select(this).classed("fixed", true);
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+
+    function dragged(event,d) {
+      // get the x and y position of the svg
+      const [xs, ys] = d3.pointer(event, d3.select(".network-graph").node());
+      d.fx = props.xScale.invert(xs - props.margin.left);
+      d.fy = props.yScale.invert(ys - props.margin.top);
+    }
+
+    function dragended(event,d) {
+      if (!event.active) simulation.alphaTarget(0);
+      // Keeping the [fx,fy] at the dragged positioned will pin it
+      // Setting to null allows the simulation to change the [fx,fy]
+      d.fx = null;
+      d.fy = null;
+    }
+
+    let drag = d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended);
+
     // Append weighted lines for each link in network
     const linkEnter = networkContainer 
       .selectAll('.link')
@@ -22,22 +51,24 @@ export default function Net(props) {
       .join('circle')
         .attr("r", props.originalNodeSize)
         .style('fill', d => props.colorScale(d.phases.length))
-        .attr('class', 'node');
+        .attr('class', 'node')
+        .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append icons for each node in the graph
-    const pathEnter = networkContainer 
-    .selectAll('.symbol')
-        .data(props.data.bus)
-        .join("g")
-            .call(g => g.append("use")
-              .attr("href", d=>`#0`)
-              .attr('class', 'symbol')
-              .attr("width", 20)
-              .attr("height", 20)            
-              .attr("stroke", "#000")
-              .attr("fill", "#000"))
-              .style("visibility", "visible")
-              // .lower();
+    console.log(props.selectedValue);
+    // const pathEnter = networkContainer 
+    // .selectAll('.symbol')
+    //     .data(props.data.bus)
+    //     .join("g")
+    //         .call(g => g.append("use")
+    //           .attr("href", d=>`#${props.selectedValue}`)
+    //           .attr('class', 'symbol')
+    //           .attr("width", 20)
+    //           .attr("height", 20)            
+    //           .attr("stroke", "#000")
+    //           .attr("fill", "#000"))
+    //           .style("visibility", "visible")
+    //           .lower();
 
     function tickSimulation() {
       linkEnter
@@ -50,8 +81,8 @@ export default function Net(props) {
         .attr('cx', d => props.xScale(d.x))
         .attr('cy', d => props.yScale(d.y));
 
-      pathEnter
-          .attr('transform', d => `translate(${props.xScale(d.x)}, ${props.yScale(d.y)})`);
+      // pathEnter
+      //     .attr('transform', d => `translate(${props.xScale(d.x)}, ${props.yScale(d.y)})`);
     }
     
     // initialize simulation
