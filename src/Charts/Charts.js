@@ -2,7 +2,26 @@ import * as d3 from 'd3';
 
 import LineChart from './LineChart';
 import NetworkGraph from './NetworkGraph';
-import Header from '../UI/Header/Header';
+// import Header from '../UI/Header/Header';
+
+
+// Header
+import React from "react";
+import { useState } from "react";
+
+import './Charts.css';
+import { DATADISPLAY } from "./data.js";
+
+function DataDisplay({children, onClick, isSelected}) {
+
+  return (
+    <li className={isSelected ? "main-tab active" : "main-tab"} onClick={onClick}>
+      <img src={children.image} alt={children.title} />
+      <p>{children.title}</p>
+    </li>
+  );
+
+}
 
 export default function Charts(props) {
 
@@ -11,10 +30,26 @@ export default function Charts(props) {
   const dateParser = d3.timeParse("%Y-%m-%dT%H:%M");
   const time_extent = d3.extent(props.data["time"], d => dateParser(d))
 
+  // Header
+  const [selectedValue, setSelectedValue] = useState('vm');
+
+  function handleClick(selectedButton) {
+    if (selectedValue !== selectedButton) {
+      setSelectedValue(selectedButton);
+    }
+  }
+
   return (
     <>
-      <div className="main">
-        <Header />
+      <div id="main-header">
+        <ul>
+          {Object.keys(DATADISPLAY).map((objKey) => 
+            <DataDisplay key={objKey} isSelected={selectedValue === objKey}
+            onClick={() => handleClick(objKey)}>
+              {DATADISPLAY[objKey]}
+            </DataDisplay>
+          )}
+        </ul>
       </div>
       <h1>Distribution Dashboard</h1>
       <div className='wrapper'>

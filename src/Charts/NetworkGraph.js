@@ -4,10 +4,10 @@ import * as d3 from 'd3';
 import Card from '../UI/Card/Card';
 import ChartContainer from '../ChartComponents/ChartContainer';
 import Layers from '../Interactions/Layers';
-import Net from '../ChartComponents/Net';
-import MapLeaflet from '../ChartComponents/MapLeaflet';
-import MapMapbox from '../ChartComponents/MapMapbox';
-import MapGeojson from '../ChartComponents/MapGeojson';
+import Net from '../ChartComponents/Network/Net';
+import MapLeaflet from '../ChartComponents/Mapping/MapLeaflet';
+import MapMapbox from '../ChartComponents/Mapping/MapMapbox';
+import MapGeojson from '../ChartComponents/Mapping/MapGeojson';
 
 const layers = [
   { id: "coordinates", label: "Coordinates" },
