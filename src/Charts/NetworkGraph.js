@@ -19,27 +19,27 @@ const layers = [
   { id: "geojson", label: "Geojson" },
 ];
 
-export default function NetworkGraph(props) {
+export default function NetworkGraph({margin, data, ...props}) {
 
   const [activeLayer, setActiveLayer] = useState("coordinates");
 
   const width = 700;
   const height = 500;
-  const innerWidth = width - props.margin.left - props.margin.right;
-  const innerHeight = height - props.margin.top - props.margin.bottom;
+  const innerWidth = width - margin.left - margin.right;
+  const innerHeight = height - margin.top - margin.bottom;
   const originalNodeSize = 6;
 
   const xScale = d3.scaleLinear()
-    .domain([0, d3.max(props.data.bus, d => d.x)])
+    .domain([0, d3.max(data.bus, d => d.x)])
     .range([0, innerWidth]);
 
   const yScale = d3.scaleLinear()
-    .domain([0, d3.max(props.data.bus, d => d.y)])
+    .domain([0, d3.max(data.bus, d => d.y)])
     .range([innerHeight, 0]);
 
   // scales
   const linkScale = d3.scaleSqrt()
-    .domain(d3.extent(props.data.branch, function (d) { return d.phases.length; }))
+    .domain(d3.extent(data.branch, function (d) { return d.phases.length; }))
     .range([2, 6]);
 
   function layerSelectionHandler(id) {
@@ -50,7 +50,7 @@ export default function NetworkGraph(props) {
 
   // The force simulation mutates links and nodes,
   // so, make a deep copy of the dataset 
-  const network = JSON.parse(JSON.stringify(props.data));
+  const network = JSON.parse(JSON.stringify(data));
 
   return(
     <Card>
@@ -74,19 +74,19 @@ export default function NetworkGraph(props) {
         <ChartContainer
           width={width}
           height={height}
-          margin={props.margin}
+          margin={margin}
           className="network-graph"
           >
           <Net
+            margin={margin}
             data={network}
-            colorScale={props.colorScale}
             activeLayer={activeLayer}
             originalNodeSize={originalNodeSize}
             xScale={xScale}
             yScale={yScale}
             linkScale={linkScale}
+            colorScale={props.colorScale}
             selectedValue={props.selectedValue}
-            margin={props.margin}
           />
         </ChartContainer>}
       {activeLayer === "geojson" &&
