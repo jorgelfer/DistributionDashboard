@@ -2,24 +2,21 @@ import { useState, useEffect } from 'react';
 import * as d3 from 'd3';
 import Charts from './Charts/Charts';
 
-function App() {
+export default function App() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
    useEffect(() => {
-    const dataURL = "https://jorgelfer.github.io/IEEETestCases/123Bus/qsts.json";
-    
-    let mounted = true;
-    d3.json(dataURL).then(data => {
-      // console.log("data", data);
-
-      if (mounted) {
+    // let mounted = true;
+    const dataURL = "http://127.0.0.1:5000/qsts/123Bus/IEEE123Master.dss";
+    fetch(dataURL)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
         setData(data);
         setLoading(false);
-      }
-    });
+      });
 
-    return () => mounted = false;
   }, []); 
 
   return (
@@ -28,6 +25,4 @@ function App() {
       {!loading && <Charts data={data} />}
     </div>
   );
-}
-
-export default App;
+};
