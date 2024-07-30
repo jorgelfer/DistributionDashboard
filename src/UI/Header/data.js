@@ -1,10 +1,10 @@
-import batteryImg from "../assets/battery.png";
-import demand_responseImg from "../assets/demand_response.png";
-import demandImg from "../assets/demand.png";
-import flowsImg from "../assets/flows.png";
-import mismatchImg from "../assets/mismatch.png";
-import solarImg from "../assets/solar.png";
-import voltageImg from "../assets/voltage.png";
+import batteryImg from "../../assets/battery.png";
+import demand_responseImg from "../../assets/demand_response.png";
+import demandImg from "../../assets/demand.png";
+import flowsImg from "../../assets/flows.png";
+import mismatchImg from "../../assets/mismatch.png";
+import solarImg from "../../assets/solar.png";
+import voltageImg from "../../assets/voltage.png";
 
 export const DATADISPLAY = {
   vm: {

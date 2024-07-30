@@ -1,25 +1,11 @@
-import * as d3 from 'd3';
-
-import LineChart from './LineChart';
-import NetworkGraph from './NetworkGraph';
-// import Symbol from '../ChartComponents/Network/Symbol';
-
-
-// Header
 import React from "react";
 import { useState } from "react";
 
-import './Charts.css';
-import { DATADISPLAY } from "./data.js";
+import * as d3 from 'd3';
 
-function DataDisplay({children, isSelected, ...props}) {
-  return (
-    <li className={isSelected ? "main-tab active" : "main-tab"} {...props}>
-      <img src={children.image} alt={children.title} />
-      <p>{children.title}</p>
-    </li>
-  );
-}
+import Header from "../UI/Header/Header";
+import LineChart from './LineChart';
+import NetworkGraph from './NetworkGraph';
 
 export default function Charts(props) {
 
@@ -39,18 +25,7 @@ export default function Charts(props) {
 
   return (
     <>
-      <div id="main-header">
-        <ul>
-          {Object.keys(DATADISPLAY).map((objKey) => 
-            <DataDisplay 
-            key={objKey} 
-            isSelected={selectedValue === objKey}
-            onClick={() => handleClick(objKey)}>
-              {DATADISPLAY[objKey]}
-            </DataDisplay>
-          )}
-        </ul>
-      </div>
+      <Header handleClick={handleClick} selectedValue={selectedValue} />
       <h1>Distribution Dashboard</h1>
       <div className='wrapper'>
         <div className='one'>

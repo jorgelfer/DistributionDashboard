@@ -1,5 +1,4 @@
 import Button from "../UI/Button";
-
 import './Layers.css';
 
 export default function Layers (props) {
