@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
+import Symbol from './Symbol';
 
 export default function Net(props) {
 
@@ -21,7 +22,7 @@ export default function Net(props) {
       const [xs, ys] = d3.pointer(event, d3.select(".network-graph").node());
       d.fx = props.xScale.invert(xs - props.margin.left);
       d.fy = props.yScale.invert(ys - props.margin.top);
-    }
+    };
 
     function dragended(event,d) {
       if (!event.active) simulation.alphaTarget(0);
@@ -29,7 +30,7 @@ export default function Net(props) {
       // Setting to null allows the simulation to change the [fx,fy]
       d.fx = null;
       d.fy = null;
-    }
+    };
 
     let drag = d3.drag()
         .on('start', dragstarted)
@@ -55,13 +56,14 @@ export default function Net(props) {
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append icons for each node in the graph
+    console.log(props.selectedValue);
     const pathEnter = networkContainer 
     .selectAll('.symbol')
         .data(props.data.bus)
         .join("path")
             .attr("d", d3.symbol()
-              .size(300)
-              .type(d3.symbolTriangle))
+              .size(200)
+              .type(Symbol(props.selectedValue)))
             .attr('class', 'symbol')
             .attr("stroke", "black")
             .attr("fill", "black")
