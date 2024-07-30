@@ -55,20 +55,18 @@ export default function Net(props) {
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append icons for each node in the graph
-    console.log(props.selectedValue);
-    // const pathEnter = networkContainer 
-    // .selectAll('.symbol')
-    //     .data(props.data.bus)
-    //     .join("g")
-    //         .call(g => g.append("use")
-    //           .attr("href", d=>`#${props.selectedValue}`)
-    //           .attr('class', 'symbol')
-    //           .attr("width", 20)
-    //           .attr("height", 20)            
-    //           .attr("stroke", "#000")
-    //           .attr("fill", "#000"))
-    //           .style("visibility", "visible")
-    //           .lower();
+    const pathEnter = networkContainer 
+    .selectAll('.symbol')
+        .data(props.data.bus)
+        .join("path")
+            .attr("d", d3.symbol()
+              .size(300)
+              .type(d3.symbolTriangle))
+            .attr('class', 'symbol')
+            .attr("stroke", "black")
+            .attr("fill", "black")
+            .style("visibility", "visible")
+            .lower();
 
     function tickSimulation() {
       linkEnter
@@ -81,8 +79,8 @@ export default function Net(props) {
         .attr('cx', d => props.xScale(d.x))
         .attr('cy', d => props.yScale(d.y));
 
-      // pathEnter
-      //     .attr('transform', d => `translate(${props.xScale(d.x)}, ${props.yScale(d.y)})`);
+      pathEnter
+          .attr('transform', function(d) { return `translate(${props.xScale(d.x)+10}, ${props.yScale(d.y)+10})`;});
     }
     
     // initialize simulation
@@ -108,7 +106,7 @@ export default function Net(props) {
 
     return (
       <g 
-        ref={networkRef}
+      ref={networkRef}
       />
     );
 };
