@@ -7,16 +7,39 @@ export default function App() {
   const [data, setData] = useState([]);
 
    useEffect(() => {
-    // let mounted = true;
+
     const dataURL = "http://127.0.0.1:5000/qsts/123Bus/IEEE123Master.dss";
-    fetch(dataURL)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
+
+    let mounted = true;
+
+    // D3 based fetch
+    // d3.json(dataURL).then(data => {
+    //   if (mounted) {
+    //     setData(data);
+    //     setLoading(false);
+    //   }
+    // });
+
+    // native JS based fetch
+    // fetch(dataURL)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //     setData(data);
+    //     setLoading(false);
+    //   });
+
+    // function-based JS based fetch
+    async function fetchData() {
+      const response = await fetch(dataURL);
+      const data = await response.json();
         setData(data);
         setLoading(false);
-      });
+    }
+    fetchData();
+    
 
+    return () => mounted = false;
   }, []); 
 
   return (
