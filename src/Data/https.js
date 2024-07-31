@@ -1,4 +1,4 @@
-export async function fetchQstsData(dataURL, payload) {
+export async function fetchQstsData(dataURL) {
 
     const response = await fetch(dataURL);
     const data = await response.json();
@@ -10,9 +10,9 @@ export async function fetchQstsData(dataURL, payload) {
     return data;
 };
 
-export async function actualPostData(data) {
+export async function fetchSchedulingData(data) {
 
-    const response = await fetch('http:/http://127.0.0.1:5000/qsts/', {
+    const response = await fetch('http:/http://127.0.0.1:8000/es/solve', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {

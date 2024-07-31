@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function useFetch(fetchFn,url,payload=null) {
+export default function useFetch(fetchFn,request) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState();
@@ -8,7 +8,7 @@ export default function useFetch(fetchFn,url,payload=null) {
   useEffect(() => {
     async function fetchData() {
       try{
-        const data = await fetchFn(url, payload);
+        const data = await fetchFn(request);
         setData(data);
         } catch (error) {
           setError({
@@ -18,7 +18,7 @@ export default function useFetch(fetchFn,url,payload=null) {
     setLoading(false);
     }
     fetchData();
-  }, [fetchFn, url, payload]);
+  }, [fetchFn, request]);
 
   return { 
     loading, 
