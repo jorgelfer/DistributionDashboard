@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from "../UI/Button";
-import { fetchQstsData, fetchSchedulingData } from './https';
+import { fetchQstsData } from './https';
 import DisplayScheduling from './DisplayScheduling';
 import useFetch from './useFetch';
 import Charts from '../Charts/Charts';
@@ -29,7 +29,7 @@ export default function Fetching({networkModel, inFile1}) {
           </>}
        </>}
       {isScheduling && <>
-      <DisplayScheduling fetchFn={fetchSchedulingData} message={data} />
+      <DisplayScheduling payload={data} />
       </>}
       <div className="layers">
         <Button

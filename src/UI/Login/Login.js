@@ -6,9 +6,6 @@ export default function Login({values, onEnteredValues, onSubmitted}) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log('Submitted!')
-    console.log(values);
-
     onSubmitted();
   }
 

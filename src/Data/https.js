@@ -10,11 +10,11 @@ export async function fetchQstsData(dataURL) {
     return data;
 };
 
-export async function fetchSchedulingData(data) {
+export async function fetchSchedulingData(payload) {
 
     const response = await fetch('http:/http://127.0.0.1:8000/es/solve', {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
         headers: {
             'Content-Type': 'application/json'
         },

@@ -56,7 +56,7 @@ export default function Net(props) {
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append icons for each node in the graph
-    console.log(props.selectedValue);
+    // console.log(props.selectedValue);
     const pathEnter = networkContainer 
     .selectAll('.symbol')
         .data(props.data.bus)
