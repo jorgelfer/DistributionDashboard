@@ -9,3 +9,22 @@ export async function actualFetchData(dataURL) {
 
     return data;
 };
+
+export async function actualPostData(data) {
+
+    const response = await fetch('http:/http://127.0.0.1:5000/qsts/', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    });
+
+    const responseData = await response.json();
+
+    if (!response.ok) {
+        throw new Error(responseData.message || 'Failed to post the data');
+    }
+
+    return responseData;
+};
