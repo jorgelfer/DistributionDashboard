@@ -14,8 +14,7 @@ export default function Login({values, onEnteredValues, onSubmitted}) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>CASE DEFINITION</h2>
-
+      <h2 className="login-header">CASE DEFINITION</h2>
       <div className="control-row">
         <div className="control no-margin">
           <label htmlFor="text">Network Model</label>
