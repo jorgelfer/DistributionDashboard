@@ -14,29 +14,6 @@ body {
   min-height: 100vh;
 }
 
-header {
-  margin: 2rem 0;
-  text-align: center;
-}
-
-header img {
-  width: 5rem;
-  height: 5rem;
-  object-fit: contain;
-  border-radius: 50%;
-  border: 2px solid #758a8a;
-  filter: drop-shadow(0 0 4px rgba(31, 42, 42, 0.5));
-}
-
-header h1 {
-  font-family: 'Quicksand', sans-serif;
-  font-weight: 700;
-  font-size: 3rem;
-  margin: 1rem 0;
-  letter-spacing: 0.2rem;
-  color: #2f4444;
-}
-
 form {
   width: 90%;
   max-width: 40rem;
@@ -133,7 +110,7 @@ fieldset {
   gap: 1rem;
 }
 
-.button {
+.login-button {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   border-radius: 4px;
@@ -143,8 +120,8 @@ fieldset {
   cursor: pointer;
 }
 
-.button:hover,
-.button:focus {
+.login-button:hover,
+.login-button:focus {
   background-color: #319890;
 }
 

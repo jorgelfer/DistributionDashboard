@@ -6,22 +6,37 @@ import Fetching from './UI/Fetching'
 export default function App() {
 
   const [isCaseSubmitted, setCaseSubmitted] = useState(false);
+
+  function handleSubmitted() {
+    setCaseSubmitted((curIsCaseSubmitted) => !curIsCaseSubmitted);
+  }
+
   const [enteredCase, setEnteredCase] = useState({
     networkModel: "123Bus",
     inFile1: "IEEE123Master.dss"
   });
+
+  function handleInputChange(identifier, value) {
+    setEnteredCase(prevCase => ({
+      ...prevCase,
+      [identifier]: value
+    }))
+  }
 
   return (
     <>
       {!isCaseSubmitted && <main>
         <Login
           values={enteredCase}
-          onEnteredValues={setEnteredCase}
-          onSubmitted={setCaseSubmitted}
+          onEnteredValues={handleInputChange}
+          onSubmitted={handleSubmitted}
         />
       </main>}
       {isCaseSubmitted && <div className="container">
-        <Fetching caseValues={enteredCase}/>
+        <Fetching 
+          networkModel={enteredCase.networkModel} 
+          inFile1={enteredCase.inFile1}
+        />
       </div>}
     </>
   );

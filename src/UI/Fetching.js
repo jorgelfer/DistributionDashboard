@@ -4,7 +4,7 @@ import Charts from '../Charts/Charts';
 import Error from './Error/Error';
 import { actualFetchData } from './https';
 
-export default function Fetching(caseValues) {
+export default function Fetching({networkModel, inFile1}) {
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -12,7 +12,7 @@ export default function Fetching(caseValues) {
 
    useEffect(() => {
 
-    const dataURL = `http://127.0.0.1:5000/qsts/${caseValues.networkModel}/${caseValues.inFile1}`;
+    const dataURL = `http://127.0.0.1:5000/qsts/${networkModel}/${inFile1}`;
 
     // function-based JS based fetch
     async function fetchData() {
@@ -32,7 +32,7 @@ export default function Fetching(caseValues) {
     }
     
     fetchData();
-  }, [caseValues]); 
+  }, [networkModel, inFile1]); 
 
   if (error) {
     return <Error title="An error occurred!" message={error.message} />;
