@@ -1,4 +1,4 @@
-export async function fetchQstsData(dataURL) {
+export async function fetchQstsData(dataURL, payload) {
 
     const response = await fetch(dataURL);
     const data = await response.json();

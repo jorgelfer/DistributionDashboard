@@ -8,18 +8,18 @@ import useFetch from './useFetch';
 export default function Fetching({networkModel, inFile1}) {
 
   const qstsURL = `http://127.0.0.1:5000/qsts/${networkModel}/${inFile1}`;
-  const {loading, data, error} = useFetch(fetchQstsData, qstsURL);
+  const {loading:loading_qsts, data:data_qsts, error_qsts} = useFetch(fetchQstsData, qstsURL);
 
-  if (error) {
-    return <Error title="An error occurred!" message={error.message} />;
+  if (error_qsts) {
+    return <Error title="An error occurred during QSTS fetching!" message={error_qsts.message} />;
   }
 
   return (
     <>
-      {loading && <div className="loading">Loading...</div>}
-      {!loading && 
+      {loading_qsts && <div className="loading">Loading...</div>}
+      {!loading_qsts && 
       <>
-        <Charts data={data} />
+        <Charts data={data_qsts} />
         <div className="layers">
           <Button
             id="qsts"
@@ -32,8 +32,7 @@ export default function Fetching({networkModel, inFile1}) {
             isActive={true}
           />
         </div>
-      </>
-      }
+      </>}
     </>
   );
 };
