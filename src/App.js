@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import Login from './UI/Login/Login';
-import Fetching from './UI/Fetching'
+import Fetching from './Data/Fetching'
 
 export default function App() {
 
