@@ -12,7 +12,7 @@ export async function fetchQstsData(dataURL) {
 
 export async function fetchSchedulingData(payload) {
 
-    const response = await fetch('http:/http://127.0.0.1:8000/es/solve', {
+    const response = await fetch('http://127.0.0.1:8000/es/solve', {
         method: 'POST',
         body: JSON.stringify(payload),
         headers: {
