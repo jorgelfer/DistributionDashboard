@@ -12,8 +12,8 @@ export default function App() {
   }
 
   const [enteredCase, setEnteredCase] = useState({
-    networkModel: "123Bus",
-    inFile1: "IEEE123Master.dss"
+    networkModel: "13Bus",
+    inFile1: "IEEE13Nodeckt.dss"
   });
 
   function handleInputChange(identifier, value) {

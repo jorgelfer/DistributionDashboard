@@ -8,7 +8,6 @@ import Net from '../ChartComponents/Network/Net';
 import MapLeaflet from '../ChartComponents/Mapping/MapLeaflet';
 import MapMapbox from '../ChartComponents/Mapping/MapMapbox';
 import MapGeojson from '../ChartComponents/Mapping/MapGeojson';
-import Symbol from '../ChartComponents/Network/Symbol';
 
 
 const layers = [
