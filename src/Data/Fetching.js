@@ -39,7 +39,7 @@ export default function Fetching({networkModel, inFile1}) {
         onSchedulingData={handleSchedulingData}
       />
       </>}
-      {(schedulingData !== null) && <>
+      {(isScheduling && schedulingData !== null) && <>
         <Charts data={schedulingData} />
       </>}
       <div className="layers">
