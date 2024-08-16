@@ -7,6 +7,8 @@ import Header from "../UI/Header/Header";
 import LineChart from './LineChart';
 import NetworkGraph from './NetworkGraph';
 
+import { updateData } from "../Data/update";
+
 export default function Charts(props) {
 
   const margin = {top: 30, right: 10, bottom: 50, left: 60};
@@ -22,6 +24,14 @@ export default function Charts(props) {
       setSelectedValue(selectedButton);
     }
   }
+
+  // console.log(props.data);
+  const [data, y_extent] = updateData(props.data, selectedValue, dateParser);
+  // console.log(data);
+
+  // const sumstat = d3.group(data.flat(), d => d.uid);
+  // sumstat.forEach((value, key) => console.log(key));
+  // console.log(sumstat.get("sourcebus.1"));
 
   return (
     <>
@@ -39,7 +49,8 @@ export default function Charts(props) {
         <div className='two'>
           <LineChart 
             margin={margin} 
-            data={props.data} 
+            data={data} 
+            y_extent={y_extent} 
             colorScale={colorScale}
             time_extent={time_extent}
             dateParser={dateParser}
