@@ -1,8 +1,35 @@
 import "./Axis.css";
 
+const AxisTimeBottom = props => {
+
+  return (
+    <g className="axis" transform={`translate(0, ${props.innerHeight})`} >
+      <line x1={0} y1={0} x2={props.innerWidth} y2={0} />
+      {props.time.map(time => (
+        <g key={time} transform={`translate(${props.scale(props.dateParser(time))}, 0)`}>
+          <line x1={0} y1={0} x2={0} y2={5} />
+          <text x={0} y={20} textAnchor="middle" >
+            {props.formatTime(props.dateParser(time))}
+          </text>
+        </g>
+      ))}
+      {props.label &&
+        <text
+          className="axis-label"
+          textAnchor="middle"
+          transform={`translate(${props.innerWidth / 2}, 45)`}
+        >
+          {props.label}
+        </text>
+      }
+    </g>
+  );
+};
+
 const AxisBottom = props => {
   const numberOfTicks = props.innerWidth / 100;
   const ticks = props.scale.ticks(numberOfTicks);
+  console.log(ticks);
 
   return (
     <g className="axis" transform={`translate(0, ${props.innerHeight})`} >
@@ -46,7 +73,7 @@ const AxisLeft = props => {
       {props.label &&
         <text
           textAnchor="middle"
-          transform={`translate(-42, ${props.innerHeight / 2}) rotate(-90)`}
+          transform={`translate(-52, ${props.innerHeight / 2}) rotate(-90)`}
         >
           {props.label}
         </text>
@@ -57,11 +84,23 @@ const AxisLeft = props => {
 
 const AxisBandBottom = props => {
   return (
-    <g></g>
+    <g className="axis" transform={`translate(0, ${props.innerHeight})`} >
+      <line x1={0} y1={0} x2={props.innerWidth} y2={0} />
+      {props.ticks.map(tick => (
+        <text
+          key={tick}
+          textAnchor="end"
+          alignmentBaseline="middle"
+          transform={`translate(${props.scale(tick) + props.scale.bandwidth() / 2}, 8) rotate(-90)`}
+        >
+          {tick}
+        </text>
+      ))}
+    </g>
   );
 };
 
-export default function Axis(props) {
+const Axis = props => {
 
   switch (props.type) {
     case "bottom":
@@ -70,7 +109,11 @@ export default function Axis(props) {
       return AxisLeft(props);
     case "band":
       return AxisBandBottom(props);
+    case "time":
+      return AxisTimeBottom(props);
     // no default
   };
 
 };
+
+export default Axis;

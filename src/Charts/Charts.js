@@ -14,7 +14,6 @@ export default function Charts(props) {
   const margin = {top: 30, right: 10, bottom: 50, left: 60};
   const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
   const dateParser = d3.timeParse("%Y-%m-%dT%H:%M");
-  const time_extent = d3.extent(props.data["time"], d => dateParser(d))
 
   // Header
   const [selectedValue, setSelectedValue] = useState('vm');
@@ -27,11 +26,6 @@ export default function Charts(props) {
 
   // console.log(props.data);
   const [data, y_extent] = updateData(props.data, selectedValue, dateParser);
-  // console.log(data);
-
-  // const sumstat = d3.group(data.flat(), d => d.uid);
-  // sumstat.forEach((value, key) => console.log(key));
-  // console.log(sumstat.get("sourcebus.1"));
 
   return (
     <>
@@ -52,7 +46,7 @@ export default function Charts(props) {
             data={data} 
             y_extent={y_extent} 
             colorScale={colorScale}
-            time_extent={time_extent}
+            time={props.data["time"]}
             dateParser={dateParser}
           />
         </div>
