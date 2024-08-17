@@ -1,12 +1,22 @@
-// import { useRef, useEffect } from 'react';
+import { useState } from 'react';
 import * as d3 from 'd3';
 
 import ChartContainer from '../ChartComponents/ChartContainer';
+import Buttons from '../Interactions/Buttons';
 import Card from '../UI/Card/Card';
 import Curve from '../ChartComponents/Curve';
 import Axis from '../ChartComponents/Axis';
 
-export default function LineChart(props) {
+const powers = [
+  { id: "p", label: "Active" },
+  { id: "q", label: "Reactive" },
+  { id: "s", label: "Aparent" },
+];
+
+export default function LineChartPQS(props) {
+
+  const [activePower, setActivePower] = useState("p");
+
   const width = 700;
   const height = 500;
   const innerWidth = width - props.margin.left - props.margin.right;
@@ -29,9 +39,33 @@ export default function LineChart(props) {
     .domain(props.y_extent)
     .range([innerHeight, 0]);
 
+  function powerSelectionHandler(id) {
+    if (activePower !== id) {
+      setActivePower(id);
+    }
+  };
+
+  function y_label(d) {
+    switch(activePower) {
+      case "p":
+        return "Power [kW]";
+      case "q":
+        return "Power [kvar]";
+      case "s":
+        return "Power [kVA]";
+      default:
+        return "Power [kW]";
+    }
+  }
+
   return(
     <Card>
       <h2>Operation Values</h2>
+      <Buttons
+        buttons={powers}
+        activeButton={activePower}
+        onButtonSelection={powerSelectionHandler}
+      />
       <ChartContainer
         width={width}
         height={height}
@@ -53,7 +87,7 @@ export default function LineChart(props) {
           scale={yScale}
           innerWidth={innerWidth}
           innerHeight={innerHeight}
-          label={"Voltage Magnitude [p.u.]"}
+          label={y_label()}
         />
         {uids.map((uid, i) => (
           <g key={`line-${uid}`}>
@@ -62,7 +96,7 @@ export default function LineChart(props) {
               xScale={xScale}
               yScale={yScale}
               xAccessor="time"
-              yAccessor="val"
+              yAccessor={activePower}
               stroke={props.colorScale(sumstat.get(uid)[0].phase)}
               strokeWidth={2}
             />

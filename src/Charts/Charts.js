@@ -1,12 +1,10 @@
 import React from "react";
 import { useState } from "react";
-
 import * as d3 from 'd3';
-
 import Header from "../UI/Header/Header";
-import LineChart from './LineChart';
+import LineChartVM from './LineChartVM';
+import LineChartPQS from './LineChartPQS';
 import NetworkGraph from './NetworkGraph';
-
 import { updateData } from "../Data/update";
 
 export default function Charts(props) {
@@ -41,14 +39,24 @@ export default function Charts(props) {
           />
         </div>
         <div className='two'>
-          <LineChart 
+          {["vm", "soc"].includes(selectedValue) &&
+          <LineChartVM 
             margin={margin} 
             data={data} 
             y_extent={y_extent} 
             colorScale={colorScale}
             time={props.data["time"]}
             dateParser={dateParser}
-          />
+          />}
+          {["p_dr", "p_d", "p_g"].includes(selectedValue) &&
+          <LineChartPQS 
+            margin={margin} 
+            data={data} 
+            y_extent={y_extent} 
+            colorScale={colorScale}
+            time={props.data["time"]}
+            dateParser={dateParser}
+          />}
         </div>
       </div>
     </>

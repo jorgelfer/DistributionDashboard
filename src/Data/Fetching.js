@@ -42,7 +42,7 @@ export default function Fetching({networkModel, inFile1}) {
       {(isScheduling && schedulingData !== null) && <>
         <Charts data={schedulingData} />
       </>}
-      <div className="layers">
+      <div className="buttons">
         <Button
           id="qsts"
           label="QSTS"

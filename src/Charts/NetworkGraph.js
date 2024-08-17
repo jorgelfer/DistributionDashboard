@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 
 import Card from '../UI/Card/Card';
 import ChartContainer from '../ChartComponents/ChartContainer';
-import Layers from '../Interactions/Layers';
+import Buttons from '../Interactions/Buttons';
 import Net from '../ChartComponents/Network/Net';
 import MapLeaflet from '../ChartComponents/Mapping/MapLeaflet';
 import MapMapbox from '../ChartComponents/Mapping/MapMapbox';
@@ -54,10 +54,10 @@ export default function NetworkGraph({margin, data, ...props}) {
   return(
     <Card>
       <h2>Network</h2>
-      <Layers
-        layers={layers}
-        activeLayer={activeLayer}
-        onLayerSelection={layerSelectionHandler}
+      <Buttons
+        buttons={layers}
+        activeButton={activeLayer}
+        onButtonSelection={layerSelectionHandler}
       />
       {activeLayer === "leaflet" && <MapLeaflet
           data={network}
