@@ -6,11 +6,13 @@ import mapboxgl from 'mapbox-gl';
 mapboxgl.accessToken = 'pk.eyJ1IjoiamZlcm5hbmRlejg3IiwiYSI6ImNseXU4MzBxdDAwNXYya29uYm44eHM4Y3cifQ.1DMghCCCvQjx_0dOaL5nJg';
 
 export default function MapMapbox(props) {
+
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng, setLng] = useState(-70.9);
-  const [lat, setLat] = useState(42.35);
-  const [zoom, setZoom] = useState(9);
+
+  const [lng, setLng] = useState(-84.402839);
+  const [lat, setLat] = useState(33.770696);
+  const [zoom, setZoom] = useState(15);
 
   useEffect(() => {
     if (map.current) return; // initialize map only once

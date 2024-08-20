@@ -5,9 +5,9 @@ import Card from '../UI/Card/Card';
 import ChartContainer from '../ChartComponents/ChartContainer';
 import Buttons from '../Interactions/Buttons';
 import Net from '../ChartComponents/Network/Net';
-import MapLeaflet from '../ChartComponents/Mapping/MapLeaflet';
-import MapMapbox from '../ChartComponents/Mapping/MapMapbox';
-import MapGeojson from '../ChartComponents/Mapping/MapGeojson';
+import LeafletMap from '../ChartComponents/Mapping/LeafletMap';
+import MapboxGLMap from '../ChartComponents/Mapping/MapboxGLMap';
+import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
 
 
 const layers = [
@@ -59,7 +59,7 @@ export default function NetworkGraph({margin, data, ...props}) {
         activeButton={activeLayer}
         onButtonSelection={layerSelectionHandler}
       />
-      {activeLayer === "leaflet" && <MapLeaflet
+      {activeLayer === "leaflet" && <LeafletMap
           data={network}
           colorScale={props.colorScale}
           activeLayer={activeLayer}
@@ -68,7 +68,7 @@ export default function NetworkGraph({margin, data, ...props}) {
           yScale={yScale}
           linkScale={linkScale}
       />}
-      {activeLayer === "mapbox" && <MapMapbox/>}
+      {activeLayer === "mapbox" && <MapboxGLMap/>}
       {["coordinates", "force"].includes(activeLayer) &&
         <ChartContainer
           width={width}
@@ -89,7 +89,7 @@ export default function NetworkGraph({margin, data, ...props}) {
           />
         </ChartContainer>}
       {activeLayer === "geojson" &&
-        <MapGeojson
+        <GeojsonMap
           width={width}
           height={height}
         />

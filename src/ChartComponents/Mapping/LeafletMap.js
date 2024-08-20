@@ -8,8 +8,8 @@ import { geoTransform, geoPath} from "d3-geo";
 export default function MapLeaflet(props) {
   // const mapRef = useRef(null);
   // const mapRef = useMap();
-  const latitude = -41.2858;
-  const longitude = 174.7868;
+  const latitude = 33.770696;
+  const longitude = -84.402839;
 
   function D3Layer(props) {
     const map = useMap();
