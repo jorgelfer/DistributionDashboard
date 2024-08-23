@@ -8,6 +8,7 @@ import Net from '../ChartComponents/Network/Net';
 import LeafletMap from '../ChartComponents/Mapping/LeafletMap';
 import MapboxGLMap from '../ChartComponents/Mapping/MapboxGLMap';
 import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
+import { nyc_geo_data, color_breaks } from "../ChartComponents/Mapping/nyc_data";
 
 
 const layers = [
@@ -68,7 +69,11 @@ export default function NetworkGraph({margin, data, ...props}) {
           yScale={yScale}
           linkScale={linkScale}
       />}
-      {activeLayer === "mapbox" && <MapboxGLMap/>}
+      {activeLayer === "mapbox" && 
+      <MapboxGLMap
+        data={nyc_geo_data()}
+        colorBreaks={color_breaks()}
+      />}
       {["coordinates", "force"].includes(activeLayer) &&
         <ChartContainer
           width={width}

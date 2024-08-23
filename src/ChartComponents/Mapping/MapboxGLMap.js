@@ -5,14 +5,26 @@ import mapboxgl from 'mapbox-gl';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiamZlcm5hbmRlejg3IiwiYSI6ImNseXU4MzBxdDAwNXYya29uYm44eHM4Y3cifQ.1DMghCCCvQjx_0dOaL5nJg';
 
-export default function MapMapbox(props) {
+export default function MapMapbox({data, colorBreaks}) {
 
   const mapContainer = useRef(null);
   const map = useRef(null);
 
-  const [lng, setLng] = useState(-84.402839);
-  const [lat, setLat] = useState(33.770696);
-  const [zoom, setZoom] = useState(15);
+  const [lng, setLng] = useState(-73.8748);
+  const [lat, setLat] = useState(40.8536);
+  const [zoom, setZoom] = useState(13);
+
+  const getFillColor = (colorBreaks) => {
+    let fc = []
+    fc.push('step')
+    fc.push(['get', 'popsqmi'])
+    fc.push('rgba(0,0,0,0)')
+    for(let colorBreak of colorBreaks) {
+      fc.push(colorBreak.break)
+      fc.push(`rgba(${colorBreak.rgba[0]}, ${colorBreak.rgba[1]}, ${colorBreak.rgba[2]},${colorBreak.rgba[3]})`)
+    }
+    return fc  
+  }
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
@@ -31,10 +43,27 @@ export default function MapMapbox(props) {
       setLat(map.current.getCenter().lat.toFixed(4));
       setZoom(map.current.getZoom().toFixed(2));
     });
-  
-  
-    // // Clean up on unmount
-    // return () => map.current.remove();
+
+    // add geojson source to map
+    map.current.on('load', () => {
+      map.current.addSource('nyc', {
+        type: 'geojson',
+        data: data
+      });
+
+      map.current.addLayer({
+        id: 'nyc-solid-line',
+        source: 'nyc',
+        type: 'line',
+        layout: {},
+        paint: {
+          'line-color': 'gray',
+        }
+      });
+    });
+
+    // add nodes to map
+
   }, []);
 
   return ( 
