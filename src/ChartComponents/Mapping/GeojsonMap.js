@@ -2,12 +2,33 @@ import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { geoMercator, geoPath} from "d3-geo";
 import Symbol from '../Network/Symbol';
+import { zoom } from "d3-zoom";
+import { select } from "d3-selection";
 
 export default function MapGeojson(props) {
 
   const lat = 40.8536;
   const lon = -73.8748;
 
+  const nodeSize = 2;
+  const symbolSize = 5;
+
+  const geoShift = 0.03;
+
+  // scales
+  const xScale = d3.scaleLinear()
+    .domain([0, d3.max(props.data.bus, d => d.x)])
+    .range([0, geoShift]);
+
+  const yScale = d3.scaleLinear()
+    .domain([0, d3.max(props.data.bus, d => d.y)])
+    .range([0, geoShift]);
+
+  const linkScale = d3.scaleSqrt()
+    .domain(d3.extent(props.data.branch, d => d.phases.length))
+    .range([1, 2.5]);
+
+  // main
   const mapRef = useRef();
   useEffect(() => {
     const mapContainer = d3.select(mapRef.current);
@@ -30,36 +51,69 @@ export default function MapGeojson(props) {
           .attr("stroke", "#09131b")
           .attr("stroke-opacity", 0.4);
  
-    const nodeEnter = mapContainer 
-    .selectAll('.node')
+    // append links
+    mapContainer
+    .selectAll(".link")
+      .data(props.data.branch)
+        .join("line")
+        .attr("class", "link")
+        .attr("x1", function(l) {
+          var n = props.data.bus.filter(function(d) {
+            return d.uid === l.source
+          })[0];
+          console.log(n);
+          d3.select(this).attr("y1", projection([xScale(n.x)+lon, yScale(n.y)+lat])[1]);
+          return projection([xScale(n.x)+lon, yScale(n.y)+lat])[0]
+        })
+        .attr("x2", function(l) {
+          var m = props.data.bus.filter(function(d) {
+            return d.uid === l.target
+          })[0];
+          console.log(m);
+          d3.select(this).attr("y2", projection([xScale(m.x)+lon, yScale(m.y)+lat])[1]);
+          return projection([xScale(m.x)+lon, yScale(m.y)+lat])[0]
+        })
+        .attr("stroke-width", d => linkScale(d.phases.length));
+
+    // Append nodes for each node in the graph
+    mapContainer 
+    .selectAll('.geo-node')
       .data(props.data.bus)
       .join('circle')
-        .attr("r", props.originalNodeSize)
+        .attr("r", nodeSize)
         .style('fill', d => props.colorScale(d.phases.length))
-        .attr('class', 'node')
-        .attr('cx', d => projection([props.xScale(d.x)+lon, props.yScale(d.y)+lat])[0])
-        .attr('cy', d => projection([props.xScale(d.x)+lon, props.yScale(d.y)+lat])[1]);
+        .attr('class', 'geo-node')
+        .attr('cx', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[0])
+        .attr('cy', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[1]);
         // .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append icons for each node in the graph
-    // console.log(props.selectedValue);
-    const pathEnter = mapContainer 
+    mapContainer 
     .selectAll('.symbol')
         .data(props.data.bus)
         .join("path")
             .attr("d", d3.symbol()
-              .size(200)
+              .size(symbolSize)
               .type(Symbol(props.selectedValue)))
             .attr('class', 'symbol')
             .attr("stroke", "black")
             .attr("fill", "black")
             .style("visibility", "visible")
             .attr('transform', function(d) { 
-              return `translate(${projection([props.xScale(d.x)+lon, props.yScale(d.y)+lat])[0]}, ${projection([props.xScale(d.x)+lon, props.yScale(d.y)+lat])[1]})`;
+              return `translate(${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[0]}, ${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[1]})`;
             });
             // .lower();
 
-  }, [props, lat, lon]);
+    // Handle zoom
+    const zoomHandler = zoom()
+      .on("zoom", (e) => {
+        mapContainer.attr("transform", e.transform);
+      });
+    
+    select(".map-container")
+      .call(zoomHandler);
+
+  }, [props, lat, lon, nodeSize, symbolSize, xScale, yScale, linkScale]);
 
   return ( 
     <g 

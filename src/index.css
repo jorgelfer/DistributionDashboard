@@ -90,8 +90,43 @@ a:hover, a:focus {
   stroke-width: 1;
 }
 
+/* Map container */
 .map-container {
-  height: 400px;
+  position: relative;
+  border: 1px solid #09131b;
+  overflow: hidden;
+}
+
+/* Map reset */
+#map-reset {
+  position: absolute;
+  top: 50;
+  right: 15px;
+  height: 40px;
+  padding: 0 20px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #f8fcff;
+  background-color: #35a7c2;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 250ms ease, opacity 250ms ease;
+}
+#map-reset.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+#map-reset:hover,
+#map-reset:focus {
+  background-color: #207ab5;
+}
+@media screen and (max-width: 768px) {
+  #map-reset {
+    top: 0;
+    right: 0;
+    padding: 0 10px;
+  }
 }
 
 .sidebar {
