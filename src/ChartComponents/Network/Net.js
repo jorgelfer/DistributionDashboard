@@ -82,7 +82,9 @@ export default function Net(props) {
         .attr('cy', d => props.yScale(d.y));
 
       pathEnter
-          .attr('transform', function(d) { return `translate(${props.xScale(d.x)+10}, ${props.yScale(d.y)+10})`;});
+          .attr('transform', function(d) { 
+            return `translate(${props.xScale(d.x)+10}, ${props.yScale(d.y)+10})`;
+          });
     }
     
     // initialize simulation

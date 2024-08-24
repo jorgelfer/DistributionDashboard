@@ -35,6 +35,14 @@ export default function NetworkGraph({margin, data, ...props}) {
     .domain([0, d3.max(data.bus, d => d.y)])
     .range([innerHeight, 0]);
 
+  const xScaleGeo = d3.scaleLinear()
+    .domain([0, d3.max(data.bus, d => d.x)])
+    .range([0, 0.01]);
+
+  const yScaleGeo = d3.scaleLinear()
+    .domain([0, d3.max(data.bus, d => d.y)])
+    .range([0.01, 0]);
+
   // scales
   const linkScale = d3.scaleSqrt()
     .domain(d3.extent(data.branch, function (d) { return d.phases.length; }))
@@ -94,6 +102,8 @@ export default function NetworkGraph({margin, data, ...props}) {
             geo_data={bronx}
             data={network}
             originalNodeSize={originalNodeSize}
+            xScale={xScaleGeo}
+            yScale={yScaleGeo}
             linkScale={linkScale}
             colorScale={props.colorScale}
             selectedValue={props.selectedValue}
