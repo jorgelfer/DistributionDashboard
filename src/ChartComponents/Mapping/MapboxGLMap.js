@@ -14,18 +14,6 @@ export default function MapMapbox({data, colorBreaks}) {
   const [lat, setLat] = useState(40.8536);
   const [zoom, setZoom] = useState(13);
 
-  const getFillColor = (colorBreaks) => {
-    let fc = []
-    fc.push('step')
-    fc.push(['get', 'popsqmi'])
-    fc.push('rgba(0,0,0,0)')
-    for(let colorBreak of colorBreaks) {
-      fc.push(colorBreak.break)
-      fc.push(`rgba(${colorBreak.rgba[0]}, ${colorBreak.rgba[1]}, ${colorBreak.rgba[2]},${colorBreak.rgba[3]})`)
-    }
-    return fc  
-  }
-
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({

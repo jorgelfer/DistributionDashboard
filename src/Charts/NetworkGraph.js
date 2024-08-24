@@ -9,6 +9,7 @@ import LeafletMap from '../ChartComponents/Mapping/LeafletMap';
 import MapboxGLMap from '../ChartComponents/Mapping/MapboxGLMap';
 import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
 import { nyc_geo_data, color_breaks } from "../ChartComponents/Mapping/nyc_data";
+import bronx from "../ChartComponents/Mapping/bronx.json";
 
 
 const layers = [
@@ -94,10 +95,18 @@ export default function NetworkGraph({margin, data, ...props}) {
           />
         </ChartContainer>}
       {activeLayer === "geojson" &&
-        <GeojsonMap
+        <ChartContainer
           width={width}
           height={height}
-        />
+          margin={margin}
+          className="network-graph"
+          >
+          <GeojsonMap
+            width={innerWidth}
+            height={innerHeight}
+            data={bronx}
+          />
+        </ChartContainer>
       }
     </Card>
   );
