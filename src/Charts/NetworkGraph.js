@@ -5,7 +5,6 @@ import Card from '../UI/Card/Card';
 import ChartContainer from '../ChartComponents/ChartContainer';
 import Buttons from '../Interactions/Buttons';
 import Net from '../ChartComponents/Network/Net';
-import LeafletMap from '../ChartComponents/Mapping/LeafletMap';
 import MapboxGLMap from '../ChartComponents/Mapping/MapboxGLMap';
 import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
 import { nyc_geo_data, color_breaks } from "../ChartComponents/Mapping/nyc_data";
@@ -61,15 +60,6 @@ export default function NetworkGraph({margin, data, ...props}) {
         activeButton={activeLayer}
         onButtonSelection={layerSelectionHandler}
       />
-      {activeLayer === "leaflet" && <LeafletMap
-          data={network}
-          colorScale={props.colorScale}
-          activeLayer={activeLayer}
-          originalNodeSize={originalNodeSize}
-          xScale={xScale}
-          yScale={yScale}
-          linkScale={linkScale}
-      />}
       {activeLayer === "mapbox" && 
       <MapboxGLMap
         data={nyc_geo_data()}
