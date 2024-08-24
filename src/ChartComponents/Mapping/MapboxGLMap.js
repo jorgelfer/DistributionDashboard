@@ -5,7 +5,7 @@ import mapboxgl from 'mapbox-gl';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiamZlcm5hbmRlejg3IiwiYSI6ImNseXU4MzBxdDAwNXYya29uYm44eHM4Y3cifQ.1DMghCCCvQjx_0dOaL5nJg';
 
-export default function MapMapbox({data, colorBreaks}) {
+export default function MapMapbox(props) {
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -36,7 +36,7 @@ export default function MapMapbox({data, colorBreaks}) {
     map.current.on('load', () => {
       map.current.addSource('nyc', {
         type: 'geojson',
-        data: data
+        data: props.data
       });
 
       map.current.addLayer({
