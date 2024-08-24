@@ -92,6 +92,11 @@ export default function NetworkGraph({margin, data, ...props}) {
             width={innerWidth}
             height={innerHeight}
             geo_data={bronx}
+            data={network}
+            originalNodeSize={originalNodeSize}
+            linkScale={linkScale}
+            colorScale={props.colorScale}
+            selectedValue={props.selectedValue}
           />
         </ChartContainer>
       }
