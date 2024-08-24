@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { select } from "d3-selection";
 import { geoMercator, geoPath} from "d3-geo";
 
 export default function MapGeojson(props) {
@@ -10,14 +9,15 @@ export default function MapGeojson(props) {
     const mapContainer = d3.select(mapRef.current);
 
     const projection = geoMercator()
-        .fitExtent([[0, 0], [props.width, props.height]], props.data);
+      .translate([props.width/2, props.height/2])
+      .fitExtent([[0, 0], [props.width, props.height]], props.geo_data);
 
     const geoPathGenerator = geoPath()
         .projection(projection); 
 
     mapContainer 
       .selectAll(".nyc-path")
-      .data(props.data.features)
+      .data(props.geo_data.features)
       .join("path")
           .attr("class", "country-path")
           .attr("d", geoPathGenerator)

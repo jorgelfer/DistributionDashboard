@@ -91,7 +91,7 @@ export default function NetworkGraph({margin, data, ...props}) {
           <GeojsonMap
             width={innerWidth}
             height={innerHeight}
-            data={bronx}
+            geo_data={bronx}
           />
         </ChartContainer>
       }
