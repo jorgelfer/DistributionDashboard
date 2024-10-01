@@ -37,7 +37,7 @@ export default function NetworkGraph({margin, data, ...props}) {
 
   // scales
   const linkScale = d3.scaleSqrt()
-    .domain(d3.extent(data.branch, function (d) { return d.phases.length; }))
+    .domain(d3.extent(data.branch, function (d) { return d.f_connections.length; }))
     .range([2, 6]);
 
   function layerSelectionHandler(id) {

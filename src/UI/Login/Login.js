@@ -2,7 +2,7 @@ import './Login.css';
 
 export default function Login({values, onEnteredValues, onSubmitted}) {
 
-  const networkModelIsInvalid = !["123Bus", "13Bus"].includes(values.networkModel);
+  const networkModelIsInvalid = !["123Bus", "13Bus", "4Bus", "3Bus"].includes(values.networkModel);
 
   function handleSubmit(event) {
     event.preventDefault();

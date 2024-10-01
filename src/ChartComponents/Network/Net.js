@@ -38,12 +38,13 @@ export default function Net(props) {
         .on('end', dragended);
 
     // Append weighted lines for each link in network
+    console.log(props.data.branch);
     const linkEnter = networkContainer 
       .selectAll('.link')
       .data(props.data.branch)
         .join('line')
           .attr('class', 'link')
-          .attr('stroke-width', d => props.linkScale(d.phases.length));
+          .attr('stroke-width', d => props.linkScale(d.f_connections.length));
 
     // Append circles for each node in the graph
     const nodeEnter = networkContainer 
