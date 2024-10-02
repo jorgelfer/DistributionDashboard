@@ -7,6 +7,108 @@ export default function Net(props) {
   const networkRef = useRef();
   useEffect(() => {
     const networkContainer = d3.select(networkRef.current);
+    
+    const curve = d3.line()
+        .curve(d3.curveCardinalClosed.tension(.85));
+
+    function getBus(n) { return n.bus; }
+
+    var radius = 4,      // default point radius
+        hull_offset = 15,    // cluster hull offset
+        collapse = {}, // collapsed clusters
+        node_map = {},       // node map
+        data, 
+        net, 
+        simulation;
+
+    // constructs the network to visualize
+    function network(data, prev, index, collapse) {
+      collapse = collapse || {};
+      let bus_map = {},    // bus map
+          link_map = {},    // link map
+          bus_nodes = {},    // previous bus nodes
+          bus_centroids = {},    // previous bus centroids
+          net_nodes = [], // output nodes
+          net_links = []; // output links
+
+      node_map = {}    // reset node map
+        
+      // process previous network by reusing nodes for centroid calculation
+      if (prev) {
+        prev.nodes.forEach(n => {
+          let i = index(n), o;
+          if (n.size > 0) {
+            bus_nodes[i] = n;
+            n.size = 0;
+          } else {
+            o = bus_centroids[i] || (bus_centroids[i] = {x:0, y:0, count:0});
+            o.x += n.x;
+            o.y += n.y;
+            o.count += 1;
+          }
+        });
+      }
+
+      // determine nodes
+      data.nodes.forEach(n => {
+        let i = index(n),
+            l = bus_map[i] || 
+            (bus_map[i] = bus_nodes[i]) || 
+            (bus_map[i] = {uid:i.toString(), bus:i, size:0, nodes:[]});
+
+        if (collapse[i] !== true) {
+          // the node should be directly visible
+          node_map[n.uid] = net_nodes.length;
+          net_nodes.push(n);
+          if (bus_nodes[i]) {
+            // place new nodes at cluster location (plus jitter)
+            n.x = bus_nodes[i].x + Math.random();
+            n.y = bus_nodes[i].y + Math.random();
+          }
+        } else {
+          // the node is part of a collapsed cluster
+          if (l.size == 0) {
+            // if new cluster, add to set and position at centroid of leaf nodes
+            node_map[i] = net_nodes.length;
+            net_nodes.push(l);
+            if (bus_centroids[i]) {
+              l.x = bus_centroids[i].x / bus_centroids[i].count;
+              l.y = bus_centroids[i].y / bus_centroids[i].count;
+            }
+          }
+          l.nodes.push(n);
+        }
+        // always count bus size as we also use it to tweak the force graph strengths/distances
+        l.size += 1;
+        n.bus_data = l;
+      });
+
+      for (i in bus_map) { bus_map[i].link_count = 0; }
+
+      // determine links
+      data.branches.forEach(e => {
+        let u = index(e.source),
+            v = index(e.target);
+        
+        if (u != v) {
+          bus_map[u].link_count++;
+          bus_map[v].link_count++;
+        }
+
+        // u_id and v_id are the node ids in case of original nodes 
+        // or cluster ids in case of collapsed nodes
+        u_id = !collapse[u] ? e.source.uid : u.toString();
+        v_id = !collapse[v] ? e.target.uid : v.toString();
+
+        // define a link id where the smallest index is always first
+        let l = lm[e.uid] || (lm[i] = {id: e.uid, source:u_id, target:v_id, size:0});
+        l.size += 1;
+      });
+
+      for (i in lm) { net_links.push(lm[i]); }
+
+      return {nodes: net_nodes, links: net_links};
+    }
 
     // Handlers for drag events on nodes
     // Drag events adjust the [fx,fy] of the nodes to override the simulation
@@ -38,7 +140,6 @@ export default function Net(props) {
         .on('end', dragended);
 
     // Append weighted lines for each link in network
-    console.log(props.data.branch);
     const linkEnter = networkContainer 
       .selectAll('.link')
       .data(props.data.branch)
