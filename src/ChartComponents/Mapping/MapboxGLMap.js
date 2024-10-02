@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import * as d3 from "d3";
-import { geoTransform, geoPath} from "d3-geo";
 import mapboxgl from 'mapbox-gl';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiamZlcm5hbmRlejg3IiwiYSI6ImNseXU4MzBxdDAwNXYya29uYm44eHM4Y3cifQ.1DMghCCCvQjx_0dOaL5nJg';
@@ -52,7 +50,7 @@ export default function MapMapbox(props) {
 
     // add nodes to map
 
-  }, []);
+  }, [lng, lat, zoom, props]);
 
   return ( 
     <div>

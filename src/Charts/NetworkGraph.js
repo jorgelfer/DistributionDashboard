@@ -86,12 +86,16 @@ export default function NetworkGraph({margin, data, ...props}) {
           width={width}
           height={height}
           margin={margin}
-          className="network-graph"
+          className="map-container"
           >
           <GeojsonMap
             width={innerWidth}
             height={innerHeight}
-            data={bronx}
+            geo_data={bronx}
+            data={network}
+            linkScale={linkScale}
+            colorScale={props.colorScale}
+            selectedValue={props.selectedValue}
           />
         </ChartContainer>
       }
