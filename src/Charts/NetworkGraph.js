@@ -28,11 +28,9 @@ export default function NetworkGraph({margin, data, ...props}) {
   const originalNodeSize = 6;
 
   const xScale = d3.scaleLinear()
-    .domain([0, d3.max(data.bus, d => d.x)])
     .range([0, innerWidth]);
 
   const yScale = d3.scaleLinear()
-    .domain([0, d3.max(data.bus, d => d.y)])
     .range([innerHeight, 0]);
 
   // scales
@@ -79,6 +77,8 @@ export default function NetworkGraph({margin, data, ...props}) {
             linkScale={linkScale}
             colorScale={props.colorScale}
             selectedValue={props.selectedValue}
+            innerHeight={innerHeight}
+            innerWidth={innerWidth}
           />
         </ChartContainer>}
       {activeLayer === "geojson" &&
