@@ -10,10 +10,10 @@ export default function NodeBreaker(props) {
   props.data.bus.forEach(d => {
     for (let i=0; i<3; ++i) {
       if (i === 0) {
-        data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x, y: d.y});
+        data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x, y: d.y, x_shift: 0, y_shift: 0, phases: d.phases});
       } 
       else {
-        data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x+((-1)**i)*30, y: d.y - 30});
+        data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x, y: d.y, x_shift: ((-1)**i)*30, y_shift: - 30, phases: d.phases});
         // data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x, y: d.y});
       }
     }
@@ -49,7 +49,9 @@ export default function NodeBreaker(props) {
     var off = 15,    // cluster hull offset
         collapse = {}, // collapsed clusters
         nm = {},       // node map
-        net, simulation;
+        net, 
+        simulation,
+        prev_pos = [];
 
     // constructs the network to visualize
     function network(data, prev, index, collapse) {
@@ -62,19 +64,25 @@ export default function NodeBreaker(props) {
           net_links = []; // output links
 
       nm = {}    // reset node map
+      // console.log(data.nodes);
         
       // process previous nodes for reuse or centroid calculation
       if (prev) {
         prev.nodes.forEach(n => {
           let i = index(n), o;
+          // console.log(n.size);
           if (n.size > 0) {
             gn[i] = n;
             n.size = 0;
-          } else {
+          } else if (n === 0) {
             o = gc[i] || (gc[i] = {x:0,y:0,count:0});
             o.x += n.x;
             o.y += n.y;
             o.count += 1;
+          } else {
+            // console.log("n is undefined");
+            // n.x += n.x_shift;
+            // n.y += n.y_shift;
           }
         });
       }
@@ -83,7 +91,7 @@ export default function NodeBreaker(props) {
       for (let k=0; k<data.nodes.length; ++k) {
         let n = data.nodes[k],
             i = index(n),
-            l = gm[i] || (gm[i]=gn[i]) || (gm[i]={id:i.toString(), group:i, size:0, x:n.x, y:n.y, nodes:[]});
+            l = gm[i] || (gm[i]=gn[i]) || (gm[i]={id:i.toString(), phases:n.phases, group:i, size:0, x:n.x, y:n.y, nodes:[]});
 
         if (collapse[i] !== true) {
           // the node should be directly visible
@@ -92,8 +100,8 @@ export default function NodeBreaker(props) {
           if (gn[i]) {
             // console.log("from collapse = false")
             // place new nodes at cluster location (plus jitter)
-            // n.x = gn[i].x + Math.random();
-            // n.y = gn[i].y + Math.random();
+            n.x = gn[i].x + n.x_shift;
+            n.y = gn[i].y + n.y_shift;
           }
         } else {
           // the node is part of a collapsed cluster
@@ -246,7 +254,7 @@ export default function NodeBreaker(props) {
         .append("circle")
           .attr("class", "foreground")
           .attr("r", d => d.radius)
-          .style("fill", d => props.colorScale(d.group))
+          .style("fill", d => props.colorScale(d.phases.length))
           .on("click", node_click)
 
       // Append icons for each node in the graph
@@ -333,19 +341,9 @@ export default function NodeBreaker(props) {
       function dragstarted(event,d) {
         if (!event.active) simulation.alphaTarget(0.3).restart();
 
+        prev_pos = [d.x, d.y];
         d.fx = d.x;
         d.fy = d.y;
-        fix_nodes(d);
-      }
-
-      // Preventing other nodes from moving while dragging one node
-      function fix_nodes(this_node) {
-          net.nodes.forEach(function(d){
-              if (this_node !== d){
-                  d.fx = d.x;
-                  d.fy = d.y;
-              }
-          });
       }
 
       function dragged(event,d) {
@@ -409,6 +407,11 @@ export default function NodeBreaker(props) {
         // Setting to null allows the simulation to change the [fx,fy]
         // d.fx = event.x;
         // d.fy = event.y;
+
+        // set previous position to the current position
+        d.x = prev_pos[0];
+        d.y = prev_pos[1];
+        prev_pos = [];
 
       };
 
