@@ -8,6 +8,9 @@ export default function Net(props) {
   useEffect(() => {
     const networkContainer = d3.select(networkRef.current);
 
+    props.xScale.domain(d3.extent(props.data.bus, d => d.x));
+    props.yScale.domain(d3.extent(props.data.bus, d => d.y));
+
     // Handlers for drag events on nodes
     // Drag events adjust the [fx,fy] of the nodes to override the simulation
     function dragstarted(event,d) {
@@ -37,8 +40,10 @@ export default function Net(props) {
         .on('drag', dragged)
         .on('end', dragended);
 
+    console.log(props.data);
+
     // Append weighted lines for each link in network
-    console.log(props.data.branch);
+    // console.log(props.data.branch);
     const linkEnter = networkContainer 
       .selectAll('.link')
       .data(props.data.branch)

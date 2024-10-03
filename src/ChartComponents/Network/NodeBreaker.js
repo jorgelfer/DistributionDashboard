@@ -4,6 +4,39 @@ import * as d3 from 'd3';
 
 export default function NodeBreaker(props) {
 
+  // --------------------------------------------------------
+  // organize bus and branch data into nodes and links
+  let data = {nodes: [], links: []};
+  props.data.bus.forEach(d => {
+    for (let i=0; i<3; ++i) {
+      if (i === 0) {
+        data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x, y: d.y});
+      } 
+      else {
+        data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x+((-1)**i)*10, y: d.y - 10});
+        // data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x, y: d.y});
+      }
+    }
+  });
+
+  props.data.branch.forEach(d => {
+    data.links.push({source: `${d.source}_n0`, target: `${d.source}_n1`});
+    data.links.push({source: `${d.source}_n0`, target: `${d.source}_n2`});
+    data.links.push({source: `${d.source}_n2`, target: `${d.target}_n0`});
+  });
+
+  // update scales
+  props.xScale.domain(d3.extent(data.nodes, d => d.x));
+  props.yScale.domain(d3.extent(data.nodes, d => d.y));
+
+  // make source and target into actual references
+  // console.log(props.data);
+  for (let i=0; i<data.links.length; ++i) {
+    let o = data.links[i];
+    o.source = data.nodes.find(x => x.id === o.source);
+    o.target = data.nodes.find(x => x.id === o.target);
+  }
+
   const networkRef = useRef();
   useEffect(() => {
     const networkContainer = d3.select(networkRef.current);
@@ -16,7 +49,7 @@ export default function NodeBreaker(props) {
     var off = 15,    // cluster hull offset
         collapse = {}, // collapsed clusters
         nm = {},       // node map
-        data, net, simulation;
+        net, simulation;
 
     // constructs the network to visualize
     function network(data, prev, index, collapse) {
@@ -141,42 +174,13 @@ export default function NodeBreaker(props) {
     }
 
     // --------------------------------------------------------
-    // organize bus and branch data into nodes and links
-    data = {nodes: [], links: []};
-    props.data.bus.forEach(d => {
-      for (let i=0; i<3; ++i) {
-        if (i === 0) {
-          data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x, y: d.y});
-        } 
-        else {
-          data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x+((-1)^i)*10, y: d.y+((-1)^i)*10});
-        }
-      }
-    });
 
-    props.data.branch.forEach(d => {
-      data.links.push({source: `${d.source}_n0`, target: `${d.source}_n1`});
-      data.links.push({source: `${d.source}_n0`, target: `${d.source}_n2`});
-      data.links.push({source: `${d.source}_n2`, target: `${d.target}_n0`});
-    });
-
-    // update scales
-    props.xScale.domain(d3.extent(data.nodes, d => d.x));
-    props.yScale.domain(d3.extent(data.nodes, d => d.y));
-
-    // make source and target into actual references
-    // console.log(props.data);
-    for (let i=0; i<data.links.length; ++i) {
-      let o = data.links[i];
-      o.source = data.nodes.find(x => x.id === o.source);
-      o.target = data.nodes.find(x => x.id === o.target);
-    }
-
-    // collapse all nodes in the beginning
     let groups = Array.from(new Set(data.nodes.map(d => d.group)));
+    // collapse all nodes in the beginning
     groups.forEach(g => {
       collapse[g] = true;
     });
+    // console.log(data);
 
     init();
 
@@ -189,10 +193,8 @@ export default function NodeBreaker(props) {
     function init() {
       if (simulation) simulation.stop();
 
-      // console.log("data", props.data);
-      // console.log("processed data", data);
       net = network(data, net, getGroup, collapse);
-      // console.log("net", net);
+      console.log(net);
 
       let drag = d3.drag()
           .on('start', dragstarted)
@@ -280,9 +282,8 @@ export default function NodeBreaker(props) {
       };           
 
       simulation = d3.forceSimulation()
-        .force("charge", d3.forceManyBody().strength(-50))
-        .force("center", d3.forceCenter().x(0).y(0))
-        .force("link", d3.forceLink().id(d => d.id).strength(d => d.size/10))
+        .force("charge", d3.forceManyBody())
+        .force("link", d3.forceLink().id(d => d.id))
         .nodes(net.nodes)
         .on("tick", updateNetwork);
 
@@ -307,7 +308,7 @@ export default function NodeBreaker(props) {
           })
           .lower();
       
-      if (props.activeLayer === 'coordinates') {
+      if (props.activeLayer === 'nodebreaker') {
         simulation.force("link", null);
         simulation.force("charge", null);
       }
@@ -429,11 +430,20 @@ export default function NodeBreaker(props) {
         d3.selectAll("line.highlight").style("stroke-opacity", 0);
       }
 
+
+
+
+
+
+
+
     }
 
 
 
-  }, [props]);
+
+
+  }, [data, props]);
 
     return (
       <g 
