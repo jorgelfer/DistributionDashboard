@@ -13,7 +13,7 @@ export default function NodeBreaker(props) {
         data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x, y: d.y});
       } 
       else {
-        data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x+((-1)**i)*10, y: d.y - 10});
+        data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x+((-1)**i)*30, y: d.y - 30});
         // data.nodes.push({id: `${d.uid}_n${i}`, group: d.uid, x: d.x, y: d.y});
       }
     }
@@ -90,9 +90,10 @@ export default function NodeBreaker(props) {
           nm[n.id] = net_nodes.length;
           net_nodes.push(n);
           if (gn[i]) {
+            // console.log("from collapse = false")
             // place new nodes at cluster location (plus jitter)
-            n.x = gn[i].x + Math.random();
-            n.y = gn[i].y + Math.random();
+            // n.x = gn[i].x + Math.random();
+            // n.y = gn[i].y + Math.random();
           }
         } else {
           // the node is part of a collapsed cluster
