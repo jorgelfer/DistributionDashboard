@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import Card from '../UI/Card/Card';
 import ChartContainer from '../ChartComponents/ChartContainer';
 import Buttons from '../Interactions/Buttons';
+import NodeBreaker from '../ChartComponents/Network/NodeBreaker';
 import Net from '../ChartComponents/Network/Net';
 import MapboxGLMap from '../ChartComponents/Mapping/MapboxGLMap';
 import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
@@ -12,6 +13,7 @@ import bronx from "../ChartComponents/Mapping/bronx.json";
 
 const layers = [
   { id: "coordinates", label: "Coordinates" },
+  { id: "nodebreaker", label: "Node Breaker" },
   { id: "force", label: "Force" },
   { id: "mapbox", label: "Mapbox" },
   { id: "geojson", label: "Geojson" },
@@ -60,6 +62,26 @@ export default function NetworkGraph({margin, data, ...props}) {
       <MapboxGLMap
         data={bronx}
       />}
+      {activeLayer === "nodebreaker" && 
+        <ChartContainer
+          width={width}
+          height={height}
+          margin={margin}
+          className="network-graph"
+          >
+          <NodeBreaker
+            margin={margin}
+            data={network}
+            activeLayer={activeLayer}
+            originalNodeSize={originalNodeSize}
+            xScale={xScale}
+            yScale={yScale}
+            linkScale={linkScale}
+            colorScale={props.colorScale}
+            selectedValue={props.selectedValue}
+          />
+        </ChartContainer>
+      }
       {["coordinates", "force"].includes(activeLayer) &&
         <ChartContainer
           width={width}
@@ -77,10 +99,9 @@ export default function NetworkGraph({margin, data, ...props}) {
             linkScale={linkScale}
             colorScale={props.colorScale}
             selectedValue={props.selectedValue}
-            innerHeight={innerHeight}
-            innerWidth={innerWidth}
           />
-        </ChartContainer>}
+        </ChartContainer>
+        }
       {activeLayer === "geojson" &&
         <ChartContainer
           width={width}
