@@ -11,36 +11,7 @@ export default function Net(props) {
     props.xScale.domain(d3.extent(props.data.bus, d => d.x));
     props.yScale.domain(d3.extent(props.data.bus, d => d.y));
 
-    // Handlers for drag events on nodes
-    // Drag events adjust the [fx,fy] of the nodes to override the simulation
-    function dragstarted(event,d) {
-      d3.select(this).classed("fixed", true);
-      if (!event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x;
-      d.fy = d.y;
-    }
-
-    function dragged(event,d) {
-      // get the x and y position of the svg
-      const [xs, ys] = d3.pointer(event, d3.select(".network-graph").node());
-      d.fx = props.xScale.invert(xs - props.margin.left);
-      d.fy = props.yScale.invert(ys - props.margin.top);
-    };
-
-    function dragended(event,d) {
-      if (!event.active) simulation.alphaTarget(0);
-      // Keeping the [fx,fy] at the dragged positioned will pin it
-      // Setting to null allows the simulation to change the [fx,fy]
-      d.fx = null;
-      d.fy = null;
-    };
-
-    let drag = d3.drag()
-        .on('start', dragstarted)
-        .on('drag', dragged)
-        .on('end', dragended);
-
-    console.log(props.data);
+    // console.log(props.data);
 
     // Append weighted lines for each link in network
     // console.log(props.data.branch);
@@ -50,31 +21,41 @@ export default function Net(props) {
         .join('line')
           .attr('class', 'link')
           .attr('stroke-width', d => props.linkScale(d.f_connections.length));
-
-    // Append circles for each node in the graph
-    const nodeEnter = networkContainer 
-    .selectAll('.node')
+      
+    let drag = d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended);
+    
+    var nodeEnter = networkContainer
+      .selectAll(".node")
       .data(props.data.bus)
-      .join('circle')
-        .attr("r", props.originalNodeSize)
-        .style('fill', d => props.colorScale(d.phases.length))
-        .attr('class', 'node')
+      .join("g")
+        .attr("class", "node")
+        .on("click", node_click)
+        .on("dblclick", node_dblclick)
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
-    // Append icons for each node in the graph
-    // console.log(props.selectedValue);
-    const pathEnter = networkContainer 
-    .selectAll('.symbol')
-        .data(props.data.bus)
-        .join("path")
-            .attr("d", d3.symbol()
-              .size(200)
-              .type(Symbol(props.selectedValue)))
-            .attr('class', 'symbol')
-            .attr("stroke", "black")
-            .attr("fill", "black")
-            .style("visibility", "visible")
-            .lower();
+    // Append circles for each node in the graph
+    nodeEnter
+      .append('circle')
+        .attr('class', 'circle')
+        .attr("r", props.originalNodeSize)
+        .style('fill', d => props.colorScale(d.phases.length))
+
+    nodeEnter
+      .append("path")
+        .attr("class", "symbol")
+        .attr("stroke", "black")
+        .attr("fill", "black")
+        .attr("dx", 10)
+        .attr("dy", 10)
+        .attr("d", d3.symbol()
+          .size(200)
+          .type(Symbol(props.selectedValue))
+        )
+        .style("display", "none")
+        .lower();
 
     function tickSimulation() {
       linkEnter
@@ -84,11 +65,7 @@ export default function Net(props) {
         .attr('y2', d => props.yScale(d.target.y));
 
       nodeEnter
-        .attr('cx', d => props.xScale(d.x))
-        .attr('cy', d => props.yScale(d.y));
-
-      pathEnter
-          .attr('transform', function(d) { return `translate(${props.xScale(d.x)+10}, ${props.yScale(d.y)+10})`;});
+          .attr('transform', function(d) { return `translate(${props.xScale(d.x)}, ${props.yScale(d.y)})`;});
     }
     
     // initialize simulation
@@ -109,6 +86,43 @@ export default function Net(props) {
       simulation.force("link", null);
       simulation.force("charge", null);
     }
+
+
+    // Handlers for click events on nodes
+    function node_dblclick(event, d) {
+        simulation.alpha(1).restart();
+        d3.select(this).select("path.symbol")
+          .style("display", "none");
+    }
+
+    function node_click(event, d) {
+        simulation.alpha(1).restart();
+        d3.select(this).select("path.symbol")
+          .style("display", "block");
+    }
+
+    // Handlers for drag events on nodes
+    // Drag events adjust the [fx,fy] of the nodes to override the simulation
+    function dragstarted(event,d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+
+    function dragged(event,d) {
+      // get the x and y position of the svg
+      const [xs, ys] = d3.pointer(event, d3.select(".network-graph").node());
+      d.fx = props.xScale.invert(xs - props.margin.left);
+      d.fy = props.yScale.invert(ys - props.margin.top);
+    };
+
+    function dragended(event,d) {
+      if (!event.active) simulation.alphaTarget(0);
+      // Keeping the [fx,fy] at the dragged positioned will pin it
+      // Setting to null allows the simulation to change the [fx,fy]
+      d.fx = null;
+      d.fy = null;
+    };
 
   }, [props]);
 
