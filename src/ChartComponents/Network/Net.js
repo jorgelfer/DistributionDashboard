@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import Symbol from './Symbol';
+import d3Tip from 'd3-tip'
 
 export default function Net(props) {
 
@@ -8,6 +9,18 @@ export default function Net(props) {
   useEffect(() => {
     const networkContainer = d3.select(networkRef.current);
 
+    // Tooltip definition
+    let toolTip = d3Tip()
+        .attr("class", "d3-tip")
+        .offset([10, 10])
+        .html(function (event, d) {
+            return "<h5>" + d['uid'] + "</h5>";
+        });
+
+    // Call tooltip to initialize it to document and svg
+    networkContainer.call(toolTip);
+
+    // Set the domain of the x and y scales
     props.xScale.domain(d3.extent(props.data.bus, d => d.x));
     props.yScale.domain(d3.extent(props.data.bus, d => d.y));
 
@@ -32,9 +45,12 @@ export default function Net(props) {
       .data(props.data.bus)
       .join("g")
         .attr("class", "node")
+        .on('mouseover', toolTip.show) // Add mouse hover tooltip listeners
+        .on('mouseout', toolTip.hide)
         .on("click", node_click)
         .on("dblclick", node_dblclick)
         .call(drag); // Call drag object to setup all drag listeners for nodes
+
 
     // Append circles for each node in the graph
     nodeEnter
