@@ -10,7 +10,7 @@ export default function Login({values, onEnteredValues, onSubmitted}) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form name="login_form" onSubmit={handleSubmit}>
       <h2 className="login-header">CASE DEFINITION</h2>
       <div className="control-row">
         <div className="control no-margin">

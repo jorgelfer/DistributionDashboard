@@ -9,22 +9,23 @@ function SymbolDisplay({id, name, viewBox, path}) {
 }
 
 export default function Symbol(selectedValue) {
+  return d3.symbolDiamond;
 
-  switch (selectedValue) {
-    case "p_d":
-      return d3.symbolTriangle;
-    case "p_i":
-      return d3.symbolCross;
-    case "soc":
-      return d3.symbolDiamond;
-    case "p_g":
-      return d3.symbolPlus;
-    case "p_dr":
-      return d3.symbolAsterisk;
-    case "vm":
-      return d3.symbolAsterisk;
-    case "flow":
-      return d3.symbolAsterisk;
-  };
+  // switch (selectedValue) {
+  //   case "p_d":
+  //     return d3.symbolTriangle;
+  //   case "p_i":
+  //     return d3.symbolCross;
+  //   case "soc":
+  //     return d3.symbolDiamond;
+  //   case "p_g":
+  //     return d3.symbolPlus;
+  //   case "p_dr":
+  //     return d3.symbolAsterisk;
+  //   case "vm":
+  //     return d3.symbolAsterisk;
+  //   case "flow":
+  //     return d3.symbolAsterisk;
+  // };
 
 };

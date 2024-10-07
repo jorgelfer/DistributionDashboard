@@ -5,26 +5,68 @@ import d3Tip from 'd3-tip'
 
 export default function Net(props) {
 
+  let selectedValue = props.selectedValue;
+
   const networkRef = useRef();
   useEffect(() => {
     const networkContainer = d3.select(networkRef.current);
-
-    // Tooltip definition
-    let toolTip = d3Tip()
-        .attr("class", "d3-tip")
-        .offset([10, 10])
-        .html(function (event, d) {
-            return "<h5>" + d['uid'] + "</h5>";
-        });
-
-    // Call tooltip to initialize it to document and svg
-    networkContainer.call(toolTip);
 
     // Set the domain of the x and y scales
     props.xScale.domain(d3.extent(props.data.bus, d => d.x));
     props.yScale.domain(d3.extent(props.data.bus, d => d.y));
 
-    // console.log(props.data);
+    function handleSubmitForm(event) {
+      event.preventDefault();
+      const form = event.target;
+      const power_rating = form.power_rating.value;
+      const power_cost = form.power_cost.value;
+      const terminals = form.terminals.value;
+
+      console.log(power_rating, power_cost, terminals);
+    }
+
+    // Tooltip definition
+    let toolTip = d3Tip()
+        .attr("class", "d3-tip")
+        .offset([0, 120])
+        .html(function (event, d) {
+            return (
+              `<form onsubmit=${handleSubmitForm}>
+                <h2 class="login-header">${selectedValue} - ${d.uid}</h2>
+                <div class="control no-margin">
+                  <label for="power_rating">Power Rating [kW]</label>
+                  <input 
+                  id="power_rating" 
+                  type="text" 
+                  name="power_rating" 
+                  />
+                </div>
+                <div class="control no-margin">
+                  <label for="power_cost">Cost [$/kWh]</label>
+                  <input 
+                  id="power_cost" 
+                  type="text" 
+                  name="power_cost" 
+                  />
+                </div>
+                <div class="control no-margin">
+                  <label for="terminals">Terminals</label>
+                  <input 
+                  id="terminals" 
+                  type="text" 
+                  name="terminals" 
+                  />
+                </div>
+                <p class="form-actions">
+                  <button type="reset" class="login-button button-flat">Cancel</button>
+                  <button class="login-button">Submit</button>
+                </p>
+              </form>`
+            );
+        });
+
+    // Call tooltip to initialize it to document and svg
+    networkContainer.call(toolTip);
 
     // Append weighted lines for each link in network
     // console.log(props.data.branch);
@@ -45,19 +87,15 @@ export default function Net(props) {
       .data(props.data.bus)
       .join("g")
         .attr("class", "node")
-        .on('mouseover', toolTip.show) // Add mouse hover tooltip listeners
-        .on('mouseout', toolTip.hide)
-        .on("click", node_click)
         .on("dblclick", node_dblclick)
         .call(drag); // Call drag object to setup all drag listeners for nodes
-
 
     // Append circles for each node in the graph
     nodeEnter
       .append('circle')
         .attr('class', 'circle')
         .attr("r", props.originalNodeSize)
-        .style('fill', d => props.colorScale(d.phases.length))
+        .style('fill', d => props.colorScale(d.phases.length));
 
     nodeEnter
       .append("path")
@@ -69,8 +107,8 @@ export default function Net(props) {
           .size(200)
           .type(Symbol(props.selectedValue))
         )
-        .style("display", "none")
-        .lower();
+        .on('click', toolTip.show)
+        .style("display", "none");
 
     function tickSimulation() {
       linkEnter
@@ -105,15 +143,19 @@ export default function Net(props) {
 
     // Handlers for click events on nodes
     function node_dblclick(event, d) {
-        simulation.alpha(1).restart();
+
+      if (d3.select(this).classed("fixed")) {
+        d3.select(this).classed("fixed", false);
+
         d3.select(this).select("path.symbol")
           .style("display", "none");
-    }
 
-    function node_click(event, d) {
-        simulation.alpha(1).restart();
+      } else {
+        d3.select(this).classed("fixed", true);
         d3.select(this).select("path.symbol")
           .style("display", "block");
+      }
+
     }
 
     // Handlers for drag events on nodes
@@ -139,7 +181,7 @@ export default function Net(props) {
       d.fy = null;
     };
 
-  }, [props]);
+  }, [selectedValue, props]);
 
     return (
       <g 
