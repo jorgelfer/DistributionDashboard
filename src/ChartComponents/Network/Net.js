@@ -3,6 +3,14 @@ import * as d3 from 'd3';
 import Symbol from './Symbol';
 import d3Tip from 'd3-tip'
 
+import batteryImg from "../../assets/battery.png";
+import demand_responseImg from "../../assets/demand_response.png";
+import demandImg from "../../assets/demand.png";
+import flowsImg from "../../assets/flows.png";
+import mismatchImg from "../../assets/mismatch.png";
+import solarImg from "../../assets/solar.png";
+import voltageImg from "../../assets/voltage.png";
+
 export default function Net(props) {
 
   let selectedValue = props.selectedValue;
@@ -97,18 +105,113 @@ export default function Net(props) {
         .attr("r", props.originalNodeSize)
         .style('fill', d => props.colorScale(d.phases.length));
 
+    const tan30 = Math.sqrt(1 / 3);
+    const tan30_2 = tan30 * 2;
+    // var plane_d = "m2,106h28l24,30h72l-44,-133h35l80,132h98c21,0 21,34 0,34l-98,0 -80,134h-35l43,-133h-71l-24,30h-28l15,-47"
+    const symbolStar = {
+      draw(context, size) {
+        context.moveTo(38.800781, 4);
+        context.bezierCurveTo(38.018781, 4, 37.269359, 4.3175781, 36.693359, 4.8925781);
+        context.lineTo(33.59375, 7.9921875);
+        context.bezierCurveTo(33.19475, 8.3901875, 33, 8.8513906, 33, 9.4003906);
+        context.lineTo(33, 10);
+        context.lineTo(13, 10);
+        context.bezierCurveTo(5.8545455, 10, 0, 15.854545, 0, 23);
+        context.lineTo(0, 34);
+        context.bezierCurveTo(0, 35.645455, 1.3545455, 37, 3, 37);
+        context.lineTo(4, 37);
+        context.lineTo(4, 39);
+        context.bezierCurveTo(4, 40.654, 5.346, 42, 7, 42);
+        context.lineTo(8.2148438, 42);
+        context.bezierCurveTo(8.8723801, 44.301307, 10.994575, 46, 13.5, 46);
+        context.bezierCurveTo(16.357053, 46, 18.719773, 43.793358, 18.974609, 41);
+        context.lineTo(34.025391, 41);
+        context.bezierCurveTo(34.280227, 43.793358, 36.642947, 46, 39.5, 46);
+        context.bezierCurveTo(42.005425, 46, 44.12762, 44.301307, 44.785156, 42);
+        context.lineTo(47, 42);
+        context.bezierCurveTo(48.654, 42, 50, 40.654, 50, 39);
+        context.lineTo(50, 34.173828);
+        context.bezierCurveTo(50, 31.964828, 48.418281, 30.097375, 46.238281, 29.734375);
+        context.lineTo(38.589844, 28.103516);
+        context.lineTo(35.009766, 23.09375);
+        context.bezierCurveTo(34.072341, 21.780105, 32.554637, 21, 30.941406, 21);
+        context.lineTo(17.544922, 21);
+        context.bezierCurveTo(16.25394, 21, 15.03917, 21.623946, 14.289062, 22.673828);
+        context.lineTo(10.412109, 28.101562);
+        context.lineTo(7.796875, 28.646484);
+        context.bezierCurveTo(5.454875, 29.134484, 4, 30.942187, 4, 33.367188);
+        context.lineTo(4, 35);
+        context.lineTo(3, 35);
+        context.bezierCurveTo(2.4454545, 35, 2, 34.554545, 2, 34);
+        context.lineTo(2, 23);
+        context.bezierCurveTo(2, 16.945455, 6.9454545, 12, 13, 12);
+        context.lineTo(33, 12);
+        context.lineTo(33, 12.599609000000001);
+        context.bezierCurveTo(33, 13.148609, 33.19475, 13.608813, 33.59375, 14.007812);
+        context.lineTo(36.691406, 17.107422);
+        context.bezierCurveTo(37.268406, 17.683422, 38.018781, 18, 38.800781, 18);
+        context.lineTo(43, 18);
+        context.bezierCurveTo(44.159, 18, 45, 17.159, 45, 16);
+        context.lineTo(50, 16);
+        context.lineTo(50, 14);
+        context.lineTo(45, 14);
+        context.lineTo(45, 8);
+        context.lineTo(50, 8);
+        context.lineTo(50, 6);
+        context.lineTo(45, 6);
+        context.bezierCurveTo(45, 4.841, 44.159, 4, 43, 4);
+        context.lineTo(38.800781, 4);
+        context.closePath();
+        context.moveTo(17.544922, 23);
+        context.lineTo(23, 23);
+        context.lineTo(23, 28);
+        context.lineTo(12.943359000000001, 28);
+        context.lineTo(15.916015999999999, 23.837891);
+        context.bezierCurveTo(16.29191, 23.311772, 16.897903, 23, 17.544922, 23);
+        context.closePath();
+        context.moveTo(25, 23);
+        context.lineTo(30.941406, 23);
+        context.bezierCurveTo(31.910175, 23, 32.820238, 23.467504, 33.382812, 24.255859);
+        context.lineTo(36.056641, 28);
+        context.lineTo(25, 28);
+        context.lineTo(25, 23);
+        context.closePath();
+        context.moveTo(13.5, 37);
+        context.bezierCurveTo(15.444841, 37, 17, 38.555159, 17, 40.5);
+        context.bezierCurveTo(17, 42.444841, 15.444841, 44, 13.5, 44);
+        context.bezierCurveTo(11.555159, 44, 10, 42.444841, 10, 40.5);
+        context.bezierCurveTo(10, 38.555159, 11.555159, 37, 13.5, 37);
+        context.closePath();
+        context.moveTo(39.5, 37);
+        context.bezierCurveTo(41.444841, 37, 43, 38.555159, 43, 40.5);
+        context.bezierCurveTo(43, 42.444841, 41.444841, 44, 39.5, 44);
+        context.bezierCurveTo(37.555159, 44, 36, 42.444841, 36, 40.5);
+        context.bezierCurveTo(36, 38.555159, 37.555159, 37, 39.5, 37);
+        context.closePath();
+      }
+    };
+
+    // nodeEnter
+    //   .append("path")
+    //     .attr("class", "symbol")
+    //     .attr("stroke", "black")
+    //     .attr("fill", "black")
+    //     .attr("transform", "translate(5,5)")
+    //     .attr("d", d3.symbol()
+    //       .size(10)
+    //       .type(symbolStar)
+    //     )
+    //     .on('click', toolTip.show)
+    //     .style("display", "none");
     nodeEnter
-      .append("path")
-        .attr("class", "symbol")
-        .attr("stroke", "black")
-        .attr("fill", "black")
-        .attr("transform", "translate(15,10)")
-        .attr("d", d3.symbol()
-          .size(200)
-          .type(Symbol(props.selectedValue))
-        )
-        .on('click', toolTip.show)
-        .style("display", "none");
+    .append("image")
+      .attr("class", "symbol")
+      .attr("xlink:href", batteryImg)
+      .attr("transform", "translate(5,5)")
+      .attr("width", 20)
+      .attr("height", 20)
+      .on('click', toolTip.show)
+      .style("display", "none");
 
     function tickSimulation() {
       linkEnter
@@ -147,12 +250,12 @@ export default function Net(props) {
       if (d3.select(this).classed("fixed")) {
         d3.select(this).classed("fixed", false);
 
-        d3.select(this).select("path.symbol")
+        d3.select(this).select("image.symbol")
           .style("display", "none");
 
       } else {
         d3.select(this).classed("fixed", true);
-        d3.select(this).select("path.symbol")
+        d3.select(this).select("image.symbol")
           .style("display", "block");
       }
 
