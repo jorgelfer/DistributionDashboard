@@ -1,31 +1,24 @@
 import * as d3 from 'd3';
 
-function SymbolDisplay({id, name, viewBox, path}) {
-  return (
-    <symbol id={id} name={name} viewBox={viewBox}>
-      <path d= {path}/>
-    </symbol>
-  );
-}
+import batteryImg from "../../assets/battery.png";
+import demand_responseImg from "../../assets/demand_response.png";
+import demandImg from "../../assets/demand.png";
+import mismatchImg from "../../assets/mismatch.png";
+import solarImg from "../../assets/solar.png";
 
 export default function Symbol(selectedValue) {
-  return d3.symbolDiamond;
 
-  // switch (selectedValue) {
-  //   case "p_d":
-  //     return d3.symbolTriangle;
-  //   case "p_i":
-  //     return d3.symbolCross;
-  //   case "soc":
-  //     return d3.symbolDiamond;
-  //   case "p_g":
-  //     return d3.symbolPlus;
-  //   case "p_dr":
-  //     return d3.symbolAsterisk;
-  //   case "vm":
-  //     return d3.symbolAsterisk;
-  //   case "flow":
-  //     return d3.symbolAsterisk;
-  // };
+  switch (selectedValue) {
+    case "p_d":
+      return demandImg;
+    case "p_i":
+      return mismatchImg;
+    case "soc":
+      return batteryImg;
+    case "p_g":
+      return solarImg;
+    case "p_dr":
+      return demand_responseImg;
+  };
 
 };
