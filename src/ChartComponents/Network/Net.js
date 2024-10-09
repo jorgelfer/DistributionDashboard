@@ -104,8 +104,8 @@ export default function Net(props) {
       .attr("class", "symbol")
       .attr("xlink:href", Symbol(props.selectedValue))
       .attr("transform", "translate(5,5)")
-      .attr("width", 20)
-      .attr("height", 20)
+      .attr("width", 25)
+      .attr("height", 25)
       .on('click', toolTip.show)
       .style("display", "none");
 
@@ -138,7 +138,6 @@ export default function Net(props) {
       simulation.force("link", null);
       simulation.force("charge", null);
     }
-
 
     // Handlers for click events on nodes
     function node_dblclick(event, d) {

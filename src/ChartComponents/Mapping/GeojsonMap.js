@@ -25,7 +25,7 @@ export default function MapGeojson(props) {
     .range([0, geoShift]);
 
   const linkScale = d3.scaleSqrt()
-    .domain(d3.extent(props.data.branch, d => d.phases.length))
+    .domain(d3.extent(props.data.branch, d => d.f_connections.length))
     .range([1, 2.5]);
 
   // main
@@ -73,36 +73,64 @@ export default function MapGeojson(props) {
           d3.select(this).attr("y2", projection([xScale(m.x)+lon, yScale(m.y)+lat])[1]);
           return projection([xScale(m.x)+lon, yScale(m.y)+lat])[0]
         })
-        .attr("stroke-width", d => linkScale(d.phases.length));
+        .attr("stroke-width", d => linkScale(d.f_connections.length));
 
-    // Append nodes for each node in the graph
-    mapContainer 
-    .selectAll('.geo-node')
+    var nodeEnter = mapContainer
+      .selectAll(".node")
       .data(props.data.bus)
-      .join('circle')
-        .attr("r", nodeSize)
-        .style('fill', d => props.colorScale(d.phases.length))
-        .attr('class', 'geo-node')
-        .attr('cx', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[0])
-        .attr('cy', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[1]);
+      .join("g")
+        .attr("class", "node")
+        // .on("dblclick", node_dblclick)
+        .attr('transform', function(d) { 
+          return `translate(${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[0]}, ${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[1]})`;
+        });
         // .call(drag); // Call drag object to setup all drag listeners for nodes
 
-    // Append icons for each node in the graph
-    mapContainer 
-    .selectAll('.symbol')
-        .data(props.data.bus)
-        .join("path")
-            .attr("d", d3.symbol()
-              .size(symbolSize)
-              .type(Symbol(props.selectedValue)))
-            .attr('class', 'symbol')
-            .attr("stroke", "black")
-            .attr("fill", "black")
-            .style("visibility", "visible")
-            .attr('transform', function(d) { 
-              return `translate(${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[0]}, ${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[1]})`;
-            });
-            // .lower();
+    // Append circles for each node in the graph
+    nodeEnter
+      .append('circle')
+        .attr('class', 'circle')
+        .attr("r", props.originalNodeSize)
+        .style('fill', d => props.colorScale(d.phases.length));
+
+    nodeEnter
+    .append("image")
+      .attr("class", "symbol")
+      .attr("xlink:href", Symbol(props.selectedValue))
+      .attr("transform", "translate(5,5)")
+      .attr("width", 25)
+      .attr("height", 25)
+      // .on('click', toolTip.show)
+      .style("display", "none");
+
+    // // Append nodes for each node in the graph
+    // mapContainer 
+    // .selectAll('.geo-node')
+    //   .data(props.data.bus)
+    //   .join('circle')
+    //     .attr("r", nodeSize)
+    //     .style('fill', d => props.colorScale(d.phases.length))
+    //     .attr('class', 'geo-node')
+    //     .attr('cx', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[0])
+    //     .attr('cy', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[1]);
+    //     // .call(drag); // Call drag object to setup all drag listeners for nodes
+
+    // // Append icons for each node in the graph
+    // mapContainer 
+    // .selectAll('.symbol')
+    //     .data(props.data.bus)
+    //     .join("path")
+    //         .attr("d", d3.symbol()
+    //           .size(symbolSize)
+    //           .type(Symbol(props.selectedValue)))
+    //         .attr('class', 'symbol')
+    //         .attr("stroke", "black")
+    //         .attr("fill", "black")
+    //         .style("visibility", "visible")
+    //         .attr('transform', function(d) { 
+    //           return `translate(${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[0]}, ${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[1]})`;
+    //         });
+    //         // .lower();
 
     // Handle zoom
     const zoomHandler = zoom()
