@@ -6,7 +6,6 @@ import ChartContainer from '../ChartComponents/ChartContainer';
 import Buttons from '../Interactions/Buttons';
 import NodeBreaker from '../ChartComponents/Network/NodeBreaker';
 import Net from '../ChartComponents/Network/Net';
-import MapboxGLMap from '../ChartComponents/Mapping/MapboxGLMap';
 import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
 import bronx from "../ChartComponents/Mapping/bronx.json";
 
@@ -15,7 +14,6 @@ const layers = [
   { id: "coordinates", label: "Coordinates" },
   { id: "nodebreaker", label: "Node Breaker" },
   { id: "force", label: "Force" },
-  { id: "mapbox", label: "Mapbox" },
   { id: "geojson", label: "Geojson" },
 ];
 
@@ -58,10 +56,6 @@ export default function NetworkGraph({margin, data, ...props}) {
         activeButton={activeLayer}
         onButtonSelection={layerSelectionHandler}
       />
-      {activeLayer === "mapbox" && 
-      <MapboxGLMap
-        data={bronx}
-      />}
       {activeLayer === "nodebreaker" && 
         <ChartContainer
           width={width}

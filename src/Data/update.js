@@ -41,7 +41,7 @@ export function updateData(network, selectedValue, dateParser) {
                     "uid": "ub.0",
                 });
             })
-            return [data, [vm_lb-0.01, vm_ub+0.01]];
+            return [data, [vm_lb-0.05, vm_ub+0.05]];
 
         case "flow":  
             return [data, [0,0]];

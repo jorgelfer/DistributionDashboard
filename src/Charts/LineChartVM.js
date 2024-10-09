@@ -24,7 +24,6 @@ export default function LineChartVM(props) {
     .range([0, innerWidth]);
 
   const formatTime = d3.timeFormat("%H")
-
   const yScale = d3.scaleLinear()
     .domain(props.y_extent)
     .range([innerHeight, 0]);
