@@ -86,45 +86,46 @@ export default function MapGeojson(props) {
         })
         .attr("stroke-width", d => linkScale(d.f_connections.length));
 
-    // var nodeEnter = mapContainer
-    //   .selectAll(".node")
-    //   .data(props.data.bus)
-    //   .join("g")
-    //     .attr("class", "node")
-    //     // .on("dblclick", node_dblclick)
-    //     .attr('transform', function(d) { 
-    //       return `translate(${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[0]}, ${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[1]})`;
-    //     });
+    var nodeEnter = mapContainer
+      .selectAll(".node")
+      .data(props.data.bus)
+      .join("g")
+        .attr("class", "node")
+        // .on("dblclick", node_dblclick)
+        .attr('transform', function(d) { 
+          return `translate(${projection([xScale(d.x)+lon, yScale(d.y)+lat])[0]}, 
+          ${projection([xScale(d.x)+lon, yScale(d.y)+lat])[1]})`;
+        });
     //     // .call(drag); // Call drag object to setup all drag listeners for nodes
 
-    // // Append circles for each node in the graph
-    // nodeEnter
-    //   .append('circle')
-    //     .attr('class', 'circle')
-    //     .attr("r", nodeSize)
-    //     .style('fill', d => props.colorScale(d.phases.length))
-    //     .raise();
+    // Append circles for each node in the graph
+    nodeEnter
+      .append('circle')
+        .attr('class', 'circle')
+        .attr("r", nodeSize)
+        .style('fill', d => props.colorScale(d.phases.length))
+        .raise();
 
-    // nodeEnter
-    // .append("image")
-    //   .attr("class", "symbol")
-    //   .attr("xlink:href", Symbol(props.selectedValue))
-    //   .attr("transform", "translate(5,5)")
-    //   .attr("width", 25)
-    //   .attr("height", 25)
+    nodeEnter
+    .append("image")
+      .attr("class", "symbol")
+      .attr("xlink:href", Symbol(props.selectedValue))
+      .attr("transform", "translate(2,2)")
+      .attr("width", 5)
+      .attr("height", 5)
       // .on('click', toolTip.show)
       // .style("display", "none");
 
     // Append nodes for each node in the graph
-    mapContainer 
-    .selectAll('.node')
-      .data(props.data.bus)
-      .join('circle')
-        .attr("r", nodeSize)
-        .style('fill', d => props.colorScale(d.phases.length))
-        .attr('class', 'node')
-        .attr('cx', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[0])
-        .attr('cy', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[1]);
+    // mapContainer 
+    // .selectAll('.node')
+    //   .data(props.data.bus)
+    //   .join('circle')
+    //     .attr("r", nodeSize)
+    //     .style('fill', d => props.colorScale(d.phases.length))
+    //     .attr('class', 'node')
+    //     .attr('cx', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[0])
+    //     .attr('cy', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[1]);
         // .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // // Append icons for each node in the graph
