@@ -121,7 +121,8 @@ export default function MapGeojson(props) {
       });
     
     select(".map-container")
-      .call(zoomHandler);
+      .call(zoomHandler)
+      .on("dblclick.zoom", null);
 
     // Handlers for click events on nodes
     function node_dblclick(event, d) {
