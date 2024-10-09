@@ -41,7 +41,9 @@ export default function MapGeojson(props) {
     const geoPathGenerator = geoPath()
         .projection(projection); 
 
-    mapContainer 
+    // var path_group = mapContainer.append("g")
+    //   .attr("id", "streets")
+    path_group 
       .selectAll(".streets-path")
       .data(props.geo_data.features)
       .join("path")
@@ -52,7 +54,11 @@ export default function MapGeojson(props) {
           .attr("stroke-opacity", 0.4);
  
     // append links
-    mapContainer
+
+    // var linkEnter = mapContainer.append("g")
+    //   .attr("id", "links");
+    
+    linkEnter
     .selectAll(".link")
       .data(props.data.branch)
         .join("line")
@@ -61,7 +67,7 @@ export default function MapGeojson(props) {
           var n = props.data.bus.filter(function(d) {
             return d.uid === l.source
           })[0];
-          console.log(n);
+          // console.log(n);
           d3.select(this).attr("y1", projection([xScale(n.x)+lon, yScale(n.y)+lat])[1]);
           return projection([xScale(n.x)+lon, yScale(n.y)+lat])[0]
         })
@@ -69,13 +75,15 @@ export default function MapGeojson(props) {
           var m = props.data.bus.filter(function(d) {
             return d.uid === l.target
           })[0];
-          console.log(m);
           d3.select(this).attr("y2", projection([xScale(m.x)+lon, yScale(m.y)+lat])[1]);
           return projection([xScale(m.x)+lon, yScale(m.y)+lat])[0]
         })
         .attr("stroke-width", d => linkScale(d.f_connections.length));
 
-    var nodeEnter = mapContainer
+    var nodeEnter = mapContainer.append("g")
+      .attr("id", "nodes");
+
+    nodeEnter
       .selectAll(".node")
       .data(props.data.bus)
       .join("g")
@@ -101,7 +109,7 @@ export default function MapGeojson(props) {
       .attr("width", 25)
       .attr("height", 25)
       // .on('click', toolTip.show)
-      .style("display", "none");
+      // .style("display", "none");
 
     // // Append nodes for each node in the graph
     // mapContainer 
