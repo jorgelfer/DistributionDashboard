@@ -10,6 +10,7 @@ export default function Net(props) {
 
     d3.selectAll(".node").remove();
     d3.selectAll(".link").remove();
+    d3.selectAll(".d3-tip").remove();
 
     const networkContainer = d3.select(networkRef.current);
 
@@ -19,53 +20,28 @@ export default function Net(props) {
 
     function handleSubmitForm(event) {
       event.preventDefault();
-      const form = event.target;
-      const power_rating = form.power_rating.value;
-      const power_cost = form.power_cost.value;
-      const terminals = form.terminals.value;
-
-      console.log(power_rating, power_cost, terminals);
+      // let form = event.target;
+      // let power_rating = form.power_rating.value;
+      console.log(event);
     }
 
     // Tooltip definition
     let toolTip = d3Tip()
-        .attr("class", "d3-tip")
-        .offset([0, 120])
-        .html(function (event, d) {
-            return (
-              `<form onsubmit=${handleSubmitForm}>
-                <h2 class="login-header">${props.selectedValue} - ${d.uid}</h2>
-                <div class="control no-margin">
-                  <label for="power_rating">Power Rating [kW]</label>
-                  <input 
-                  id="power_rating" 
-                  type="text" 
-                  name="power_rating" 
-                  />
-                </div>
-                <div class="control no-margin">
-                  <label for="power_cost">Cost [$/kWh]</label>
-                  <input 
-                  id="power_cost" 
-                  type="text" 
-                  name="power_cost" 
-                  />
-                </div>
-                <div class="control no-margin">
-                  <label for="terminals">Terminals</label>
-                  <input 
-                  id="terminals" 
-                  type="text" 
-                  name="terminals" 
-                  />
-                </div>
-                <p class="form-actions">
-                  <button type="reset" class="login-button button-flat">Cancel</button>
-                  <button class="login-button">Submit</button>
-                </p>
-              </form>`
-            );
-        });
+      .attr("class", "d3-tip")
+      .offset([0, 120])
+      .html(function (event, d) {
+        return (
+          `<form onsubmit="${handleSubmitForm}">
+            <p>
+              <label for="name">Name:</label>
+              <input type="text" id="name" name="user_name" />
+            </p>
+            <p class="button">
+              <button>Submit</button>
+            </p>
+          </form>`
+        );
+      });
 
     // Call tooltip to initialize it to document and svg
     networkContainer.call(toolTip);

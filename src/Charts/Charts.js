@@ -9,13 +9,12 @@ import { updateData } from "../Data/update";
 
 export default function Charts(props) {
 
-  const margin = {top: 30, right: 10, bottom: 50, left: 60};
+  const margin = {top: 30, right: 10, bottom: 50, left: 70};
   const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
   const dateParser = d3.timeParse("%Y-%m-%dT%H:%M");
 
   // Header
   const [selectedValue, setSelectedValue] = useState('vm');
-
   function handleClick(selectedButton) {
     if (selectedValue !== selectedButton) {
       setSelectedValue(selectedButton);
@@ -24,7 +23,6 @@ export default function Charts(props) {
 
   // console.log(props.data);
   const [data, y_extent] = updateData(props.data, selectedValue, dateParser);
-
   return (
     <>
       <Header handleClick={handleClick} selectedValue={selectedValue} />
