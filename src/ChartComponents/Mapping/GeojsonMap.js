@@ -61,9 +61,6 @@ export default function MapGeojson(props) {
           .attr("stroke-opacity", 0.4);
  
     // append links
-
-    // var linkEnter = mapContainer.append("g")
-    //   .attr("id", "links");
     mapContainer
     .selectAll(".link")
       .data(props.data.branch)
@@ -86,17 +83,17 @@ export default function MapGeojson(props) {
         })
         .attr("stroke-width", d => linkScale(d.f_connections.length));
 
+    // append nodes
     var nodeEnter = mapContainer
       .selectAll(".node")
       .data(props.data.bus)
       .join("g")
         .attr("class", "node")
-        // .on("dblclick", node_dblclick)
+        .on("dblclick", node_dblclick)
         .attr('transform', function(d) { 
           return `translate(${projection([xScale(d.x)+lon, yScale(d.y)+lat])[0]}, 
           ${projection([xScale(d.x)+lon, yScale(d.y)+lat])[1]})`;
         });
-    //     // .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append circles for each node in the graph
     nodeEnter
@@ -106,44 +103,16 @@ export default function MapGeojson(props) {
         .style('fill', d => props.colorScale(d.phases.length))
         .raise();
 
+    // Append symbols for each node in the graph
     nodeEnter
     .append("image")
       .attr("class", "symbol")
       .attr("xlink:href", Symbol(props.selectedValue))
       .attr("transform", "translate(2,2)")
-      .attr("width", 5)
-      .attr("height", 5)
+      .attr("width", symbolSize)
+      .attr("height", symbolSize)
       // .on('click', toolTip.show)
-      // .style("display", "none");
-
-    // Append nodes for each node in the graph
-    // mapContainer 
-    // .selectAll('.node')
-    //   .data(props.data.bus)
-    //   .join('circle')
-    //     .attr("r", nodeSize)
-    //     .style('fill', d => props.colorScale(d.phases.length))
-    //     .attr('class', 'node')
-    //     .attr('cx', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[0])
-    //     .attr('cy', d => projection([xScale(d.x)+lon, yScale(d.y)+lat])[1]);
-        // .call(drag); // Call drag object to setup all drag listeners for nodes
-
-    // // Append icons for each node in the graph
-    // mapContainer 
-    // .selectAll('.symbol')
-    //     .data(props.data.bus)
-    //     .join("path")
-    //         .attr("d", d3.symbol()
-    //           .size(symbolSize)
-    //           .type(Symbol(props.selectedValue)))
-    //         .attr('class', 'symbol')
-    //         .attr("stroke", "black")
-    //         .attr("fill", "black")
-    //         .style("visibility", "visible")
-    //         .attr('transform', function(d) { 
-    //           return `translate(${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[0]}, ${projection([xScale(d.x)+0.001+lon, yScale(d.y)-0.001+lat])[1]})`;
-    //         });
-    //         // .lower();
+      .style("display", "none");
 
     // Handle zoom
     const zoomHandler = zoom()
@@ -153,6 +122,22 @@ export default function MapGeojson(props) {
     
     select(".map-container")
       .call(zoomHandler);
+
+    // Handlers for click events on nodes
+    function node_dblclick(event, d) {
+
+      if (d3.select(this).classed("fixed")) {
+        d3.select(this).classed("fixed", false);
+        d3.select(this).select("image.symbol")
+          .style("display", "none");
+      } else {
+        d3.select(this).classed("fixed", true);
+        d3.select(this).select("image.symbol")
+          .style("display", "block");
+      }
+
+    }
+
 
   }, [props, lat, lon, nodeSize, symbolSize, xScale, yScale, linkScale]);
 
