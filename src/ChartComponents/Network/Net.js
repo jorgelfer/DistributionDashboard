@@ -5,6 +5,8 @@ import d3Tip from 'd3-tip'
 
 export default function Net(props) {
 
+  props.data.flex_devices = props.data.flex_devices || [];
+
   const networkRef = useRef();
   useEffect(() => {
 
@@ -18,33 +20,55 @@ export default function Net(props) {
     props.xScale.domain(d3.extent(props.data.bus, d => d.x));
     props.yScale.domain(d3.extent(props.data.bus, d => d.y));
 
-    function handleSubmitForm(event) {
-      event.preventDefault();
-      // let form = event.target;
-      // let power_rating = form.power_rating.value;
-      console.log(event);
-    }
-
     // Tooltip definition
     let toolTip = d3Tip()
       .attr("class", "d3-tip")
       .offset([0, 120])
       .html(function (event, d) {
+        // let props.data["flex_devices"] = props.data["flex_devices"] || [];
+        let device = props.data.flex_devices.find(f => f.bus === d.bus);
         return (
-          `<form onsubmit="${handleSubmitForm}">
-            <p>
-              <label for="name">Name:</label>
-              <input type="text" id="name" name="user_name" />
-            </p>
-            <p class="button">
-              <button>Submit</button>
-            </p>
+          `<form class="dev_form">
+            <h2 class="login-header">${props.selectedValue} - ${d.uid}</h2>
+            <div class="control no-margin">
+              <label for="power_rating">Power Rating [kW]</label>
+              <input 
+              id="power_rating" 
+              type="text" 
+              name="power_rating" 
+              value="${device.power_rating}"
+              />
+            </div>
+            <div class="control no-margin">
+              <label for="power_cost">Cost [$/kWh]</label>
+              <input 
+              id="power_cost" 
+              type="text" 
+              name="power_cost" 
+              value="${d.power_cost}"
+              />
+            </div>
+            <div class="control no-margin">
+              <label for="terminals">Terminals</label>
+              <input 
+              id="terminals" 
+              type="text" 
+              name="terminals" 
+              value="${d.terminals}"
+              />
+            </div>
           </form>`
         );
       });
 
     // Call tooltip to initialize it to document and svg
     networkContainer.call(toolTip);
+
+    window.onkeydown = function(event) {
+      if (event.key === "Escape") {
+        toolTip.hide();
+      }
+    };
 
     // Append weighted lines for each link in network
     // console.log(props.data.branch);
@@ -123,13 +147,26 @@ export default function Net(props) {
 
         d3.select(this).select("image.symbol")
           .style("display", "none");
+        
+        // Remove the device from the flex_devices array
+        props.data.flex_devices = props.data.flex_devices.filter(f => f.bus !== d.bus);
 
       } else {
         d3.select(this).classed("fixed", true);
         d3.select(this).select("image.symbol")
           .style("display", "block");
+
+        // append new device to the flex_devices array
+        props.data.flex_devices.push({
+          uid: `fl_${d.uid}`,
+          bus: d.uid,
+          power_rating: 10,
+          power_cost: 0.1,
+          terminals: [1, 2, 3]
+        });
       }
 
+      console.log(props.data.flex_devices);
     }
 
     // Handlers for drag events on nodes
