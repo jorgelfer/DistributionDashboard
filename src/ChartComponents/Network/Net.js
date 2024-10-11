@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import Symbol from './Symbol';
-import styles from "./forceGraph.module.css";
+import styles from './forceGraph.module.css';
 // import d3Tip from 'd3-tip'
 
 export default function Net(props) {
@@ -21,7 +21,7 @@ export default function Net(props) {
     props.xScale.domain(d3.extent(props.data.bus, d => d.x));
     props.yScale.domain(d3.extent(props.data.bus, d => d.y));
 
-    // Tooltip definition
+    // // Tooltip definition
     // let toolTip = d3Tip()
     //   .attr("class", "d3-tip")
     //   .offset([0, 120])
@@ -70,6 +70,12 @@ export default function Net(props) {
         .style("display", "none");
     };
 
+    window.onkeydown = function(event) {
+      if (event.key === "Escape") {
+        removeTooltip();
+      }
+    };
+
     // Append weighted lines for each link in network
     // console.log(props.data.branch);
     const linkEnter = networkContainer 
@@ -108,13 +114,13 @@ export default function Net(props) {
       .attr("height", 25)
       // .on('click', toolTip.show)
       .style("display", "none")
-      .on("mouseover", (event, d) => {
+      .on("click", (event, d) => {
         // console.log(d);
         addTooltip(props.nodeHoverTooltip, event, d);
-      })
-      .on("mouseout", () => {
-        removeTooltip();
       });
+      // .on("mouseout", () => {
+      //   removeTooltip();
+      // });
 
     function tickSimulation() {
       linkEnter

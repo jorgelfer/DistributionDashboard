@@ -3,12 +3,14 @@ import classes from './SimpleForm.module.css';
 export default function SimpleForm(props) {
 
   function handleSubmit(event) {
-    event.preventDefault();
+    // event.preventDefault();
+    console.log("Form submitted");
+    return false;
   }
 
   return (
     <>
-      <form name="login_form" onSubmit={handleSubmit}>
+      <form className={classes["simple-form"]} name="login_form" onSubmit={handleSubmit}>
       <h2 className="login-header">CASE DEFINITION</h2>
       <div className="control-row">
         <div className="control no-margin">
