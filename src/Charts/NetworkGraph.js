@@ -8,12 +8,13 @@ import NodeBreaker from '../ChartComponents/Network/NodeBreaker';
 import Net from '../ChartComponents/Network/Net';
 import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
 import bronx from "../ChartComponents/Mapping/bronx.json";
+import SimpleForm from './SimpleForm';
+import { renderToString } from 'react-dom/server'
 // import { ForceGraph } from '../ChartComponents/Network/forceGraph';
 
 
 const layers = [
   { id: "coordinates", label: "Coordinates" },
-  { id: "focegraph", label: "ForceGraph" },
   { id: "nodebreaker", label: "Node Breaker" },
   { id: "force", label: "Force" },
   { id: "geojson", label: "Geojson" },
@@ -47,7 +48,7 @@ export default function NetworkGraph({margin, data, ...props}) {
   };
 
   const nodeHoverTooltip = useCallback((node) => {
-    return `<div>${node.uid}</div>`;
+    return renderToString(<SimpleForm />);
   }, []);
 
   // The force simulation mutates links and nodes,

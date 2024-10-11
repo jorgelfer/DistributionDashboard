@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import Symbol from './Symbol';
 import styles from "./forceGraph.module.css";
-import d3Tip from 'd3-tip'
+// import d3Tip from 'd3-tip'
 
 export default function Net(props) {
 
@@ -22,23 +22,23 @@ export default function Net(props) {
     props.yScale.domain(d3.extent(props.data.bus, d => d.y));
 
     // Tooltip definition
-    let toolTip = d3Tip()
-      .attr("class", "d3-tip")
-      .offset([0, 120])
-      .html(function (event, d) {
-        // let props.data["flex_devices"] = props.data["flex_devices"] || [];
-        let device = props.data.flex_devices.find(f => f.bus === d.bus);
-        return `<div class="${styles.tooltip}">${d.uid}</div>`;
-      });
+    // let toolTip = d3Tip()
+    //   .attr("class", "d3-tip")
+    //   .offset([0, 120])
+    //   .html(function (event, d) {
+    //     // let props.data["flex_devices"] = props.data["flex_devices"] || [];
+    //     let device = props.data.flex_devices.find(f => f.bus === d.bus);
+    //     return `<div class="${styles.tooltip}">${d.uid}</div>`;
+    //   });
 
-    // Call tooltip to initialize it to document and svg
-    networkContainer.call(toolTip);
+    // // Call tooltip to initialize it to document and svg
+    // networkContainer.call(toolTip);
 
-    window.onkeydown = function(event) {
-      if (event.key === "Escape") {
-        toolTip.hide();
-      }
-    };
+    // window.onkeydown = function(event) {
+    //   if (event.key === "Escape") {
+    //     toolTip.hide();
+    //   }
+    // };
 
     // Add the tooltip element to the graph
     const tooltip = document.querySelector("#graph-tooltip");
@@ -106,10 +106,10 @@ export default function Net(props) {
       .attr("transform", "translate(5,5)")
       .attr("width", 25)
       .attr("height", 25)
-      .on('click', toolTip.show)
+      // .on('click', toolTip.show)
       .style("display", "none")
       .on("mouseover", (event, d) => {
-        console.log(d);
+        // console.log(d);
         addTooltip(props.nodeHoverTooltip, event, d);
       })
       .on("mouseout", () => {
