@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import * as d3 from 'd3';
 
 import Card from '../UI/Card/Card';
@@ -8,10 +8,12 @@ import NodeBreaker from '../ChartComponents/Network/NodeBreaker';
 import Net from '../ChartComponents/Network/Net';
 import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
 import bronx from "../ChartComponents/Mapping/bronx.json";
+// import { ForceGraph } from '../ChartComponents/Network/forceGraph';
 
 
 const layers = [
   { id: "coordinates", label: "Coordinates" },
+  { id: "focegraph", label: "ForceGraph" },
   { id: "nodebreaker", label: "Node Breaker" },
   { id: "force", label: "Force" },
   { id: "geojson", label: "Geojson" },
@@ -43,6 +45,10 @@ export default function NetworkGraph({margin, data, ...props}) {
       setActiveLayer(id);
     }
   };
+
+  const nodeHoverTooltip = useCallback((node) => {
+    return `<div>${node.uid}</div>`;
+  }, []);
 
   // The force simulation mutates links and nodes,
   // so, make a deep copy of the dataset 
@@ -84,6 +90,9 @@ export default function NetworkGraph({margin, data, ...props}) {
           className="network-graph"
           >
           <Net
+            nodeHoverTooltip={nodeHoverTooltip}
+            innerHeight={innerHeight}
+            innerWidth={innerWidth}
             margin={margin}
             data={network}
             activeLayer={activeLayer}
@@ -96,6 +105,29 @@ export default function NetworkGraph({margin, data, ...props}) {
           />
         </ChartContainer>
         }
+      {/* {activeLayer === "forcegraph" &&
+        <ChartContainer
+          width={width}
+          height={height}
+          margin={margin}
+          className="network-graph"
+          >
+          <ForceGraph
+            nodeHoverTooltip={nodeHoverTooltip}
+            innerHeight={innerHeight}
+            innerWidth={innerWidth}
+            margin={margin}
+            data={network}
+            activeLayer={activeLayer}
+            originalNodeSize={originalNodeSize}
+            xScale={xScale}
+            yScale={yScale}
+            linkScale={linkScale}
+            colorScale={props.colorScale}
+            selectedValue={props.selectedValue}
+          />
+        </ChartContainer>
+        } */}
       {activeLayer === "geojson" &&
         <ChartContainer
           width={width}

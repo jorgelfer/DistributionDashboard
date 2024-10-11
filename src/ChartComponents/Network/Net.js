@@ -1,7 +1,8 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import Symbol from './Symbol';
-import d3Tip from 'd3-tip'
+import styles from "./forceGraph.module.css";
+// import d3Tip from 'd3-tip'
 
 export default function Net(props) {
 
@@ -21,53 +22,82 @@ export default function Net(props) {
     props.yScale.domain(d3.extent(props.data.bus, d => d.y));
 
     // Tooltip definition
-    let toolTip = d3Tip()
-      .attr("class", "d3-tip")
-      .offset([0, 120])
-      .html(function (event, d) {
-        // let props.data["flex_devices"] = props.data["flex_devices"] || [];
-        let device = props.data.flex_devices.find(f => f.bus === d.bus);
-        return (
-          `<form class="dev_form">
-            <h2 class="login-header">${props.selectedValue} - ${d.uid}</h2>
-            <div class="control no-margin">
-              <label for="power_rating">Power Rating [kW]</label>
-              <input 
-              id="power_rating" 
-              type="text" 
-              name="power_rating" 
-              value="${device.power_rating}"
-              />
-            </div>
-            <div class="control no-margin">
-              <label for="power_cost">Cost [$/kWh]</label>
-              <input 
-              id="power_cost" 
-              type="text" 
-              name="power_cost" 
-              value="${d.power_cost}"
-              />
-            </div>
-            <div class="control no-margin">
-              <label for="terminals">Terminals</label>
-              <input 
-              id="terminals" 
-              type="text" 
-              name="terminals" 
-              value="${d.terminals}"
-              />
-            </div>
-          </form>`
-        );
-      });
+    // let toolTip = d3Tip()
+    //   .attr("class", "d3-tip")
+    //   .offset([0, 120])
+    //   .html(function (event, d) {
+    //     // let props.data["flex_devices"] = props.data["flex_devices"] || [];
+    //     let device = props.data.flex_devices.find(f => f.bus === d.bus);
+    //     return (
+    //       `<form class="dev_form">
+    //         <h2 class="login-header">${props.selectedValue} - ${d.uid}</h2>
+    //         <div class="control no-margin">
+    //           <label for="power_rating">Power Rating [kW]</label>
+    //           <input 
+    //           id="power_rating" 
+    //           type="text" 
+    //           name="power_rating" 
+    //           value="${device.power_rating}"
+    //           />
+    //         </div>
+    //         <div class="control no-margin">
+    //           <label for="power_cost">Cost [$/kWh]</label>
+    //           <input 
+    //           id="power_cost" 
+    //           type="text" 
+    //           name="power_cost" 
+    //           value="${d.power_cost}"
+    //           />
+    //         </div>
+    //         <div class="control no-margin">
+    //           <label for="terminals">Terminals</label>
+    //           <input 
+    //           id="terminals" 
+    //           type="text" 
+    //           name="terminals" 
+    //           value="${d.terminals}"
+    //           />
+    //         </div>
+    //       </form>`
+    //     );
+    //   });
 
-    // Call tooltip to initialize it to document and svg
-    networkContainer.call(toolTip);
+    // // Call tooltip to initialize it to document and svg
+    // networkContainer.call(toolTip);
 
-    window.onkeydown = function(event) {
-      if (event.key === "Escape") {
-        toolTip.hide();
-      }
+    // window.onkeydown = function(event) {
+    //   if (event.key === "Escape") {
+    //     toolTip.hide();
+    //   }
+    // };
+
+    // Add the tooltip element to the graph
+    const tooltip = document.querySelector("#graph-tooltip");
+    if (!tooltip) {
+      const tooltipDiv = document.createElement("div");
+      tooltipDiv.classList.add(styles.tooltip);
+      tooltipDiv.style.opacity = "0";
+      tooltipDiv.id = "graph-tooltip";
+      document.body.appendChild(tooltipDiv);
+    }
+    const div = d3.select("#graph-tooltip");
+
+    const addTooltip = (hoverTooltip, d, x, y) => {
+      div
+        .transition()
+        .duration(200)
+        .style("opacity", 0.9);
+      div
+        .html(hoverTooltip(d))
+        .style("left", `${x}px`)
+        .style("top", `${y - 28}px`);
+    };
+
+    const removeTooltip = () => {
+      div
+        .transition()
+        .duration(200)
+        .style("opacity", 0);
     };
 
     // Append weighted lines for each link in network
@@ -106,8 +136,14 @@ export default function Net(props) {
       .attr("transform", "translate(5,5)")
       .attr("width", 25)
       .attr("height", 25)
-      .on('click', toolTip.show)
-      .style("display", "none");
+      // .on('click', toolTip.show)
+      .style("display", "none")
+      .on("mouseover", (d) => {
+        addTooltip(props.nodeHoverTooltip, d, props.innerWidth, props.innerHeight);
+      })
+      .on("mouseout", () => {
+        removeTooltip();
+      });
 
     function tickSimulation() {
       linkEnter
