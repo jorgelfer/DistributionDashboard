@@ -6,6 +6,9 @@ import LineChartVM from './LineChartVM';
 import LineChartPQS from './LineChartPQS';
 import NetworkGraph from './NetworkGraph';
 import { updateData } from "../Data/update";
+import SimpleForm from './SimpleForm';
+
+import * as ReactTooltip from 'react-tooltip';
 
 export default function Charts(props) {
 

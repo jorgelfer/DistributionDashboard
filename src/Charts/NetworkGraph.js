@@ -11,6 +11,7 @@ import bronx from "../ChartComponents/Mapping/bronx.json";
 import SimpleForm from './SimpleForm';
 import { renderToString } from 'react-dom/server'
 import { ForceGraph } from '../ChartComponents/Network/forceGraph';
+// import * as ReactTooltip from 'react-tooltip';
 
 
 const layers = [
@@ -48,19 +49,52 @@ export default function NetworkGraph({margin, data, ...props}) {
     }
   };
 
+  const [isDeviceSubmitted, setDeviceSubmitted] = useState(false);
 
+  function handleDeviceSubmitted() {
+    setDeviceSubmitted((curIsDeviceSubmitted) => !curIsDeviceSubmitted);
+  }
 
+  const [enteredDevice, setEnteredDevice] = useState({
+    power_rating: 10,
+    power_cost: 0.1,
+    terminals: [1]
+  });
 
+  const nodeHoverTooltip = useCallback((bus) => {
+    // console.log(data)
+    data[`${props.selectedValue}`] = data[`${props.selectedValue}`] || [];
 
-  
-  const nodeHoverTooltip = useCallback((node) => {
-    return renderToString(<SimpleForm />);
-  }, []);
+    // let uid =  `${props.selectedValue}_${bus.uid}`;
+
+    function handleDeviceChange(identifier, value) {
+      setEnteredDevice(prevCase => ({
+        ...prevCase,
+        [identifier]: value
+      }))
+    }
+
+    console.log(isDeviceSubmitted);
+    console.log(enteredDevice);
+
+    // let device = data[`${props.selectedValue}`].find(f => f.bus === bus.uid) || {
+    //   uid: `${props.selectedValue}_${bus.uid}`,
+    //   bus: bus.uid,
+    //   power_rating: 10,
+    //   power_cost: 0.1,
+    //   terminals: [1]
+    // };
+
+    return renderToString(<SimpleForm 
+      device={enteredDevice}
+      onEnteredValues={handleDeviceChange}
+      onSubmitted={handleDeviceSubmitted}
+      />);
+  }, [data, props, enteredDevice, isDeviceSubmitted]);
 
   // The force simulation mutates links and nodes,
   // so, make a deep copy of the dataset 
   const network = JSON.parse(JSON.stringify(data));
-
   return(
     <Card>
       <h2>Network</h2>
@@ -153,6 +187,7 @@ export default function NetworkGraph({margin, data, ...props}) {
           />
         </ChartContainer>
       }
+      {/* <ReactTooltip /> */}
     </Card>
   );
 }

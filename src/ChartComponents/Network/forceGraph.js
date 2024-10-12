@@ -1,7 +1,7 @@
-import { useRef, useEffect, useMemo, useState } from "react";
+import React, { useRef, useEffect, useMemo, useState } from "react";
 import { runForceGraph } from "./forceGraphGenerator";
 import classes from "./forceGraph.module.css";
-
+import SimpleForm from "../../Charts/SimpleForm";
 
 import {
   forceSimulation,
@@ -65,7 +65,7 @@ export function ForceGraph({ nodeHoverTooltip, ...props }) {
 
   return (
     <>
-      {links.map((d, i) => (
+      {/* {links.map((d, i) => (
         <line
           key={d.uid}
           x1={props.xScale(d.source.x)}
@@ -83,6 +83,8 @@ export function ForceGraph({ nodeHoverTooltip, ...props }) {
             cy={props.yScale(d.y)}
             r={RADIUS}
             fill="black"
+            data-tip
+            data-for="node-tooltip"
           />
           <text 
             x={props.xScale(d.x)} 
@@ -92,7 +94,15 @@ export function ForceGraph({ nodeHoverTooltip, ...props }) {
             {d.uid}
           </text>
         </g>
-      ))}
+      ))} */}
+      <circle 
+        cx="100" 
+        cy="100" 
+        r="50" 
+        fill="blue" 
+        data-tip="hello"
+        // data-for="node-tooltip"
+      />
     </>
   );
 }
