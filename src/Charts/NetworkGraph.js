@@ -10,11 +10,12 @@ import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
 import bronx from "../ChartComponents/Mapping/bronx.json";
 import SimpleForm from './SimpleForm';
 import { renderToString } from 'react-dom/server'
-// import { ForceGraph } from '../ChartComponents/Network/forceGraph';
+import { ForceGraph } from '../ChartComponents/Network/forceGraph';
 
 
 const layers = [
   { id: "coordinates", label: "Coordinates" },
+  { id: "forcegraph", label: "ForceGraph" },
   { id: "nodebreaker", label: "Node Breaker" },
   { id: "force", label: "Force" },
   { id: "geojson", label: "Geojson" },
@@ -111,7 +112,7 @@ export default function NetworkGraph({margin, data, ...props}) {
           />
         </ChartContainer>
         }
-      {/* {activeLayer === "forcegraph" &&
+      {activeLayer === "forcegraph" &&
         <ChartContainer
           width={width}
           height={height}
@@ -133,7 +134,7 @@ export default function NetworkGraph({margin, data, ...props}) {
             selectedValue={props.selectedValue}
           />
         </ChartContainer>
-        } */}
+        }
       {activeLayer === "geojson" &&
         <ChartContainer
           width={width}
