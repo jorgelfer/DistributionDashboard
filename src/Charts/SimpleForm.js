@@ -3,7 +3,7 @@ import classes from './SimpleForm.module.css';
 export default function SimpleForm(props) {
 
   function handleSubmit(event) {
-    // event.preventDefault();
+    event.preventDefault();
     console.log("Form submitted");
     return false;
   }
