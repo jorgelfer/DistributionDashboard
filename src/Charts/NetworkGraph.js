@@ -49,48 +49,21 @@ export default function NetworkGraph({margin, data, ...props}) {
     }
   };
 
-  const [isDeviceSubmitted, setDeviceSubmitted] = useState(false);
-
-  function handleDeviceSubmitted() {
-    setDeviceSubmitted((curIsDeviceSubmitted) => !curIsDeviceSubmitted);
-  }
-
-  const [enteredDevice, setEnteredDevice] = useState({
-    power_rating: 10,
-    power_cost: 0.1,
-    terminals: [1]
-  });
-
   const nodeHoverTooltip = useCallback((bus) => {
-    // console.log(data)
+    console.log(data[`${props.selectedValue}`]);
     data[`${props.selectedValue}`] = data[`${props.selectedValue}`] || [];
 
     // let uid =  `${props.selectedValue}_${bus.uid}`;
+    let device = data[`${props.selectedValue}`].find(f => f.bus === bus.uid) || {
+      uid: `${props.selectedValue}_${bus.uid}`,
+      bus: bus.uid,
+      power_rating: 10,
+      power_cost: 0.1,
+      terminals: [1]
+    };
 
-    function handleDeviceChange(identifier, value) {
-      setEnteredDevice(prevCase => ({
-        ...prevCase,
-        [identifier]: value
-      }))
-    }
-
-    console.log(isDeviceSubmitted);
-    console.log(enteredDevice);
-
-    // let device = data[`${props.selectedValue}`].find(f => f.bus === bus.uid) || {
-    //   uid: `${props.selectedValue}_${bus.uid}`,
-    //   bus: bus.uid,
-    //   power_rating: 10,
-    //   power_cost: 0.1,
-    //   terminals: [1]
-    // };
-
-    return renderToString(<SimpleForm 
-      device={enteredDevice}
-      onEnteredValues={handleDeviceChange}
-      onSubmitted={handleDeviceSubmitted}
-      />);
-  }, [data, props, enteredDevice, isDeviceSubmitted]);
+    return renderToString(<SimpleForm device={device}/>);
+  }, [data, props.selectedValue]);
 
   // The force simulation mutates links and nodes,
   // so, make a deep copy of the dataset 

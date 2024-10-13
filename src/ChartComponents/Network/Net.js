@@ -21,22 +21,58 @@ export default function Net(props) {
     props.xScale.domain(d3.extent(props.data.bus, d => d.x));
     props.yScale.domain(d3.extent(props.data.bus, d => d.y));
 
-    // // Tooltip definition
+    // Tooltip definition
     // let toolTip = d3Tip()
     //   .attr("class", "d3-tip")
     //   .offset([0, 120])
     //   .html(function (event, d) {
     //     // let props.data["flex_devices"] = props.data["flex_devices"] || [];
-    //     let device = props.data.flex_devices.find(f => f.bus === d.bus);
-    //     return `<div class="${styles.tooltip}">${d.uid}</div>`;
+    //     return `<form class="dev_form">
+    //         <h2 class="login-header">${props.selectedValue} - ${d.uid}</h2>
+    //         <div class="control no-margin">
+    //           <label for="power_rating">Power Rating [kW]</label>
+    //           <input 
+    //           id="power_rating" 
+    //           type="text" 
+    //           name="power_rating" 
+    //           value="${d.power_rating}"
+    //           />
+    //         </div>
+    //         <div class="control no-margin">
+    //           <label for="power_cost">Cost [$/kWh]</label>
+    //           <input 
+    //           id="power_cost" 
+    //           type="text" 
+    //           name="power_cost" 
+    //           value="${d.power_cost}"
+    //           />
+    //         </div>
+    //         <div class="control no-margin">
+    //           <label for="terminals">Terminals</label>
+    //           <input 
+    //           id="terminals" 
+    //           type="text" 
+    //           name="terminals" 
+    //           value="${d.terminals}"
+    //           />
+    //         </div>
+    //       </form>`
     //   });
 
-    // // Call tooltip to initialize it to document and svg
+    // Call tooltip to initialize it to document and svg
     // networkContainer.call(toolTip);
 
     // window.onkeydown = function(event) {
     //   if (event.key === "Escape") {
     //     toolTip.hide();
+    //   } else if (event.key === "Enter") {
+    //     // console.log("Enter key pressed");
+    //     const inputPower = d3.select("#power_rating").property("value");
+    //     console.log("Input power:", inputPower); 
+    //     const inputCost = d3.select("#power_cost").property("value");
+    //     console.log("Input cost:", inputCost); 
+    //     const inputTerminals = d3.select("#terminals").property("value");
+    //     console.log("Input terminals:", inputTerminals); 
     //   }
     // };
 
@@ -72,6 +108,15 @@ export default function Net(props) {
 
     window.onkeydown = function(event) {
       if (event.key === "Escape") {
+        removeTooltip();
+      } else if (event.key === "Enter") {
+        // console.log("Enter key pressed");
+        const inputPower = d3.select("#power_rating").property("value");
+        console.log("Input power:", inputPower); 
+        const inputCost = d3.select("#power_cost").property("value");
+        console.log("Input cost:", inputCost); 
+        const inputTerminals = d3.select("#terminals").property("value");
+        console.log("Input terminals:", inputTerminals); 
         removeTooltip();
       }
     };
@@ -115,7 +160,6 @@ export default function Net(props) {
       // .on('click', toolTip.show)
       .style("display", "none")
       .on("click", (event, d) => {
-        // console.log(d);
         addTooltip(props.nodeHoverTooltip, event, d);
       });
       // .on("mouseout", () => {
@@ -160,6 +204,9 @@ export default function Net(props) {
 
         d3.select(this).select("image.symbol")
           .style("display", "none");
+
+        // toolTip.hide();
+        removeTooltip();
         
         // Remove the device from the flex_devices array
         props.data.flex_devices = props.data.flex_devices.filter(f => f.bus !== d.bus);
