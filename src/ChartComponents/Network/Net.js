@@ -111,12 +111,17 @@ export default function Net(props) {
         removeTooltip();
       } else if (event.key === "Enter") {
         // console.log("Enter key pressed");
+        const inputBus = d3.select("#bus_uid").property("value");
         const inputPower = d3.select("#power_rating").property("value");
-        console.log("Input power:", inputPower); 
         const inputCost = d3.select("#power_cost").property("value");
-        console.log("Input cost:", inputCost); 
         const inputTerminals = d3.select("#terminals").property("value");
-        console.log("Input terminals:", inputTerminals); 
+
+        // add updated device
+        let device = props.data[`${props.selectedValue}`].find(f => f.bus === inputBus);
+        device.power_rating = inputPower;
+        device.power_cost = inputCost;
+        device.terminals = inputTerminals;
+
         removeTooltip();
       }
     };
@@ -209,24 +214,30 @@ export default function Net(props) {
         removeTooltip();
         
         // Remove the device from the flex_devices array
-        props.data.flex_devices = props.data.flex_devices.filter(f => f.bus !== d.bus);
+        props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
+        console.log(props.data[`${props.selectedValue}`]);
 
       } else {
         d3.select(this).classed("fixed", true);
         d3.select(this).select("image.symbol")
           .style("display", "block");
 
-        // append new device to the flex_devices array
-        props.data.flex_devices.push({
-          uid: `fl_${d.uid}`,
-          bus: d.uid,
-          power_rating: 10,
-          power_cost: 0.1,
-          terminals: [1, 2, 3]
-        });
-      }
+        // create the new device
+        props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
 
-      // console.log(props.data.flex_devices);
+        // check if the device already exists
+        let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
+        if (device === undefined) {
+          // append new device to the flex_devices array
+          props.data[`${props.selectedValue}`].push({
+            uid: `${props.selectedValue}_${d.uid}`,
+            bus: d.uid,
+            power_rating: 10,
+            power_cost: 0.1,
+            terminals: [1]
+          });
+        };
+      }
     }
 
     // Handlers for drag events on nodes

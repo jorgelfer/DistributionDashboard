@@ -7,6 +7,14 @@ export default function SimpleForm({device}) {
       <form className={classes["simple-form"]} name="login_form">
       <h2 className="login-header">CASE DEFINITION</h2>
       <div className="control no-margin">
+      <label htmlFor="text">Bus</label>
+      <input 
+      id="bus_uid" 
+      type="text" 
+      name="bus_uid" 
+      value={device.bus}
+      readOnly={true}
+      />
       <label htmlFor="text">Power Rating [kW]</label>
       <input 
       id="power_rating" 

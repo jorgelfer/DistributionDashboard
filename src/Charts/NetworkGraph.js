@@ -48,26 +48,18 @@ export default function NetworkGraph({margin, data, ...props}) {
       setActiveLayer(id);
     }
   };
-
-  const nodeHoverTooltip = useCallback((bus) => {
-    console.log(data[`${props.selectedValue}`]);
-    data[`${props.selectedValue}`] = data[`${props.selectedValue}`] || [];
-
-    // let uid =  `${props.selectedValue}_${bus.uid}`;
-    let device = data[`${props.selectedValue}`].find(f => f.bus === bus.uid) || {
-      uid: `${props.selectedValue}_${bus.uid}`,
-      bus: bus.uid,
-      power_rating: 10,
-      power_cost: 0.1,
-      terminals: [1]
-    };
-
-    return renderToString(<SimpleForm device={device}/>);
-  }, [data, props.selectedValue]);
-
   // The force simulation mutates links and nodes,
   // so, make a deep copy of the dataset 
   const network = JSON.parse(JSON.stringify(data));
+
+  const nodeHoverTooltip = useCallback((bus) => {
+    // Find the device in the network
+    let device = network[`${props.selectedValue}`].find(f => f.bus === bus.uid)
+    console.log(device);
+
+    return renderToString(<SimpleForm device={device}/>);
+  }, [network, props.selectedValue]);
+
   return(
     <Card>
       <h2>Network</h2>
