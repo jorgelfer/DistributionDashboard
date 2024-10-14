@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import Symbol from './Symbol';
-import InitDevice from './initDevice';
+import InitDevice from './InitDevice';
 import styles from './Net.module.css';
 
 export default function Net(props) {
