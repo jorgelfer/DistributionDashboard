@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-.simple-form {
+.simple {
   width: 100%;
   margin: 3rem auto;
   padding: 2rem;
@@ -13,25 +13,29 @@
   box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
 }
 
+.login-header {
+  color: #9bafaf;
+}
+
 .control,
 fieldset {
   margin-bottom: 1rem;
 }
 
-.control.no-margin {
+.no-margin {
   margin-bottom: 0.2rem;
 }
 
-.control label {
+.label {
   display: block;
   font-size: 0.8rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0rem;
   color: #9bafaf;
   text-transform: uppercase;
   font-weight: bold;
 }
 
-.control input {
+.input {
   display: block;
   width: 100%;
   max-width: 15rem;

@@ -8,7 +8,7 @@ export default function InitDevice(selectedValue, bus, T) {
               bus: bus,
               capacity: 100,
               charging_limit: 20,
-              charging_efficiency: 0.9,
+              efficiency: 0.9,
               initial_energy: 0.8,
               final_energy: 0.8,
               cost: 0.01,
@@ -30,7 +30,7 @@ export default function InitDevice(selectedValue, bus, T) {
               uid: `${selectedValue}_${bus}`,
               bus: bus,
               phases: [1],
-              revenue: 0.5,
+              cost: 0.5,
               power_rating: 10,
               p: {1: Array(T).fill(0)},
             };
@@ -41,8 +41,8 @@ export default function InitDevice(selectedValue, bus, T) {
               phases: [1],
               cost: 0.5,
               power_rating: 10,
-              power_factor: 0.9,
               p: {1: Array(T).fill(0)},
+              power_factor: 0.9,
             };
     default:
       return null;

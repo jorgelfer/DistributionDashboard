@@ -1,6 +1,5 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
-// import Symbol from './Symbol';
 
 export default function NodeBreaker(props) {
 

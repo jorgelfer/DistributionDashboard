@@ -59,16 +59,26 @@ export default function Net(props) {
       if (event.key === "Escape") {
         removeTooltip();
       } else if (event.key === "Enter") {
-        const inputBus = d3.select("#bus_uid").property("value");
-        const inputPower = d3.select("#power_rating").property("value");
-        const inputCost = d3.select("#power_cost").property("value");
-        const inputTerminals = d3.select("#terminals").property("value");
 
-        // add updated device
+        // get updated device
+        const inputBus = d3.select("#bus").property("value");
         let device = props.data[`${props.selectedValue}`].find(f => f.bus === inputBus);
-        device.power_rating = inputPower;
-        device.power_cost = inputCost;
-        device.terminals = inputTerminals;
+
+        // update device information
+        if (props.selectedValue === "battery") {
+          device.capacity = d3.select("#capacity").property("value");
+          device.charging_limit = d3.select("#charging_limit").property("value");
+          device.efficiency = d3.select("#efficiency").property("value");
+          device.initial_energy = d3.select("#initial_energy").property("value");
+          device.final_energy = d3.select("#initial_energy").property("value");
+          device.cost = d3.select("#cost").property("value");
+          device.revenue = d3.select("#revenue").property("value");
+          device.phases = d3.select("#terminals").property("value");
+        } else {
+          device.power_rating = d3.select("#power_rating").property("value");
+          device.cost = d3.select("#cost").property("value");
+          device.phases = d3.select("#terminals").property("value");
+        }
 
         removeTooltip();
       }

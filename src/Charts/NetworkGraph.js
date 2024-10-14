@@ -8,8 +8,10 @@ import NodeBreaker from '../ChartComponents/Network/NodeBreaker';
 import Net from '../ChartComponents/Network/Net';
 import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
 import bronx from "../ChartComponents/Mapping/bronx.json";
-import SimpleForm from './SimpleForm';
 import { renderToString } from 'react-dom/server'
+
+import UnitForm from '../UI/Device/UnitForm';
+import BatteryForm from '../UI/Device/BatteryForm';
 
 
 const layers = [
@@ -58,7 +60,10 @@ export default function NetworkGraph({margin, data, ...props}) {
     // Find the device in the network
     let device = network[`${props.selectedValue}`].find(f => f.bus === bus.uid)
 
-    return renderToString(<SimpleForm selectedValue={props.selectedValue} device={device}/>);
+    return renderToString(
+      (props.selectedValue === "battery") ? <BatteryForm selectedValue={props.selectedValue} device={device}/>
+      : <UnitForm selectedValue={props.selectedValue} device={device}/>);
+
   }, [network, props.selectedValue]);
 
   return(

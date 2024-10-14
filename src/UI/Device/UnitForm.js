@@ -1,0 +1,53 @@
+import classes from './Form.module.css';
+
+export default function UnitForm({selectedValue, device}) {
+  return (
+    <>
+      <form className={classes.simple} name="unit_form">
+      <h2 className={classes["login-header"]}>{selectedValue}</h2>
+      <div className={classes["no-margin"]}>
+      <label className={classes.label} htmlFor="text">Bus</label>
+      <input 
+      className={classes.input}
+      id="bus" 
+      type="text" 
+      name="bus_uid" 
+      value={device.bus}
+      readOnly={true}
+      />
+      <label className={classes.label} htmlFor="text">Power Rating [kW]</label>
+      <input 
+      className={classes.input}
+      id="power_rating" 
+      type="text" 
+      name="power_rating" 
+      onChange={(event) => console.log(event.target.value)}
+      value={device.power_rating}
+      />
+      </div>
+      <div className={classes["no-margin"]}>
+      <label className={classes.label} htmlFor="text">Cost [$/kWh]</label>
+      <input 
+      className={classes.input}
+      id="cost" 
+      type="text" 
+      name="cost" 
+      value={device.cost}
+      onChange={(event) => console.log(event.target.value)}
+      />
+      </div>
+      <div className={classes["no-margin"]}>
+      <label className={classes.label} htmlFor="text">Terminals</label>
+      <input 
+      className={classes.input}
+      id="terminals" 
+      type="text" 
+      name="terminals" 
+      value={device.phases}
+      onChange={(event) => console.log(event.target.value)}
+      />
+      </div>
+      </form>
+    </>
+  );
+}
