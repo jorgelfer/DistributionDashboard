@@ -1,5 +1,3 @@
-import * as d3 from 'd3';
-
 import batteryImg from "../../assets/battery.png";
 import drImg from "../../assets/demand_response.png";
 import evImg from "../../assets/electric_vehicle.png";
@@ -22,6 +20,8 @@ export default function Symbol(selectedValue) {
       return drImg;
     case "substation":
       return substationImg;
+    default:
+      return null;
   };
 
 };

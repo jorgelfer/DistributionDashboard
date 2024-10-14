@@ -46,7 +46,63 @@ export function updateData(network, selectedValue, dateParser) {
         case "flow":  
             return [data, [0,0]];
 
-        case "p_dr":   
+        case "vsource":   
+            // organize data
+            network["vsource"].forEach((d, i) => {
+                if (buses_uid.includes(d.bus)) {
+                    d["phases"].forEach((d2, i2) => {
+                        data.push(d.p[d2.toString()].map((d3, i3) =>({
+                            "time": dateParser(network["time"][i3]),
+                            "p": +d3,
+                            "q": +d.q[d2.toString()][i3],
+                            "s": Math.sqrt(Math.pow(+d3,2) + Math.pow(+d.q[d2.toString()][i3],2)),
+                            "phase": d2.toString(),
+                            "bus": d.bus,
+                            "uid": d.uid + "." + d2.toString(),
+                        })));
+                    })
+                }
+            })
+            return [data, [0, d3.max(data.flat().map(d=>d.p))]];
+
+        case "load":   
+            // organize data
+            network["load"].forEach((d, i) => {
+                if (buses_uid.includes(d.bus)) {
+                    d["phases"].forEach((d2, i2) => {
+                        data.push(d.p[d2.toString()].map((d3, i3) =>({
+                            "time": dateParser(network["time"][i3]),
+                            "p": +d3,
+                            "q": d.q[d2.toString()][i3],
+                            "s": Math.sqrt(Math.pow(+d3,2) + Math.pow(+d.q[d2.toString()][i3],2)),
+                            "phase": d2.toString(),
+                            "bus": d.bus,
+                            "uid": d.uid + "." + d2.toString(),
+                        })));
+                    })
+                }
+            });
+            return [data, [0, d3.max(data.flat().map(d=>d.p))]];
+
+        case "battery":
+            // organize data
+            const battery = (network["battery"] || [])
+            battery.forEach((d, i) => {
+                if (buses_uid.includes(d.bus)) {
+                    d["phases"].forEach((d2, i2) => {
+                        data.push(d.soc[d2.toString()].map((d3, i3) =>({
+                            "time": dateParser(network["time"][i3]),
+                            "val": +d3,
+                            "phase": d2.toString(),
+                            "bus": d.bus,
+                            "uid": d.uid + "." + d2.toString(),
+                        })));
+                    })
+                }
+            });
+            return [data, [0, d3.max(data.flat().map(d=>d["val"]))]];
+
+        case "dr_load":   
             // organize data
             const dr_load = (network["dr_load"] || [])
             dr_load.forEach((d, i) => {
@@ -66,42 +122,7 @@ export function updateData(network, selectedValue, dateParser) {
             });
             return [data, [0, d3.max(data.flat().map(d=>d.p))]];
 
-        case "p_d":   
-            // organize data
-            network["load"].forEach((d, i) => {
-                if (buses_uid.includes(d.bus)) {
-                    d["phases"].forEach((d2, i2) => {
-                        data.push(d.p[d2.toString()].map((d3, i3) =>({
-                            "time": dateParser(network["time"][i3]),
-                            "p": +d3,
-                            "q": d.q[d2.toString()][i3],
-                            "s": Math.sqrt(Math.pow(+d3,2) + Math.pow(+d.q[d2.toString()][i3],2)),
-                            "phase": d2.toString(),
-                            "bus": d.bus,
-                            "uid": d.uid + "." + d2.toString(),
-                        })));
-                    })
-                }
-            });
-            return [data, [0, d3.max(data.flat().map(d=>d.p))]];
-
-        case "p_g":   
-            // organize data
-            network["vsource"].forEach((d, i) => {
-                if (buses_uid.includes(d.bus)) {
-                    d["phases"].forEach((d2, i2) => {
-                        data.push(d.p[d2.toString()].map((d3, i3) =>({
-                            "time": dateParser(network["time"][i3]),
-                            "p": +d3,
-                            "q": +d.q[d2.toString()][i3],
-                            "s": Math.sqrt(Math.pow(+d3,2) + Math.pow(+d.q[d2.toString()][i3],2)),
-                            "phase": d2.toString(),
-                            "bus": d.bus,
-                            "uid": d.uid + "." + d2.toString(),
-                        })));
-                    })
-                }
-            })
+        case "flex_gen":   
             const flex_gen = (network["flex_gen"] || [])
             flex_gen.forEach((d, i) => {
                 if (buses_uid.includes(d.bus)) {
@@ -120,7 +141,26 @@ export function updateData(network, selectedValue, dateParser) {
             })
             return [data, [0, d3.max(data.flat().map(d=>d.p))]];
 
-        case "p_i":   
+        case "flex_load":   
+            const flex_load = (network["flex_load"] || [])
+            flex_load.forEach((d, i) => {
+                if (buses_uid.includes(d.bus)) {
+                    d["phases"].forEach((d2, i2) => {
+                        data.push(d.p[d2.toString()].map((d3, i3) =>({
+                            "time": dateParser(network["time"][i3]),
+                            "p": +d3,
+                            "q": 0.0,
+                            "s": +d3,
+                            "phase": d2.toString(),
+                            "bus": d.bus,
+                            "uid": d.uid + "." + d2.toString(),
+                        })));
+                    })
+                }
+            })
+            return [data, [0, d3.max(data.flat().map(d=>d.p))]];
+
+        case "mismatch":   
             // organize data
             network.bus.forEach((d, i) => {
                 d["phases"].forEach((d2, i2) => {
@@ -148,25 +188,6 @@ export function updateData(network, selectedValue, dateParser) {
                 let max_q = d3.max(data.flat().map(d=>d.q))
                 return [data, [d3.min([min_p, min_q]), d3.max([max_p, max_q])]];
             }
-
-        case "soc":
-            // organize data
-            const battery = (network["battery"] || [])
-            battery.forEach((d, i) => {
-                if (buses_uid.includes(d.bus)) {
-                    d["phases"].forEach((d2, i2) => {
-                        data.push(d.soc[d2.toString()].map((d3, i3) =>({
-                            "time": dateParser(network["time"][i3]),
-                            "val": +d3,
-                            "phase": d2.toString(),
-                            "bus": d.bus,
-                            "uid": d.uid + "." + d2.toString(),
-                        })));
-                    })
-                }
-            });
-
-            return [data, [0, d3.max(data.flat().map(d=>d["val"]))]];
 
         default:  
             return [data, [0,0]];

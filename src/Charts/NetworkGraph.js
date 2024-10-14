@@ -10,13 +10,10 @@ import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
 import bronx from "../ChartComponents/Mapping/bronx.json";
 import SimpleForm from './SimpleForm';
 import { renderToString } from 'react-dom/server'
-import { ForceGraph } from '../ChartComponents/Network/forceGraph';
-// import * as ReactTooltip from 'react-tooltip';
 
 
 const layers = [
   { id: "coordinates", label: "Coordinates" },
-  { id: "forcegraph", label: "ForceGraph" },
   { id: "nodebreaker", label: "Node Breaker" },
   { id: "force", label: "Force" },
   { id: "geojson", label: "Geojson" },
@@ -55,7 +52,6 @@ export default function NetworkGraph({margin, data, ...props}) {
   const nodeHoverTooltip = useCallback((bus) => {
     // Find the device in the network
     let device = network[`${props.selectedValue}`].find(f => f.bus === bus.uid)
-    console.log(device);
 
     return renderToString(<SimpleForm device={device}/>);
   }, [network, props.selectedValue]);
@@ -111,29 +107,6 @@ export default function NetworkGraph({margin, data, ...props}) {
           />
         </ChartContainer>
         }
-      {activeLayer === "forcegraph" &&
-        <ChartContainer
-          width={width}
-          height={height}
-          margin={margin}
-          className="network-graph"
-          >
-          <ForceGraph
-            nodeHoverTooltip={nodeHoverTooltip}
-            innerHeight={innerHeight}
-            innerWidth={innerWidth}
-            margin={margin}
-            data={network}
-            activeLayer={activeLayer}
-            originalNodeSize={originalNodeSize}
-            xScale={xScale}
-            yScale={yScale}
-            linkScale={linkScale}
-            colorScale={props.colorScale}
-            selectedValue={props.selectedValue}
-          />
-        </ChartContainer>
-        }
       {activeLayer === "geojson" &&
         <ChartContainer
           width={width}
@@ -152,7 +125,6 @@ export default function NetworkGraph({margin, data, ...props}) {
           />
         </ChartContainer>
       }
-      {/* <ReactTooltip /> */}
     </Card>
   );
 }

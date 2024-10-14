@@ -10,7 +10,7 @@ import vmImg from "../../assets/voltage.png";
 
 
 export const DATADISPLAY = {
-  vmag: {
+  vm: {
     image: vmImg,
     title: 'Voltage Magnitude',
   },
@@ -18,7 +18,7 @@ export const DATADISPLAY = {
     image: flowImg,
     title: 'Power Flow',
   },
-  substation: {
+  vsource: {
     image: substationImg,
     title: 'Substation',
   },
@@ -30,7 +30,7 @@ export const DATADISPLAY = {
     image: batteryImg,
     title: 'Battery',
   },
-  dresponse: {
+  dr_load: {
     image: drImg,
     title: 'Demand Response',
   },

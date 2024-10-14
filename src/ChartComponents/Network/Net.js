@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import Symbol from './Symbol';
-import styles from './forceGraph.module.css';
+import styles from './Net.module.css';
 // import d3Tip from 'd3-tip'
 
 export default function Net(props) {
