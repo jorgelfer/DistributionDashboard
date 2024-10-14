@@ -4,6 +4,7 @@ import Error from '../UI/Error/Error';
 import { fetchSchedulingData } from './https';
 
 export default function DisplayScheduling({payload, onSchedulingData}) {
+  console.log("payload", payload);
   const {loading, data, error} = useFetch(fetchSchedulingData, payload);
 
   if (error) {

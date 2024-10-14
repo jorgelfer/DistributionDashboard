@@ -80,8 +80,6 @@ export default function Net(props) {
           device.phases = d3.select("#terminals").property("value").split(',').map(Number);;
         }
 
-        console.log(device);
-
         // update original data
         props.updateData(props.data);
 
@@ -91,7 +89,6 @@ export default function Net(props) {
     };
 
     // Append weighted lines for each link in network
-    // console.log(props.data.branch);
     const linkEnter = networkContainer 
       .selectAll('.link')
       .data(props.data.branch)

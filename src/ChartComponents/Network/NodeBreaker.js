@@ -63,13 +63,11 @@ export default function NodeBreaker(props) {
           net_links = []; // output links
 
       nm = {}    // reset node map
-      // console.log(data.nodes);
         
       // process previous nodes for reuse or centroid calculation
       if (prev) {
         prev.nodes.forEach(n => {
           let i = index(n), o;
-          // console.log(n.size);
           if (n.size > 0) {
             gn[i] = n;
             n.size = 0;
@@ -79,7 +77,6 @@ export default function NodeBreaker(props) {
             o.y += n.y;
             o.count += 1;
           } else {
-            // console.log("n is undefined");
             // n.x += n.x_shift;
             // n.y += n.y_shift;
           }
@@ -97,7 +94,6 @@ export default function NodeBreaker(props) {
           nm[n.id] = net_nodes.length;
           net_nodes.push(n);
           if (gn[i]) {
-            // console.log("from collapse = false")
             // place new nodes at cluster location (plus jitter)
             n.x = gn[i].x + n.x_shift;
             n.y = gn[i].y + n.y_shift;
@@ -188,7 +184,6 @@ export default function NodeBreaker(props) {
     groups.forEach(g => {
       collapse[g] = true;
     });
-    // console.log(data);
 
     init();
 
@@ -202,7 +197,6 @@ export default function NodeBreaker(props) {
       if (simulation) simulation.stop();
 
       net = network(data, net, getGroup, collapse);
-      console.log(net);
 
       let drag = d3.drag()
           .on('start', dragstarted)
