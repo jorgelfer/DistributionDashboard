@@ -40,9 +40,9 @@ export default function BatteryForm({selectedValue, device}) {
       <label className={classes.label} htmlFor="text">Efficiency</label>
       <input 
       className={classes.input}
-      id="Efficiency" 
+      id="efficiency" 
       type="text" 
-      name="Efficiency" 
+      name="efficiency" 
       value={device.efficiency}
       onChange={(event) => console.log(event.target.value)}
       />

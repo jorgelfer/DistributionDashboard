@@ -72,14 +72,20 @@ export default function Net(props) {
           device.initial_energy = d3.select("#initial_energy").property("value");
           device.final_energy = d3.select("#initial_energy").property("value");
           device.cost = d3.select("#cost").property("value");
-          device.revenue = d3.select("#revenue").property("value");
-          device.phases = d3.select("#terminals").property("value");
+          device.revenue = d3.select("#cost").property("value");
+          device.phases = d3.select("#terminals").property("value").split(',').map(Number);;
         } else {
           device.power_rating = d3.select("#power_rating").property("value");
           device.cost = d3.select("#cost").property("value");
-          device.phases = d3.select("#terminals").property("value");
+          device.phases = d3.select("#terminals").property("value").split(',').map(Number);;
         }
 
+        console.log(device);
+
+        // update original data
+        props.updateData(props.data);
+
+        // remove the tooltip
         removeTooltip();
       }
     };
