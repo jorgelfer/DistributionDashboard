@@ -82,7 +82,7 @@ export function updateData(network, selectedValue, dateParser) {
                     })
                 }
             });
-            return [data, [0, d3.max(data.flat().map(d=>d.p))]];
+            return [data, [0, d3.max(data.flat().map(d=>d.s))]];
 
         case "battery":
             // organize data
@@ -120,7 +120,7 @@ export function updateData(network, selectedValue, dateParser) {
                     })
                 }
             });
-            return [data, [0, d3.max(data.flat().map(d=>d.p))]];
+            return [data, [0, d3.max(data.flat().map(d=>d.s))]];
 
         case "flex_gen":   
             const flex_gen = (network["flex_gen"] || [])
@@ -179,15 +179,7 @@ export function updateData(network, selectedValue, dateParser) {
             })
 
             // vertical scale
-            if (data.length === 0) {
-                return [data, [0,0]];
-            } else {
-                let min_p = d3.min(data.flat().map(d=>d.p))
-                let min_q = d3.min(data.flat().map(d=>d.q))
-                let max_p = d3.max(data.flat().map(d=>d.p))
-                let max_q = d3.max(data.flat().map(d=>d.q))
-                return [data, [d3.min([min_p, min_q]), d3.max([max_p, max_q])]];
-            }
+            return [data, d3.extent(data.flat().map(d=>d.s))];
 
         default:  
             return [data, [0,0]];

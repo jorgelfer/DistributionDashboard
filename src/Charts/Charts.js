@@ -46,7 +46,7 @@ export default function Charts(props) {
             time={props.data["time"]}
             dateParser={dateParser}
           />}
-          {["vsource", "load", "dr_load", "flex_gen", "flex_load"].includes(selectedValue) &&
+          {["vsource", "load", "dr_load", "flex_gen", "flex_load", "mismatch"].includes(selectedValue) &&
           <LineChartPQS 
             margin={margin} 
             data={data} 
