@@ -1,24 +1,27 @@
 import * as d3 from 'd3';
 
 import batteryImg from "../../assets/battery.png";
-import demand_responseImg from "../../assets/demand_response.png";
-import demandImg from "../../assets/demand.png";
-import mismatchImg from "../../assets/mismatch.png";
-import solarImg from "../../assets/solar.png";
+import drImg from "../../assets/demand_response.png";
+import evImg from "../../assets/electric_vehicle.png";
+import loadImg from "../../assets/load.png";
+import pvImg from "../../assets/pv_system.png";
+import substationImg from "../../assets/substation.png";
 
 export default function Symbol(selectedValue) {
 
   switch (selectedValue) {
-    case "p_d":
-      return demandImg;
-    case "p_i":
-      return mismatchImg;
-    case "soc":
+    case "load":
+      return loadImg;
+    case "battery":
       return batteryImg;
-    case "p_g":
-      return solarImg;
-    case "p_dr":
-      return demand_responseImg;
+    case "flex_gen":
+      return pvImg;
+    case "flex_load":
+      return evImg;
+    case "dresponse":
+      return drImg;
+    case "substation":
+      return substationImg;
   };
 
 };
