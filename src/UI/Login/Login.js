@@ -2,7 +2,11 @@ import './Login.css';
 
 export default function Login({values, onEnteredValues, onSubmitted}) {
 
-  const networkModelIsInvalid = !["123Bus", "13Bus", "4Bus", "3Bus"].includes(values.networkModel);
+  const networks = [
+    { value:"3Bus" , label:"3Bus", inFile1: "3Bus-DY.dss"},
+    { value:"4Bus" , label:"4Bus", inFile1: "4Bus-DY.dss"},
+    { value:"123Bus" , label:"123Bus", inFile1: "IEEE123Nodeckt.dss"},
+  ];
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -14,17 +18,17 @@ export default function Login({values, onEnteredValues, onSubmitted}) {
       <h2 className="login-header">CASE DEFINITION</h2>
       <div className="control-row">
         <div className="control no-margin">
-          <label htmlFor="text">Network Model</label>
-          <input 
+          <label htmlFor="dropdown">Network Model</label>
+          <select 
           id="network-model" 
-          type="text" 
-          name="network-model" 
-          onChange={(event) => onEnteredValues("networkModel", event.target.value)}
-          value={values.networkModel}
-          />
-          <div className="control-error">{networkModelIsInvalid && <p>Please enter a valid network model.</p>}</div>
+          value={values.netWorkModel}
+          onChange={(event) => onEnteredValues("networkModel", event.target.value)}>
+            <option value="13Bus">13 Bus</option>
+            {networks.map((network) => (
+              <option key={network.value} value={network.value}>{network.label}</option>
+            ))}
+          </select>
         </div>
-
         <div className="control no-margin">
           <label htmlFor="text">InFile1</label>
           <input 
@@ -36,7 +40,6 @@ export default function Login({values, onEnteredValues, onSubmitted}) {
           />
         </div>
       </div>
-
       <p className="form-actions">
         <button type="reset" className="login-button button-flat">Reset</button>
         <button className="login-button">Run qsts</button>

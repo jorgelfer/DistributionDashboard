@@ -16,11 +16,27 @@ export default function App() {
     inFile1: "IEEE13Nodeckt.dss"
   });
 
+
+  const infile1_map = { 
+    "3Bus" : "case3_unbalanced.dss",
+    "4Bus" : "4Bus-DY.dss",
+    "13Bus": "IEEE13Nodeckt.dss",
+    "123Bus": "IEEE123Nodeckt.dss"
+    };
+  
+
   function handleInputChange(identifier, value) {
     setEnteredCase(prevCase => ({
       ...prevCase,
       [identifier]: value
     }))
+    // By default inFile1 based on networkModel
+    if (identifier === "networkModel") {
+      setEnteredCase(prevCase => ({
+        ...prevCase,
+        inFile1: infile1_map[value]
+      }))
+    } 
   }
 
   return (
