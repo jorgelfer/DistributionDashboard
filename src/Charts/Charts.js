@@ -9,7 +9,7 @@ import { updateData } from "../Data/update";
 
 export default function Charts(props) {
 
-  const margin = {top: 30, right: 10, bottom: 50, left: 70};
+  const margin = {top: 30, right: 30, bottom: 50, left: 70};
   const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
   const dateParser = d3.timeParse("%Y-%m-%dT%H:%M");
 

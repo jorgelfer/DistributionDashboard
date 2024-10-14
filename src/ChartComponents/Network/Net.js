@@ -14,6 +14,13 @@ export default function Net(props) {
 
     const networkContainer = d3.select(networkRef.current);
 
+    // active nodes
+    var active_nodes = [];
+    if (!["vm", "flow", "mismatch"].includes(props.selectedValue)) {
+      if (props.data[`${props.selectedValue}`]) {
+        active_nodes = props.data[`${props.selectedValue}`].map(d => d.bus);
+      }
+    } 
     // Set the domain of the x and y scales
     props.xScale.domain(d3.extent(props.data.bus, d => d.x));
     props.yScale.domain(d3.extent(props.data.bus, d => d.y));
@@ -102,7 +109,7 @@ export default function Net(props) {
       .attr("transform", "translate(5,5)")
       .attr("width", 25)
       .attr("height", 25)
-      .style("display", "none")
+      .style("display", d => active_nodes.includes(d.uid) ? "block" : "none")
       .on("click", (event, d) => {
         if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
           addTooltip(props.nodeHoverTooltip, event, d);
@@ -142,27 +149,26 @@ export default function Net(props) {
     // Handlers for click events on nodes
     function node_dblclick(event, d) {
 
-      if (d3.select(this).classed("fixed")) {
-        d3.select(this).classed("fixed", false);
+      if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
+        if (d3.select(this).classed("fixed")) {
+          d3.select(this).classed("fixed", false);
 
-        d3.select(this).select("image.symbol")
-          .style("display", "none");
+          d3.select(this).select("image.symbol")
+            .style("display", "none");
 
-        
-        if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
-          // toolTip.hide();
-          removeTooltip();
-          // Remove the device from array
-          props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
-          console.log(props.data[`${props.selectedValue}`]);
-        };
+          
+          if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
+            // toolTip.hide();
+            removeTooltip();
+            // Remove the device from array
+            props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
+            console.log(props.data[`${props.selectedValue}`]);
+          };
 
-      } else {
-        d3.select(this).classed("fixed", true);
-        d3.select(this).select("image.symbol")
-          .style("display", "block");
-
-        if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
+        } else {
+          d3.select(this).classed("fixed", true);
+          d3.select(this).select("image.symbol")
+            .style("display", "block");
           // create the new device
           props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
           // check if the device already exists
