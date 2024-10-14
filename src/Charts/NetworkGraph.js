@@ -49,11 +49,11 @@ export default function NetworkGraph({margin, data, ...props}) {
   // so, make a deep copy of the dataset 
   const network = JSON.parse(JSON.stringify(data));
 
-  const nodeHoverTooltip = useCallback((bus) => {
+  const deviceTooltip = useCallback((bus) => {
     // Find the device in the network
     let device = network[`${props.selectedValue}`].find(f => f.bus === bus.uid)
 
-    return renderToString(<SimpleForm device={device}/>);
+    return renderToString(<SimpleForm selectedValue={props.selectedValue} device={device}/>);
   }, [network, props.selectedValue]);
 
   return(
@@ -72,7 +72,7 @@ export default function NetworkGraph({margin, data, ...props}) {
           className="network-graph"
           >
           <Net
-            nodeHoverTooltip={nodeHoverTooltip}
+            deviceTooltip={deviceTooltip}
             innerHeight={innerHeight}
             innerWidth={innerWidth}
             margin={margin}

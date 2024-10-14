@@ -1,11 +1,11 @@
 import classes from './SimpleForm.module.css';
 
-export default function SimpleForm({device}) {
+export default function SimpleForm({selectedValue, device}) {
 
   return (
     <>
       <form className={classes["simple-form"]} name="login_form">
-      <h2 className="login-header">CASE DEFINITION</h2>
+      <h2 className="login-header">{selectedValue} DEFINITION</h2>
       <div className="control no-margin">
       <label htmlFor="text">Bus</label>
       <input 

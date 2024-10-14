@@ -112,7 +112,7 @@ export default function Net(props) {
       .style("display", d => active_nodes.includes(d.uid) ? "block" : "none")
       .on("click", (event, d) => {
         if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
-          addTooltip(props.nodeHoverTooltip, event, d);
+          addTooltip(props.deviceTooltip, event, d);
         }
       });
 
