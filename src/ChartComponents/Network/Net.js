@@ -12,7 +12,7 @@ export default function Net(props) {
 
     d3.selectAll(".node").remove();
     d3.selectAll(".link").remove();
-    d3.selectAll(".d3-tip").remove();
+    d3.selectAll("#graph-tooltip").remove();
 
     const networkContainer = d3.select(networkRef.current);
 

@@ -16,9 +16,9 @@ export default function Symbol(selectedValue) {
       return pvImg;
     case "flex_load":
       return evImg;
-    case "dresponse":
+    case "dr_load":
       return drImg;
-    case "substation":
+    case "vsource":
       return substationImg;
     default:
       return null;

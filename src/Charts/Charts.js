@@ -6,9 +6,6 @@ import LineChartVM from './LineChartVM';
 import LineChartPQS from './LineChartPQS';
 import NetworkGraph from './NetworkGraph';
 import { updateData } from "../Data/update";
-import SimpleForm from './SimpleForm';
-
-import * as ReactTooltip from 'react-tooltip';
 
 export default function Charts(props) {
 
@@ -40,7 +37,7 @@ export default function Charts(props) {
           />
         </div>
         <div className='two'>
-          {["vm", "soc"].includes(selectedValue) &&
+          {["vm", "battery"].includes(selectedValue) &&
           <LineChartVM 
             margin={margin} 
             data={data} 
@@ -49,7 +46,7 @@ export default function Charts(props) {
             time={props.data["time"]}
             dateParser={dateParser}
           />}
-          {["p_dr", "p_d", "p_g"].includes(selectedValue) &&
+          {["vsource", "load", "dr_load", "flex_gen", "flex_load"].includes(selectedValue) &&
           <LineChartPQS 
             margin={margin} 
             data={data} 

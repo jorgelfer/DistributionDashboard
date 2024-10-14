@@ -63,7 +63,7 @@ export function updateData(network, selectedValue, dateParser) {
                     })
                 }
             })
-            return [data, [0, d3.max(data.flat().map(d=>d.p))]];
+            return [data, [0, d3.max(data.flat().map(d=>d.s))]];
 
         case "load":   
             // organize data
