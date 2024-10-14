@@ -40,7 +40,7 @@ export default function SimpleForm({selectedValue, device}) {
       id="terminals" 
       type="text" 
       name="terminals" 
-      value={device.terminals}
+      value={device.phases}
       onChange={(event) => console.log(event.target.value)}
       />
       </div>

@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import Symbol from './Symbol';
+import InitDevice from './InitDevice';
 import styles from './Net.module.css';
 
 export default function Net(props) {
@@ -150,40 +151,49 @@ export default function Net(props) {
     function node_dblclick(event, d) {
 
       if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
+
+        // ---------------------------------------
         if (d3.select(this).classed("fixed")) {
+          // remove the fixed class
           d3.select(this).classed("fixed", false);
 
+          // hide the symbol
           d3.select(this).select("image.symbol")
             .style("display", "none");
 
-          
-          if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
-            // toolTip.hide();
-            removeTooltip();
-            // Remove the device from array
-            props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
-            console.log(props.data[`${props.selectedValue}`]);
-          };
+          // remove the tooltip
+          removeTooltip();
+
+          // Remove the device from array
+          props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
+
+          // update original data
+          props.updateData(props.data);
 
         } else {
+          // add the fixed class
           d3.select(this).classed("fixed", true);
+
+          // show the symbol
           d3.select(this).select("image.symbol")
             .style("display", "block");
+
           // create the new device
           props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
+
           // check if the device already exists
           let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
           if (device === undefined) {
             // append new device to the flex_devices array
-            props.data[`${props.selectedValue}`].push({
-              uid: `${props.selectedValue}_${d.uid}`,
-              bus: d.uid,
-              power_rating: 10,
-              power_cost: 0.1,
-              terminals: [1]
-            });
+            props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d.uid, props.data.time.length));
           };
+
+          // update original data
+          props.updateData(props.data);
+
         };
+        // ---------------------------------------
+
       };
     };
 

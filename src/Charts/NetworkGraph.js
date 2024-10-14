@@ -45,6 +45,11 @@ export default function NetworkGraph({margin, data, ...props}) {
       setActiveLayer(id);
     }
   };
+
+  const updateData = useCallback((network) => {
+    data[`${props.selectedValue}`] = network[`${props.selectedValue}`]; 
+  }, [data, props.selectedValue]);
+
   // The force simulation mutates links and nodes,
   // so, make a deep copy of the dataset 
   const network = JSON.parse(JSON.stringify(data));
@@ -72,6 +77,7 @@ export default function NetworkGraph({margin, data, ...props}) {
           className="network-graph"
           >
           <Net
+            updateData={updateData}
             deviceTooltip={deviceTooltip}
             innerHeight={innerHeight}
             innerWidth={innerWidth}
