@@ -14,8 +14,8 @@ import { renderToString } from 'react-dom/server'
 
 const layers = [
   { id: "coordinates", label: "Coordinates" },
-  { id: "nodebreaker", label: "Node Breaker" },
   { id: "force", label: "Force" },
+  { id: "nodebreaker", label: "Node Breaker" },
   { id: "geojson", label: "Geojson" },
 ];
 
@@ -64,26 +64,6 @@ export default function NetworkGraph({margin, data, ...props}) {
         activeButton={activeLayer}
         onButtonSelection={layerSelectionHandler}
       />
-      {activeLayer === "nodebreaker" && 
-        <ChartContainer
-          width={width}
-          height={height}
-          margin={margin}
-          className="network-graph"
-          >
-          <NodeBreaker
-            margin={margin}
-            data={network}
-            activeLayer={activeLayer}
-            originalNodeSize={originalNodeSize}
-            xScale={xScale}
-            yScale={yScale}
-            linkScale={linkScale}
-            colorScale={props.colorScale}
-            selectedValue={props.selectedValue}
-          />
-        </ChartContainer>
-      }
       {["coordinates", "force"].includes(activeLayer) &&
         <ChartContainer
           width={width}
@@ -107,6 +87,26 @@ export default function NetworkGraph({margin, data, ...props}) {
           />
         </ChartContainer>
         }
+      {activeLayer === "nodebreaker" && 
+        <ChartContainer
+          width={width}
+          height={height}
+          margin={margin}
+          className="network-graph"
+          >
+          <NodeBreaker
+            margin={margin}
+            data={network}
+            activeLayer={activeLayer}
+            originalNodeSize={originalNodeSize}
+            xScale={xScale}
+            yScale={yScale}
+            linkScale={linkScale}
+            colorScale={props.colorScale}
+            selectedValue={props.selectedValue}
+          />
+        </ChartContainer>
+      }
       {activeLayer === "geojson" &&
         <ChartContainer
           width={width}

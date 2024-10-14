@@ -5,8 +5,6 @@ import styles from './Net.module.css';
 
 export default function Net(props) {
 
-  props.data.flex_devices = props.data.flex_devices || [];
-
   const networkRef = useRef();
   useEffect(() => {
 
@@ -32,7 +30,6 @@ export default function Net(props) {
     const div = d3.select("#graph-tooltip");
 
     const addTooltip = (hoverTooltip, event, d) => {
-      // console.log(d);
       div
         .transition()
         .duration(200)
@@ -107,7 +104,9 @@ export default function Net(props) {
       .attr("height", 25)
       .style("display", "none")
       .on("click", (event, d) => {
-        addTooltip(props.nodeHoverTooltip, event, d);
+        if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
+          addTooltip(props.nodeHoverTooltip, event, d);
+        }
       });
 
     function tickSimulation() {
@@ -149,35 +148,38 @@ export default function Net(props) {
         d3.select(this).select("image.symbol")
           .style("display", "none");
 
-        // toolTip.hide();
-        removeTooltip();
         
-        // Remove the device from the flex_devices array
-        props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
-        console.log(props.data[`${props.selectedValue}`]);
+        if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
+          // toolTip.hide();
+          removeTooltip();
+          // Remove the device from array
+          props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
+          console.log(props.data[`${props.selectedValue}`]);
+        };
 
       } else {
         d3.select(this).classed("fixed", true);
         d3.select(this).select("image.symbol")
           .style("display", "block");
 
-        // create the new device
-        props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
-
-        // check if the device already exists
-        let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
-        if (device === undefined) {
-          // append new device to the flex_devices array
-          props.data[`${props.selectedValue}`].push({
-            uid: `${props.selectedValue}_${d.uid}`,
-            bus: d.uid,
-            power_rating: 10,
-            power_cost: 0.1,
-            terminals: [1]
-          });
+        if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
+          // create the new device
+          props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
+          // check if the device already exists
+          let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
+          if (device === undefined) {
+            // append new device to the flex_devices array
+            props.data[`${props.selectedValue}`].push({
+              uid: `${props.selectedValue}_${d.uid}`,
+              bus: d.uid,
+              power_rating: 10,
+              power_cost: 0.1,
+              terminals: [1]
+            });
+          };
         };
-      }
-    }
+      };
+    };
 
     // Handlers for drag events on nodes
     // Drag events adjust the [fx,fy] of the nodes to override the simulation

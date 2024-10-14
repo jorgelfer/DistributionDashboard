@@ -8,7 +8,6 @@ import pvImg from "../../assets/pv_system.png";
 import substationImg from "../../assets/substation.png";
 import vmImg from "../../assets/voltage.png";
 
-
 export const DATADISPLAY = {
   vm: {
     image: vmImg,
