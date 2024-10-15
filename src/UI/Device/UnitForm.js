@@ -19,7 +19,7 @@ export default function UnitForm({selectedValue, device}) {
       <input 
       className={classes.input}
       id="power_rating" 
-      type="text" 
+      type="number" 
       name="power_rating" 
       onChange={(event) => console.log(event.target.value)}
       value={device.power_rating}
@@ -30,13 +30,14 @@ export default function UnitForm({selectedValue, device}) {
       <input 
       className={classes.input}
       id="cost" 
-      type="text" 
+      type="number" 
       name="cost" 
       value={device.cost}
       onChange={(event) => console.log(event.target.value)}
       />
       </div>
-      <div className={classes["no-margin"]}>
+
+      {/* <div className={classes["no-margin"]}>
       <label className={classes.label} htmlFor="text">Terminals</label>
       <input 
       className={classes.input}
@@ -46,7 +47,24 @@ export default function UnitForm({selectedValue, device}) {
       value={device.phases}
       onChange={(event) => console.log(event.target.value)}
       />
-      </div>
+      </div> */}
+
+      <fieldset>
+        <legend className={classes.label}>Terminals</legend>
+        {device.phases.map((phase) => 
+        <div key={phase} className={classes.control}>
+          <input
+            type="checkbox"
+            id={phase}
+            name="terminals"
+            value={phase}
+          />
+          <label className={classes.label} htmlFor={phase}>{phase}</label>
+        </div>
+        )}
+      </fieldset>
+
+
       </form>
     </>
   );

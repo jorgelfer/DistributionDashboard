@@ -198,7 +198,7 @@ export default function Net(props) {
           let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
           if (device === undefined) {
             // append new device to the flex_devices array
-            props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d.uid, props.data.time.length));
+            props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d, props.data.time.length));
           };
 
           // update original data
