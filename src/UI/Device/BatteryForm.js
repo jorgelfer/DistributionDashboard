@@ -69,17 +69,23 @@ export default function BatteryForm({selectedValue, device}) {
       onChange={(event) => console.log(event.target.value)}
       />
       </div>
-      <div className={classes["no-margin"]}>
-      <label className={classes.label} htmlFor="text">Terminals</label>
-      <input 
-      className={classes.input}
-      id="terminals" 
-      type="text" 
-      name="terminals" 
-      value={device.phases}
-      onChange={(event) => console.log(event.target.value)}
-      />
-      </div>
+
+      <fieldset>
+        <legend className={classes.label}>Terminals</legend>
+        {device.terminals.map((terminal) => 
+        <div key={terminal} className={classes.control}>
+          <input
+            type="checkbox"
+            id={`terminal_${terminal}`}
+            name="terminals"
+            checked={device.phases.includes(terminal)}
+            onChange={(event) => console.log(event.target.checked)}
+          />
+          <label className={classes.label} htmlFor={terminal}>{terminal}</label>
+        </div>
+        )}
+      </fieldset>
+
       </form>
     </>
   );

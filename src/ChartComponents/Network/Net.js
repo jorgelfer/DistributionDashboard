@@ -73,11 +73,31 @@ export default function Net(props) {
           device.final_energy = d3.select("#initial_energy").property("value");
           device.cost = d3.select("#cost").property("value");
           device.revenue = d3.select("#cost").property("value");
-          device.phases = d3.select("#terminals").property("value").split(',').map(Number);;
+
+          // define device phases
+          device.phases = [];
+          device.soc = {};
+          device.terminals.map((terminal) => {
+            const ph_test = d3.select(`#terminal_${terminal}`).property("checked");
+            if (ph_test) {
+              device.phases.push(terminal)
+              device.p[terminal] = Array(props.data.time.length).fill(0);
+            };
+          });
         } else {
           device.power_rating = d3.select("#power_rating").property("value");
           device.cost = d3.select("#cost").property("value");
-          device.phases = d3.select("#terminals").property("value").split(',').map(Number);;
+
+          // define device phases
+          device.phases = [];
+          device.p = {};
+          device.terminals.map((terminal) => {
+            const ph_test = d3.select(`#terminal_${terminal}`).property("checked");
+            if (ph_test) {
+              device.phases.push(terminal)
+              device.p[terminal] = Array(props.data.time.length).fill(0);
+            };
+          });
         }
 
         // update original data
