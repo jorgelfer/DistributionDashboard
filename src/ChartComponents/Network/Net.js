@@ -92,8 +92,7 @@ export default function Net(props) {
             };
           });
         } else if (props.selectedValue === "dr_load"){
-          console.log(d3.select("#response_percent").property("value"));
-          device.response_percent = d3.select("#reponse_percent").property("value");
+          device.response_percent = d3.select("#response_percent").property("value");
           device.cost = d3.select("#cost").property("value");
 
           // define device phases
@@ -154,14 +153,9 @@ export default function Net(props) {
       .append('circle')
         .attr('class', 'circle')
         // .attr("r", props.originalNodeSize)
-        .attr("r", d => {
-          if (props.selectedValue === "dr_load") {
-            return props.originalNodeSize * (dr_nodes.includes(d.uid) ? 1.3 : 0.9);
-          } else {
-            return props.originalNodeSize;
-          }
-        })
+        .attr("r", d => props.originalNodeSize)
         .style('fill', d => {
+          // console.log(d.phases.length);
           if (props.selectedValue === "dr_load") {
             return (dr_nodes.includes(d.uid) ? props.colorScale(d.phases.length) : "grey");
           } else {

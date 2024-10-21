@@ -51,7 +51,7 @@ export default function NetworkGraph({margin, data, ...props}) {
 
   const updateData = useCallback((network) => {
     data[`${props.selectedValue}`] = network[`${props.selectedValue}`]; 
-    console.log(data)
+    // console.log(data)
   }, [data, props.selectedValue]);
 
   // The force simulation mutates links and nodes,

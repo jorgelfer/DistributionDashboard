@@ -20,6 +20,8 @@ export default function UnitForm({selectedValue, device}) {
       className={classes.input}
       id="response_percent" 
       type="number" 
+      min="0"
+      max="100"
       name="response_percent" 
       onChange={(event) => console.log(event.target.value)}
       value={device.response_percent}
