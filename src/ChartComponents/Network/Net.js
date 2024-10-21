@@ -88,7 +88,7 @@ export default function Net(props) {
             const ph_test = d3.select(`#terminal_${terminal}`).property("checked");
             if (ph_test) {
               device.phases.push(terminal)
-              device.p[terminal] = Array(props.data.time.length).fill(0);
+              device.soc[terminal] = Array(props.data.time.length).fill(0);
             };
           });
         } else if (props.selectedValue === "dr_load"){
