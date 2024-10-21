@@ -22,6 +22,13 @@ export default function Net(props) {
         active_nodes = props.data[`${props.selectedValue}`].map(d => d.bus);
       }
     } 
+
+    // demand response nodes
+    var dr_nodes = [];
+    if (props.selectedValue === "dr_load") {
+      dr_nodes = props.data["load"].map(d => d.bus);
+    }
+
     // Set the domain of the x and y scales
     props.xScale.domain(d3.extent(props.data.bus, d => d.x));
     props.yScale.domain(d3.extent(props.data.bus, d => d.y));
@@ -131,8 +138,21 @@ export default function Net(props) {
     nodeEnter
       .append('circle')
         .attr('class', 'circle')
-        .attr("r", props.originalNodeSize)
-        .style('fill', d => props.colorScale(d.phases.length));
+        // .attr("r", props.originalNodeSize)
+        .attr("r", d => {
+          if (props.selectedValue === "dr_load") {
+            return props.originalNodeSize * (dr_nodes.includes(d.uid) ? 1.3 : 0.9);
+          } else {
+            return props.originalNodeSize;
+          }
+        })
+        .style('fill', d => {
+          if (props.selectedValue === "dr_load") {
+            return (dr_nodes.includes(d.uid) ? props.colorScale(d.phases.length) : "grey");
+          } else {
+            return props.colorScale(d.phases.length);
+          }
+          });
 
     nodeEnter
     .append("image")
@@ -182,6 +202,10 @@ export default function Net(props) {
     function node_dblclick(event, d) {
 
       if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
+
+        if (props.selectedValue === "dr_load" && !dr_nodes.includes(d.uid)) {
+          return;
+        }
 
         // ---------------------------------------
         if (d3.select(this).classed("fixed")) {
