@@ -99,10 +99,8 @@ export default function Net(props) {
             };
           });
         }
-
         // update original data
         props.updateData(props.data);
-
         // remove the tooltip
         removeTooltip();
       }
@@ -223,10 +221,8 @@ export default function Net(props) {
 
           // update original data
           props.updateData(props.data);
-
         };
         // ---------------------------------------
-
       };
     };
 

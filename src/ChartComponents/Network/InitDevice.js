@@ -2,9 +2,10 @@
 export default function InitDevice(selectedValue, bus, T) {
 
   const ph0 = bus.phases[0];
-
+  let vdict = {};
   switch (selectedValue) {
     case "battery":
+      vdict[ph0] = Array(T).fill(0);
       return {
               uid: `${selectedValue}_${bus.uid}`,
               bus: bus.uid,
@@ -16,39 +17,42 @@ export default function InitDevice(selectedValue, bus, T) {
               cost: 0.01,
               revenue: 0.01,
               terminals: bus.phases,
-              phases: [ph0],
-              soc: {ph0: Array(T).fill(0)},
+              phases: [bus.phases[0]],
+              soc: vdict,
             };
     case "flex_gen":
+      vdict[ph0] = Array(T).fill(0);
       return {
               uid: `${selectedValue}_${bus.uid}`,
               bus: bus.uid,
               terminals: bus.phases,
-              phases: [ph0],
+              phases: [bus.phases[0]],
               cost: 0.1,
               power_rating: 10,
-              p: {ph0: Array(T).fill(0)},
+              p: vdict,
             };
     case "flex_load":
+      vdict[ph0] = Array(T).fill(0);
       return {
               uid: `${selectedValue}_${bus.uid}`,
               bus: bus.uid,
               terminals: bus.phases,
-              phases: [ph0],
+              phases: [bus.phases[0]],
               cost: 0.5,
               power_rating: 10,
-              p: {ph0: Array(T).fill(0)},
+              p: vdict,
             };
     case "dr_load":
+      vdict[ph0] = Array(T).fill(0);
       return {
               uid: `${selectedValue}_${bus.uid}`,
               bus: bus.uid,
               terminals: bus.phases,
-              phases: [ph0],
+              phases: [bus.phases[0]],
               cost: 0.5,
               power_rating: 10,
-              p: {ph0: Array(T).fill(0)},
               power_factor: 0.9,
+              p: vdict,
             };
     default:
       return null;
