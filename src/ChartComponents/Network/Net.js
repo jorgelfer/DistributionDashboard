@@ -91,6 +91,21 @@ export default function Net(props) {
               device.p[terminal] = Array(props.data.time.length).fill(0);
             };
           });
+        } else if (props.selectedValue === "dr_load"){
+          console.log(d3.select("#response_percent").property("value"));
+          device.response_percent = d3.select("#reponse_percent").property("value");
+          device.cost = d3.select("#cost").property("value");
+
+          // define device phases
+          device.phases = [];
+          device.p = {};
+          device.terminals.map((terminal) => {
+            const ph_test = d3.select(`#terminal_${terminal}`).property("checked");
+            if (ph_test) {
+              device.phases.push(terminal)
+              device.p[terminal] = Array(props.data.time.length).fill(0);
+            };
+          });
         } else {
           device.power_rating = d3.select("#power_rating").property("value");
           device.cost = d3.select("#cost").property("value");

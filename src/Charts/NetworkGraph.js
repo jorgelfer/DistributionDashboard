@@ -12,6 +12,7 @@ import { renderToString } from 'react-dom/server'
 
 import UnitForm from '../UI/Device/UnitForm';
 import BatteryForm from '../UI/Device/BatteryForm';
+import DRloadForm from '../UI/Device/DRloadForm';
 
 
 const layers = [
@@ -57,14 +58,21 @@ export default function NetworkGraph({margin, data, ...props}) {
   // so, make a deep copy of the dataset 
   const network = JSON.parse(JSON.stringify(data));
 
+  function defineForm (selectedValue, device) {
+    if (selectedValue === "battery") {
+      return <BatteryForm selectedValue={selectedValue} device={device}/>;
+    } else if (selectedValue === "dr_load") {
+      return <DRloadForm selectedValue={selectedValue} device={device}/>;
+    } else {
+      return <UnitForm selectedValue={selectedValue} device={device}/>;
+    }
+  }
+
+
   const deviceTooltip = useCallback((bus) => {
     // Find the device in the network
     let device = network[`${props.selectedValue}`].find(f => f.bus === bus.uid)
-
-    return renderToString(
-      (props.selectedValue === "battery") ? <BatteryForm selectedValue={props.selectedValue} device={device}/>
-      : <UnitForm selectedValue={props.selectedValue} device={device}/>);
-
+    return renderToString(defineForm(props.selectedValue, device));
   }, [network, props.selectedValue]);
 
   return(

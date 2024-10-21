@@ -50,8 +50,7 @@ export default function InitDevice(selectedValue, bus, T) {
               terminals: bus.phases,
               phases: [bus.phases[0]],
               cost: 0.5,
-              power_rating: 10,
-              power_factor: 0.9,
+              response_percent: 100,
               p: vdict,
             };
     default:
