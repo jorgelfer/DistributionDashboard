@@ -10,8 +10,6 @@ import { updateData } from "../Data/update";
 export default function Charts(props) {
 
   const margin = {top: 30, right: 30, bottom: 50, left: 70};
-  // const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
-  // const colorScale = d3.scaleOrdinal(["#f28e2c", "#59a14f", "#4e79a7"]);
   var colorScale = d3.scaleQuantile()
       .domain([0,1,2,3,4])
       .range(["red","#f28e2c", "#59a14f", "#4e79a7","red"]);

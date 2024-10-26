@@ -10,16 +10,17 @@ export function updateData(network, selectedValue, dateParser) {
     switch (selectedValue) {
         case "vm":
             // organize data
-            network.bus.forEach((d, i) => {
-                d["phases"].forEach((d2, i2) => {
-                    data.push(d.vm[d2.toString()].map((d3, i3) =>({
-                        "time": dateParser(network["time"][i3]),
-                        "val": +d3 / (+d.kV_base * 1000),
-                        "phase": d2.toString(),
+            network["qsts"].bus.forEach((d, i) => {
+                if (d["variable"] === "vm") {
+                    bus = network["network"].find(e => e.uid === d.uid)
+                    data.push(d.time_series[d2.toString()].map((d3, i3) =>({
+                        "time": dateParser(network["qsts"]["time"][i3]),
+                        "val": +d3 / (+bus.kV_base * 1000),
+                        "terminal": d.terminal,
                         "bus": d.uid,
-                        "uid": d.uid + "." + d2.toString(),
+                        "uid": d.uid + "." + d.terminal.toString(),
                     })));
-                })
+                }
             })
             // push lower limit 
             const vm_lb = 1 - (isNaN(network["ansi"]) ? 0.05 : +network["ansi"])
@@ -27,7 +28,7 @@ export function updateData(network, selectedValue, dateParser) {
                 data.push({
                     "time": dateParser(d),
                     "val":  vm_lb,
-                    "phase": "0",
+                    "terminal": "0",
                     "uid": "lb.0",
                 });
             })
@@ -48,7 +49,7 @@ export function updateData(network, selectedValue, dateParser) {
 
         case "vsource":   
             // organize data
-            network["vsource"].forEach((d, i) => {
+            network["qsts"]["vsource"].forEach((d, i) => {
                 if (buses_uid.includes(d.bus)) {
                     d["phases"].forEach((d2, i2) => {
                         data.push(d.p[d2.toString()].map((d3, i3) =>({

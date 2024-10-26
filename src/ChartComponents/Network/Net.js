@@ -18,20 +18,20 @@ export default function Net(props) {
     // active nodes
     var active_nodes = [];
     if (!["vm", "flow", "mismatch"].includes(props.selectedValue)) {
-      if (props.data[`${props.selectedValue}`]) {
-        active_nodes = props.data[`${props.selectedValue}`].map(d => d.bus);
+      if (props.data["network"][`${props.selectedValue}`]) {
+        active_nodes = props.data["network"][`${props.selectedValue}`].map(d => d.bus);
       }
     } 
 
     // demand response nodes
     var dr_nodes = [];
     if (props.selectedValue === "dr_load") {
-      dr_nodes = props.data["load"].map(d => d.bus);
+      dr_nodes = props.data["network"]["load"].map(d => d.bus);
     }
 
     // Set the domain of the x and y scales
-    props.xScale.domain(d3.extent(props.data.bus, d => d.x));
-    props.yScale.domain(d3.extent(props.data.bus, d => d.y));
+    props.xScale.domain(d3.extent(props.data["network"].bus, d => d.x));
+    props.yScale.domain(d3.extent(props.data["network"].bus, d => d.y));
 
     // Add the tooltip element to the graph
     const tooltip = document.querySelector("#graph-tooltip");
@@ -69,7 +69,7 @@ export default function Net(props) {
 
         // get updated device
         const inputBus = d3.select("#bus").property("value");
-        let device = props.data[`${props.selectedValue}`].find(f => f.bus === inputBus);
+        let device = props.data["network"][`${props.selectedValue}`].find(f => f.bus === inputBus);
 
         // update device information
         if (props.selectedValue === "battery") {
@@ -88,7 +88,7 @@ export default function Net(props) {
             const ph_test = d3.select(`#terminal_${terminal}`).property("checked");
             if (ph_test) {
               device.phases.push(terminal)
-              device.soc[terminal] = Array(props.data.time.length).fill(0);
+              device.soc[terminal] = Array(props.data["qsts"].time.length).fill(0);
             };
           });
         } else if (props.selectedValue === "dr_load"){
@@ -102,7 +102,7 @@ export default function Net(props) {
             const ph_test = d3.select(`#terminal_${terminal}`).property("checked");
             if (ph_test) {
               device.phases.push(terminal)
-              device.p[terminal] = Array(props.data.time.length).fill(0);
+              device.p[terminal] = Array(props.data["qsts"].time.length).fill(0);
             };
           });
         } else {
@@ -116,7 +116,7 @@ export default function Net(props) {
             const ph_test = d3.select(`#terminal_${terminal}`).property("checked");
             if (ph_test) {
               device.phases.push(terminal)
-              device.p[terminal] = Array(props.data.time.length).fill(0);
+              device.p[terminal] = Array(props.data["qsts"].time.length).fill(0);
             };
           });
         }
@@ -128,12 +128,13 @@ export default function Net(props) {
     };
 
     // Append weighted lines for each link in network
+    let branch = props.data["network"].line.concat(props.data["network"].transformer);
     const linkEnter = networkContainer 
       .selectAll('.link')
-      .data(props.data.branch)
+      .data(branch)
         .join('line')
           .attr('class', 'link')
-          .attr('stroke-width', d => props.linkScale(d.f_connections.length));
+          .attr('stroke-width', d => props.linkScale(d.s_terminals.length));
       
     let drag = d3.drag()
         .on('start', dragstarted)
@@ -243,13 +244,13 @@ export default function Net(props) {
             .style("display", "block");
 
           // create the new device
-          props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
+          props.data["network"][`${props.selectedValue}`] = props.data["network"][`${props.selectedValue}`] || [];
 
           // check if the device already exists
-          let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
+          let device = props.data["network"][`${props.selectedValue}`].find(f => f.bus === d.uid);
           if (device === undefined) {
             // append new device to the flex_devices array
-            props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d, props.data.time.length));
+            props.data["network"][`${props.selectedValue}`].push(InitDevice(props.selectedValue, d, props.data["qsts"].time.length));
           };
 
           // update original data

@@ -53,7 +53,6 @@ export default function UnitForm({selectedValue, device}) {
         )}
       </fieldset>
 
-
       </form>
     </>
   );

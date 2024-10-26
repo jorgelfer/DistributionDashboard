@@ -50,7 +50,7 @@ export default function NetworkGraph({margin, data, ...props}) {
   };
 
   const updateData = useCallback((network) => {
-    data[`${props.selectedValue}`] = network[`${props.selectedValue}`]; 
+    data["network"][`${props.selectedValue}`] = network[`${props.selectedValue}`]["network"]; 
     // console.log(data)
   }, [data, props.selectedValue]);
 
@@ -68,10 +68,9 @@ export default function NetworkGraph({margin, data, ...props}) {
     }
   }
 
-
   const deviceTooltip = useCallback((bus) => {
     // Find the device in the network
-    let device = network[`${props.selectedValue}`].find(f => f.bus === bus.uid)
+    let device = network["network"][`${props.selectedValue}`].find(f => f.bus === bus.uid)
     return renderToString(defineForm(props.selectedValue, device));
   }, [network, props.selectedValue]);
 
