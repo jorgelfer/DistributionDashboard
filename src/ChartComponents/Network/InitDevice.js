@@ -19,6 +19,8 @@ export default function InitDevice(selectedValue, bus, T) {
               terminals: bus.phases,
               phases: [bus.phases[0]],
               soc: vdict,
+              p_bsc: vdict,
+              p_bsd: vdict,
             };
     case "flex_gen":
       vdict[ph0] = Array(T).fill(0);
