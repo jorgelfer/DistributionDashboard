@@ -7,6 +7,7 @@ import Buttons from '../Interactions/Buttons';
 import NodeBreaker from '../ChartComponents/Network/NodeBreaker';
 import Net from '../ChartComponents/Network/Net';
 import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
+import { ForceGraph } from '../ChartComponents/Network/ForceGraph';
 import bronx from "../ChartComponents/Mapping/bronx.json";
 import { renderToString } from 'react-dom/server'
 
@@ -83,7 +84,31 @@ export default function NetworkGraph({margin, data, ...props}) {
         activeButton={activeLayer}
         onButtonSelection={layerSelectionHandler}
       />
-      {["coordinates", "force"].includes(activeLayer) &&
+      {(activeLayer === "coordinates") &&
+        <ChartContainer
+          width={width}
+          height={height}
+          margin={margin}
+          className="network-graph"
+          >
+          <ForceGraph
+            updateData={updateData}
+            deviceTooltip={deviceTooltip}
+            innerHeight={innerHeight}
+            innerWidth={innerWidth}
+            margin={margin}
+            data={network}
+            activeLayer={activeLayer}
+            originalNodeSize={originalNodeSize}
+            xScale={xScale}
+            yScale={yScale}
+            linkScale={linkScale}
+            colorScale={props.colorScale}
+            selectedValue={props.selectedValue}
+          />
+        </ChartContainer>
+        }
+      {(activeLayer === "force") &&
         <ChartContainer
           width={width}
           height={height}
