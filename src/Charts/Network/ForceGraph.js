@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import * as d3 from 'd3';
+import Symbol from './Symbol';
+import Circle from "../../ChartComponents/Circle";
 
-export function ForceGraph(props) {
+export default function ForceGraph(props) {
 
   const initNodes = props.data.bus.map((d) => {
     return {
@@ -46,8 +48,6 @@ export function ForceGraph(props) {
   }, [initNodes, initLinks]);
 
   // console.log(newLinks);
-
-  const RADIUS = 8;
   const LINK_WIDTH = 3;
 
   const [nodes, setNodes] = useState(initNodes);
@@ -68,16 +68,18 @@ export function ForceGraph(props) {
       ))}
       {nodes.map((d, i) => (
         <g key={d.uid}>
-          <circle
+          <Circle
+            key={d.uid}
             cx={props.xScale(d.x)}
             cy={props.yScale(d.y)}
-            r={RADIUS}
-            fill="black"
+            r={props.originalNodeSize}
+            fill={props.colorScale(d.phases.length)}
           />
-          <text 
+          <text
             x={props.xScale(d.x)} 
             y={props.yScale(d.y)} 
-            dy={-RADIUS - 5} 
+            dx={props.originalNodeSize + 10} 
+            dy={props.originalNodeSize + 10} 
             textAnchor="middle">
             {d.uid}
           </text>

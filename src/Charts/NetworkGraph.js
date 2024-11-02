@@ -4,16 +4,19 @@ import * as d3 from 'd3';
 import Card from '../UI/Card/Card';
 import ChartContainer from '../ChartComponents/ChartContainer';
 import Buttons from '../Interactions/Buttons';
-import NodeBreaker from '../ChartComponents/Network/NodeBreaker';
-import Net from '../ChartComponents/Network/Net';
-import GeojsonMap from '../ChartComponents/Mapping/GeojsonMap';
-import { ForceGraph } from '../ChartComponents/Network/ForceGraph';
-import bronx from "../ChartComponents/Mapping/bronx.json";
-import { renderToString } from 'react-dom/server'
+
+import NodeBreaker from './Network/NodeBreaker';
+import Net from './Network/Net';
+import ForceGraph from './Network/ForceGraph';
+
+import GeojsonMap from './Mapping/GeojsonMap';
+import bronx from "./Mapping/bronx.json";
 
 import UnitForm from '../UI/Device/UnitForm';
 import BatteryForm from '../UI/Device/BatteryForm';
 import DRloadForm from '../UI/Device/DRloadForm';
+
+import { renderToString } from 'react-dom/server';
 
 
 const layers = [
