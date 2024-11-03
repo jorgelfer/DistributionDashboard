@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import * as d3 from 'd3';
 import Symbol from './Symbol';
 import Circle from "../../ChartComponents/Circle";
+import Line from "../../ChartComponents/Line";
 
 export default function ForceGraph(props) {
 
@@ -10,7 +11,6 @@ export default function ForceGraph(props) {
       ...d,
     };
   });
-
   const initLinks = props.data.branch.map((d) => {
     return {
       ...d,
@@ -56,33 +56,34 @@ export default function ForceGraph(props) {
   return (
     <>
       {links.map((d, i) => (
-        <line
+        <Line
           key={d.uid}
+          class="link"
           x1={props.xScale(d.source.x)}
           y1={props.yScale(d.source.y)}
           x2={props.xScale(d.target.x)}
           y2={props.yScale(d.target.y)}
-          stroke="black"
-          strokeWidth={LINK_WIDTH}
+          stroke="grey"
+          strokeWidth={props.linkScale(d.f_connections.length)}
         />
       ))}
       {nodes.map((d, i) => (
-        <g key={d.uid}>
+        <g key={d.uid} className="node">
           <Circle
-            key={d.uid}
+            class="circle"
             cx={props.xScale(d.x)}
             cy={props.yScale(d.y)}
             r={props.originalNodeSize}
             fill={props.colorScale(d.phases.length)}
           />
-          <text
+          <image
             x={props.xScale(d.x)} 
             y={props.yScale(d.y)} 
             dx={props.originalNodeSize + 10} 
             dy={props.originalNodeSize + 10} 
             textAnchor="middle">
             {d.uid}
-          </text>
+          </image>
         </g>
       ))}
     </>

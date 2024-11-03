@@ -1,6 +1,7 @@
 export default function Circle(props) {
   return (
     <circle 
+      className={props.class}
       cx={props.cx}
       cy={props.cy}
       r={props.r}
