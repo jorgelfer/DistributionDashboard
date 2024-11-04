@@ -141,10 +141,6 @@ export default function Net(props) {
         .on('end', dragended);
 
     let nodeEnter = networkContainer
-      .append("g")
-      .attr("class", "nodes");
-    
-    let myNodes = nodeEnter
       .selectAll(".node")
       .data(props.data.bus)
       .join("g")
@@ -154,7 +150,7 @@ export default function Net(props) {
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append circles for each node in the graph
-    myNodes
+    nodeEnter
       .append('circle')
         .attr('class', 'circle')
         // .attr("r", props.originalNodeSize)
@@ -168,7 +164,7 @@ export default function Net(props) {
           }
           });
 
-    myNodes
+    nodeEnter
     .append("image")
       .attr("class", "symbol")
       .attr("xlink:href", Symbol(props.selectedValue))
@@ -189,7 +185,7 @@ export default function Net(props) {
         .attr('x2', d => props.xScale(d.target.x))
         .attr('y2', d => props.yScale(d.target.y));
 
-      myNodes
+      nodeEnter
           .attr('transform', function(d) { return `translate(${props.xScale(d.x)}, ${props.yScale(d.y)})`;});
     }
     
@@ -214,6 +210,8 @@ export default function Net(props) {
 
     // Handlers for click events on nodes
     function node_click(event, d) {
+      d3.select(this).classed("fixed", true);
+      // console.log(d3.select(this));
       props.onSelectBus(d);
     }
 

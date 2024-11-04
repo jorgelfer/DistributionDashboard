@@ -33,13 +33,13 @@ export default function Fetching({networkModel, inFile1}) {
             <Charts data={data} />
           </>}
        </>}
-      {(isScheduling && schedulingData === null) && <>
+      {isScheduling && schedulingData === null && <>
       <DisplayScheduling 
         payload={data}
         onSchedulingData={handleSchedulingData}
       />
       </>}
-      {(isScheduling && schedulingData !== null) && <>
+      {isScheduling && schedulingData !== null && <>
         <Charts data={schedulingData} />
       </>}
       <div className="buttons">

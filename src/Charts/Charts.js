@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import * as d3 from 'd3';
 import Header from "../UI/Header/Header";
 import LineChartVM from './LineChartVM';
