@@ -68,7 +68,6 @@ export default function NetworkGraph({margin, data, ...props}) {
     }
   }
 
-
   const deviceTooltip = useCallback((bus) => {
     // Find the device in the network
     let device = network[`${props.selectedValue}`].find(f => f.bus === bus.uid)
@@ -104,7 +103,7 @@ export default function NetworkGraph({margin, data, ...props}) {
             linkScale={linkScale}
             colorScale={props.colorScale}
             selectedValue={props.selectedValue}
-            updateBuses={props.updateBuses}
+            onSelectBus={props.onSelectBus}
           />
         </ChartContainer>
         }

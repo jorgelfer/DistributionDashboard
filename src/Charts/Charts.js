@@ -23,24 +23,13 @@ export default function Charts(props) {
   }
 
   // selected buses
-  const [selectedBuses, setSelectedBuses] = useState({
-    selectedBus: null,
-    buses: []
-  });
-
-  const updateBuses = useCallback((buses) => {
-    setSelectedBuses((prevState) =>{
-      return {
-        ...prevState,
-        buses: buses
-      }
-    });
-  }, []);
-
-  console.log(selectedBuses);
+  const [selectedBus, setSelectedBus] = useState(null);
+  function handleSelectBus(bus) {
+    setSelectedBus(bus);
+  };
 
   // console.log(props.data);
-  const [data, y_extent] = updateData(props.data, selectedValue, selectedBuses, dateParser);
+  const [data, y_extent] = updateData(props.data, selectedValue, selectedBus, dateParser);
   return (
     <>
       <Header handleClick={handleClick} selectedValue={selectedValue} />
@@ -52,8 +41,12 @@ export default function Charts(props) {
             data={props.data} 
             colorScale={colorScale}
             selectedValue={selectedValue}
-            updateBuses={updateBuses}
+            onSelectBus={handleSelectBus}
           />
+          {selectedBus && 
+          <p className="form-actions">
+            <button className="login-button" onClick={() => handleSelectBus(null)}>Release</button>
+          </p>}
         </div>
         <div className='two'>
           {["vm", "battery"].includes(selectedValue) &&

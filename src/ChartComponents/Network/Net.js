@@ -149,6 +149,7 @@ export default function Net(props) {
       .data(props.data.bus)
       .join("g")
         .attr("class", "node")
+        .on("click", node_click)
         .on("dblclick", node_dblclick)
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
@@ -211,32 +212,10 @@ export default function Net(props) {
       simulation.force("charge", null);
     }
 
-    // handlers for brush events
-    let nodeBrush = d3.brush().extent([[0, 0], [props.innerWidth, props.innerHeight]])
-        .on('brush', function (event) {
-            // console.log('event::: ', event);
-            // console.log('event.selection::: ', event.selection);
-
-            let brushedArea = event.selection
-            myNodes.classed('selected', d => {
-              return isBrushed(brushedArea, props.xScale(d.x), props.yScale(d.y));
-            });
-
-            // get all selected nodes
-            let selectedNodes = myNodes.filter('.selected').data();
-            props.updateBuses(selectedNodes);
-        })
-
-    function isBrushed(brush_coords, cx, cy) {
-        if (brush_coords) {
-            let x0 = brush_coords[0][0],
-                x1 = brush_coords[1][0],
-                y0 = brush_coords[0][1],
-                y1 = brush_coords[1][1];
-            return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
-        }
+    // Handlers for click events on nodes
+    function node_click(event, d) {
+      props.onSelectBus(d);
     }
-    nodeEnter.call(nodeBrush) // calling a d3 brush
 
     // Handlers for click events on nodes
     function node_dblclick(event, d) {
