@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import * as d3 from 'd3';
 import Header from "../UI/Header/Header";
 import LineChartVM from './LineChartVM';
@@ -8,14 +8,10 @@ import NetworkGraph from './NetworkGraph';
 import { updateData } from "../Data/update";
 
 export default function Charts(props) {
-
   const margin = {top: 30, right: 30, bottom: 50, left: 70};
-  // const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
-  // const colorScale = d3.scaleOrdinal(["#f28e2c", "#59a14f", "#4e79a7"]);
   var colorScale = d3.scaleQuantile()
       .domain([0,1,2,3,4])
       .range(["red","#f28e2c", "#59a14f", "#4e79a7","red"]);
-
   const dateParser = d3.timeParse("%Y-%m-%dT%H:%M");
 
   // Header
@@ -26,8 +22,25 @@ export default function Charts(props) {
     }
   }
 
+  // selected buses
+  const [selectedBuses, setSelectedBuses] = useState({
+    selectedBus: null,
+    buses: []
+  });
+
+  const updateBuses = useCallback((buses) => {
+    setSelectedBuses((prevState) =>{
+      return {
+        ...prevState,
+        buses: buses
+      }
+    });
+  }, []);
+
+  console.log(selectedBuses);
+
   // console.log(props.data);
-  const [data, y_extent] = updateData(props.data, selectedValue, dateParser);
+  const [data, y_extent] = updateData(props.data, selectedValue, selectedBuses, dateParser);
   return (
     <>
       <Header handleClick={handleClick} selectedValue={selectedValue} />
@@ -39,6 +52,7 @@ export default function Charts(props) {
             data={props.data} 
             colorScale={colorScale}
             selectedValue={selectedValue}
+            updateBuses={updateBuses}
           />
         </div>
         <div className='two'>

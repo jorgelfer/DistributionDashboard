@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-export function updateData(network, selectedValue, dateParser) {
+export function updateData(network, selectedValue, selectedBuses, dateParser) {
 
     // buses uid
     const buses_uid = network.bus.map(d => d.uid)
