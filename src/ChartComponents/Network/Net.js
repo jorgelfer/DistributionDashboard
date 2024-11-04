@@ -73,13 +73,18 @@ export default function Net(props) {
 
         // update device information
         if (props.selectedValue === "battery") {
-          device.capacity = d3.select("#capacity").property("value");
-          device.charging_limit = d3.select("#charging_limit").property("value");
-          device.efficiency = d3.select("#efficiency").property("value");
-          device.initial_energy = d3.select("#initial_energy").property("value");
-          device.final_energy = d3.select("#initial_energy").property("value");
-          device.cost = d3.select("#cost").property("value");
-          device.revenue = d3.select("#cost").property("value");
+          let capacity = d3.select("#capacity").property("value");
+          device.capacity = (typeof(capacity) === "string") ? parseFloat(capacity) : capacity;
+          let charging_limit = d3.select("#charging_limit").property("value");
+          device.charging_limit = (typeof(charging_limit) === "string") ? parseFloat(charging_limit) : charging_limit;
+          let efficiency = d3.select("#efficiency").property("value");
+          device.efficiency = (typeof(efficiency) === "string") ? parseFloat(efficiency) : efficiency;
+          let initial_energy = d3.select("#initial_energy").property("value");
+          device.initial_energy = (typeof(initial_energy) === "string") ? parseFloat(initial_energy) : initial_energy;
+          device.final_energy = (typeof(initial_energy) === "string") ? parseFloat(initial_energy) : initial_energy;
+          let cost = d3.select("#cost").property("value");
+          device.cost = (typeof(cost) === "string") ? parseFloat(cost) : cost;
+          device.revenue = (typeof(cost) === "string") ? parseFloat(cost) : cost;
 
           // define device phases
           device.phases = [];
@@ -92,8 +97,10 @@ export default function Net(props) {
             };
           });
         } else if (props.selectedValue === "dr_load"){
-          device.response_percent = d3.select("#response_percent").property("value");
-          device.cost = d3.select("#cost").property("value");
+          let response_percent = d3.select("#response_percent").property("value");
+          device.response_percent = (typeof(response_percent) === "string") ? parseFloat(response_percent) : response_percent;
+          let cost = d3.select("#cost").property("value");
+          device.cost = (typeof(cost) === "string") ? parseFloat(cost) : cost;
 
           // define device phases
           device.phases = [];
@@ -106,8 +113,10 @@ export default function Net(props) {
             };
           });
         } else {
-          device.power_rating = d3.select("#power_rating").property("value");
-          device.cost = d3.select("#cost").property("value");
+          let power_rating = d3.select("#power_rating").property("value");
+          device.power_rating = (typeof(power_rating) === "string") ? parseFloat(power_rating) : power_rating;
+          let cost = d3.select("#cost").property("value");
+          device.cost = (typeof(cost) === "string") ? parseFloat(cost) : cost;
 
           // define device phases
           device.phases = [];
@@ -145,8 +154,6 @@ export default function Net(props) {
       .data(props.data.bus)
       .join("g")
         .attr("class", "node")
-        .on("click", node_click)
-        .on("dblclick", node_dblclick)
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append circles for each node in the graph
@@ -155,6 +162,8 @@ export default function Net(props) {
         .attr('class', 'circle')
         // .attr("r", props.originalNodeSize)
         .attr("r", d => props.originalNodeSize)
+        .on("click", node_click)
+        .on("dblclick", node_dblclick)
         .style('fill', d => {
           // console.log(d.phases.length);
           if (props.selectedValue === "dr_load") {
@@ -210,7 +219,7 @@ export default function Net(props) {
 
     // Handlers for click events on nodes
     function node_click(event, d) {
-      d3.select(this).classed("fixed", true);
+      // d3.select(this).classed("fixed", true);
       // console.log(d3.select(this));
       props.onSelectBus(d);
     }
