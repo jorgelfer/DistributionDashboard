@@ -18,6 +18,21 @@ body {
   color: #06273b;
 }
 
+.report {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  width: 600px;
+  height: 100%;
+}
+
+.react-pdf__Page__canvas {
+    margin: 0 auto;
+    width: 80% !important;
+    height: 100% !important;
+}
+
 /* Type */
 h1, h2, h3, h4 {
   font-family: 'Bebas Neue', 'sans-serif';

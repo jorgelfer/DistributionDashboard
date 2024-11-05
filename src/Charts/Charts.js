@@ -57,6 +57,7 @@ export default function Charts(props) {
             colorScale={colorScale}
             time={props.data["time"]}
             dateParser={dateParser}
+            selectedValue={selectedValue}
           />}
           {["vsource", "load", "dr_load", "flex_gen", "flex_load", "mismatch"].includes(selectedValue) &&
           <LineChartPQS 
