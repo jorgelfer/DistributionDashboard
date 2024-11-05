@@ -20,6 +20,7 @@ import { renderToString } from 'react-dom/server';
 
 
 const layers = [
+  { id: "react", label: "React" },
   { id: "coordinates", label: "Coordinates" },
   { id: "force", label: "Force" },
   { id: "nodebreaker", label: "Node Breaker" },
@@ -28,7 +29,7 @@ const layers = [
 
 export default function NetworkGraph({margin, data, ...props}) {
 
-  const [activeLayer, setActiveLayer] = useState("coordinates");
+  const [activeLayer, setActiveLayer] = useState("react");
 
   const width = 700;
   const height = 500;
@@ -87,7 +88,7 @@ export default function NetworkGraph({margin, data, ...props}) {
         activeButton={activeLayer}
         onButtonSelection={layerSelectionHandler}
       />
-      {(activeLayer === "coordinates") &&
+      {(activeLayer === "react") &&
         <ChartContainer
           width={width}
           height={height}
@@ -111,7 +112,7 @@ export default function NetworkGraph({margin, data, ...props}) {
           />
         </ChartContainer>
         }
-      {(activeLayer === "force") &&
+      {["coordinates", "force"].includes(activeLayer) &&
         <ChartContainer
           width={width}
           height={height}
