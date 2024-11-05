@@ -20,7 +20,7 @@ export default function App() {
     "3Bus" : "case3_unbalanced.dss",
     "4Bus" : "4Bus-DY.dss",
     "13Bus": "IEEE13Nodeckt.dss",
-    "123Bus": "IEEE123Nodeckt.dss"
+    "123Bus": "IEEE123Master.dss"
     };
   
 
