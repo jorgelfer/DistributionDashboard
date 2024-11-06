@@ -12,6 +12,11 @@ export default function LineChartVM(props) {
   const innerWidth = width - props.margin.left - props.margin.right;
   const innerHeight = height - props.margin.top - props.margin.bottom;
 
+  let title = "Voltage Magnitude [p.u.]";
+  if (props.selectedValue === "battery") {
+    title = "Battery State of Charge [kWh]";
+  }
+
   // group data
   const sumstat = d3.group(props.data.flat(), d => d.uid);
 
@@ -52,7 +57,7 @@ export default function LineChartVM(props) {
           scale={yScale}
           innerWidth={innerWidth}
           innerHeight={innerHeight}
-          label={"Voltage Magnitude [p.u.]"}
+          label={title}
         />
         {uids.map((uid, i) => (
           <g key={`line-${uid}`}>

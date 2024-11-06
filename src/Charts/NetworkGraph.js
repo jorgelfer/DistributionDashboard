@@ -133,6 +133,7 @@ export default function NetworkGraph({margin, data, ...props}) {
             linkScale={linkScale}
             colorScale={props.colorScale}
             selectedValue={props.selectedValue}
+            onSelectBus={props.onSelectBus}
           />
         </ChartContainer>
         }

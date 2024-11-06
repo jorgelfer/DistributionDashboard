@@ -1,9 +1,12 @@
 import * as d3 from 'd3';
 
-export function updateData(network, selectedValue, dateParser) {
+export function updateData(network, selectedValue, selectedBus, dateParser) {
 
     // buses uid
-    const buses_uid = network.bus.map(d => d.uid)
+    let buses_uid = network.bus.map(d => d.uid)
+    if (selectedBus !== null) {
+        buses_uid = selectedBus.uid
+    }
 
     // initialize data container
     let data = []
@@ -11,15 +14,17 @@ export function updateData(network, selectedValue, dateParser) {
         case "vm":
             // organize data
             network.bus.forEach((d, i) => {
-                d["phases"].forEach((d2, i2) => {
-                    data.push(d.vm[d2.toString()].map((d3, i3) =>({
-                        "time": dateParser(network["time"][i3]),
-                        "val": +d3 / (+d.kV_base * 1000),
-                        "phase": d2.toString(),
-                        "bus": d.uid,
-                        "uid": d.uid + "." + d2.toString(),
-                    })));
-                })
+                if (buses_uid.includes(d.uid)) {
+                    d["phases"].forEach((d2, i2) => {
+                        data.push(d.vm[d2.toString()].map((d3, i3) =>({
+                            "time": dateParser(network["time"][i3]),
+                            "val": +d3 / (+d.kV_base * 1000),
+                            "phase": d2.toString(),
+                            "bus": d.uid,
+                            "uid": d.uid + "." + d2.toString(),
+                        })));
+                    })
+                };
             })
             // push lower limit 
             const vm_lb = 1 - (isNaN(network["ansi"]) ? 0.05 : +network["ansi"])
