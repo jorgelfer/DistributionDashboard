@@ -32,50 +32,52 @@ export default function ForceGraph(props) {
     dr_nodes = props.data["load"].map(d => d.bus);
   }
 
-  function node_click(event, d) {
+  function node_click(event) {
     console.log("single click")
   }
 
   // Handlers for click events on nodes
-  function node_dblclick(event, d) {
-    console.log(d);
-    console.log(event.target.id);
+  function node_dblclick(event) {
+    console.log(props.data[`${props.selectedValue}`]);
+    let d = props.data.bus.find(d => d.uid === event.target.id);
     if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
-      if (props.selectedValue === "dr_load" && !dr_nodes.includes(event.target.id)) {
+      if (props.selectedValue === "dr_load" && !dr_nodes.includes(d.uid)) {
         return;
       }
-      d3.select(`#${event.target.id}`).classed("fixed", true);
+      // event.target.fixed = true;
+      // console.log(event.target.fixed);
+      // d3.select(`#${event.target.id}`).classed("fixed", true);
       // ---------------------------------------
-    //   if (d3.select(`#${event.target.id}`).classed("fixed")) {
-    //     // remove the fixed class
-    //     d3.select(this).classed("fixed", false);
-    //     // hide the symbol
-    //     d3.select(this).select("image.symbol")
-    //       .style("display", "none");
-    //     // remove the tooltip
-    //     // removeTooltip();
-    //     // Remove the device from array
-    //     props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
-    //     // update original data
-    //     props.updateData(props.data);
-    //   } else {
-    //     // add the fixed class
-    //     d3.select(this).classed("fixed", true);
-    //     // show the symbol
-    //     d3.select(this).select("image.symbol")
-    //       .style("display", "block");
-    //     // create the new device
-    //     props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
-    //     // check if the device already exists
-    //     let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
-    //     if (device === undefined) {
-    //       // append new device to the flex_devices array
-    //       props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d, props.data.time.length));
-    //     };
-    //     // update original data
-    //     props.updateData(props.data);
-    //   };
-    //   // ---------------------------------------
+      if (event.target.fixed) {
+        // remove the fixed class
+        // d3.select(this).classed("fixed", false);
+        event.target.fixed = false;
+        // // hide the symbol
+        // d3.select(this).select("image.symbol")
+        //   .style("display", "none");
+        // remove the tooltip
+        // removeTooltip();
+        // Remove the device from array
+        // props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
+        // update original data
+        // props.updateData(props.data);
+      } else {
+        // add the fixed class
+        // d3.select(this).classed("fixed", true);
+        event.target.fixed = true;
+        // create the new device
+        props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
+        // check if the device already exists
+        let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
+        console.log(device);
+        if (device === undefined) {
+          // append new device to the flex_devices array
+          props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d, props.data.time.length));
+        };
+        // update original data
+        // props.updateData(props.data);
+      };
+      // ---------------------------------------
     };
   };
 
