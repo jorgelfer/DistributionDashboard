@@ -5,7 +5,7 @@
 }
 
 .simple {
-  width: 100%;
+  width: 60%;
   margin: 3rem auto;
   padding: 2rem;
   background: linear-gradient(180deg, #0c4a70, #1a1d1d);
@@ -13,7 +13,7 @@
   box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
 }
 
-.login-header {
+.header {
   color: #9bafaf;
 }
 
@@ -103,7 +103,7 @@ fieldset {
   gap: 1rem;
 }
 
-.login-button {
+.button {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   border-radius: 4px;
@@ -113,18 +113,19 @@ fieldset {
   cursor: pointer;
 }
 
-.login-button:hover,
-.login-button:focus {
+.button:hover,
+.button:focus {
   background-color: #319890;
 }
 
-.button-flat {
+.button.button-flat {
   background-color: transparent;
   color: #9cbaba;
+  font-family: 'IBM Plex Mono', monospace;
 }
 
-.button-flat:hover,
-.button-flat:focus {
+.button.button-flat:hover,
+.button.button-flat:focus {
   background-color: transparent;
   color: #869999;
 }
