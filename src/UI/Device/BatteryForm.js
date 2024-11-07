@@ -1,11 +1,12 @@
 import classes from './Form.module.css';
 
-export default function BatteryForm({selectedValue, device}) {
+export default function BatteryForm({selectedValue, device, onSubmitted}) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    // onSubmitted();
+    onSubmitted(false);
   }
+
   return (
     <>
       <form className={classes.simple} onSubmit={handleSubmit}>

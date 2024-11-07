@@ -32,6 +32,7 @@ export default function ForceGraph(props) {
     dr_nodes = props.data["load"].map(d => d.bus);
   }
 
+  // Handler for click events on devices
   function device_click(event) {
     if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
       let device = props.data[`${props.selectedValue}`].find(f => f.bus === event.target.id);
@@ -39,12 +40,13 @@ export default function ForceGraph(props) {
     }
   }
 
+  // Handler for click events on devices
   function node_click(event) {
     let d = props.data.bus.find(d => d.uid === event.target.id);
     props.onSelectBus(d);
   }
 
-  // Handlers for click events on nodes
+  // Handlers for doubleclick events on nodes
   function node_dblclick(event) {
     console.log(event);
     let d = props.data.bus.find(d => d.uid === event.target.id);

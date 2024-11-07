@@ -69,7 +69,7 @@ export default function NetworkGraph({margin, data, ...props}) {
   function handleSelectDevice(device) {
     setSelectedDevice(device);
   };
-  
+
   return(
     <Card>
       <h2>Network</h2>
@@ -79,8 +79,8 @@ export default function NetworkGraph({margin, data, ...props}) {
         onButtonSelection={layerSelectionHandler}
       />
       {selectedDevice && 
-      <div className="game-over">
-        {Form(props.selectedValue, selectedDevice)}
+      <div className="device-form">
+        {Form(props.selectedValue, selectedDevice, handleSelectDevice)}
       </div>
       }
       {(activeLayer === "react") &&
