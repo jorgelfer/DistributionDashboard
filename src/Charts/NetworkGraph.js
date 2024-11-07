@@ -26,7 +26,6 @@ const layers = [
 export default function NetworkGraph({margin, data, ...props}) {
 
   const [activeLayer, setActiveLayer] = useState("react");
-
   const width = 700;
   const height = 500;
   const innerWidth = width - margin.left - margin.right;
@@ -65,6 +64,12 @@ export default function NetworkGraph({margin, data, ...props}) {
     return renderToString(Form(props.selectedValue, device));
   }, [network, props.selectedValue]);
 
+  // selected device
+  const [selectedDevice, setSelectedDevice] = useState(false);
+  function handleSelectDevice(device) {
+    setSelectedDevice(device);
+  };
+  
   return(
     <Card>
       <h2>Network</h2>
@@ -73,6 +78,11 @@ export default function NetworkGraph({margin, data, ...props}) {
         activeButton={activeLayer}
         onButtonSelection={layerSelectionHandler}
       />
+      {selectedDevice && 
+      <div className="game-over">
+        {Form(props.selectedValue, selectedDevice)}
+      </div>
+      }
       {(activeLayer === "react") &&
         <ChartContainer
           width={width}
@@ -95,6 +105,7 @@ export default function NetworkGraph({margin, data, ...props}) {
             colorScale={props.colorScale}
             selectedValue={props.selectedValue}
             onSelectBus={props.onSelectBus}
+            onSelectDevice={handleSelectDevice}
           />
         </ChartContainer>
         }

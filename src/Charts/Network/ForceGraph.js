@@ -32,6 +32,13 @@ export default function ForceGraph(props) {
     dr_nodes = props.data["load"].map(d => d.bus);
   }
 
+  function device_click(event) {
+    if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
+      let device = props.data[`${props.selectedValue}`].find(f => f.bus === event.target.id);
+      props.onSelectDevice(device);
+    }
+  }
+
   function node_click(event) {
     let d = props.data.bus.find(d => d.uid === event.target.id);
     props.onSelectBus(d);
@@ -39,29 +46,20 @@ export default function ForceGraph(props) {
 
   // Handlers for click events on nodes
   function node_dblclick(event) {
-    console.log(props.data[`${props.selectedValue}`]);
+    console.log(event);
     let d = props.data.bus.find(d => d.uid === event.target.id);
     if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
       if (props.selectedValue === "dr_load" && !dr_nodes.includes(d.uid)) {
         return;
       }
-      // event.target.fixed = true;
-      // console.log(event.target.fixed);
-      // d3.select(`#${event.target.id}`).classed("fixed", true);
       // ---------------------------------------
       if (event.target.fixed) {
         // remove the fixed class
-        // d3.select(this).classed("fixed", false);
         event.target.fixed = false;
-        // // hide the symbol
-        // d3.select(this).select("image.symbol")
-        //   .style("display", "none");
-        // remove the tooltip
-        // removeTooltip();
         // Remove the device from array
-        // props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
+        props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
         // update original data
-        // props.updateData(props.data);
+        props.updateData(props.data);
       } else {
         // add the fixed class
         // d3.select(this).classed("fixed", true);
@@ -80,7 +78,7 @@ export default function ForceGraph(props) {
           props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d, props.data.time.length));
         };
         // update original data
-        // props.updateData(props.data);
+        props.updateData(props.data);
       };
       // ---------------------------------------
     };
@@ -146,11 +144,14 @@ export default function ForceGraph(props) {
           <image
             x={props.xScale(d.x)} 
             y={props.yScale(d.y)} 
+            className="symbol"
+            id={d.uid}
             transform="translate(5,5)"
             display={active_nodes.includes(d.uid) ? "block" : "none"}
             heigth={25}
             width={25}
             href={Symbol(props.selectedValue)}
+            onClick={device_click}
             >
           </image>
         </g>

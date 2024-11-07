@@ -8,7 +8,6 @@ import Error from '../UI/Error/Error';
 
 
 // import ReactPDF from '@react-pdf/renderer';
-import ReactDOM from 'react-dom';
 import { PDFViewer } from '@react-pdf/renderer';
 import MyDocument from '../UI/Report/MyDocument';
 

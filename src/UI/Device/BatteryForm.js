@@ -1,9 +1,14 @@
 import classes from './Form.module.css';
 
 export default function BatteryForm({selectedValue, device}) {
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    // onSubmitted();
+  }
   return (
     <>
-      <form className={classes.simple} name="battery_form">
+      <form className={classes.simple} onSubmit={handleSubmit}>
       <h2 className={classes["login-header"]}>{selectedValue}</h2>
       <div className={classes["no-margin"]}>
       <label className={classes.label} htmlFor="text">Bus</label>
@@ -85,6 +90,11 @@ export default function BatteryForm({selectedValue, device}) {
         </div>
         )}
       </fieldset>
+
+      <p className="form-actions">
+        <button type="reset" className="login-button button-flat">Remove</button>
+        <button className="login-button">Submit</button>
+      </p>
 
       </form>
     </>
