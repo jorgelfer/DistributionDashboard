@@ -70,6 +70,16 @@ export default function NetworkGraph({margin, data, ...props}) {
     setSelectedDevice(device);
   };
 
+  // handle form submission
+  function handleChangeDevice(identifier, value) {
+    setSelectedDevice(prevDevice => ({
+      ...prevDevice,
+      [identifier]: value
+    }))
+  };
+
+  console.log(selectedDevice);
+
   return(
     <Card>
       <h2>Network</h2>
@@ -80,7 +90,7 @@ export default function NetworkGraph({margin, data, ...props}) {
       />
       {selectedDevice && 
       <div className="device-form">
-        {Form(props.selectedValue, selectedDevice, handleSelectDevice)}
+        {Form(props.selectedValue, selectedDevice, handleSelectDevice, handleChangeDevice)}
       </div>
       }
       {(activeLayer === "react") &&

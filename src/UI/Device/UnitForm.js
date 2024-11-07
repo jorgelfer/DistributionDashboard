@@ -1,6 +1,6 @@
 import classes from './Form.module.css';
 
-export default function UnitForm({selectedValue, device, onSubmitted}) {
+export default function UnitForm({selectedValue, device, onSubmitted, onEnteredValues}) {
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -32,7 +32,7 @@ export default function UnitForm({selectedValue, device, onSubmitted}) {
             id="power_rating" 
             type="number" 
             name="power_rating" 
-            onChange={(event) => console.log(event.target.value)}
+            onChange={(event) => onEnteredValues("power_rating", event.target.value)}
             value={device.power_rating}
           />
           </div>
@@ -45,7 +45,7 @@ export default function UnitForm({selectedValue, device, onSubmitted}) {
             type="number" 
             name="cost" 
             value={device.cost}
-            onChange={(event) => console.log(event.target.value)}
+            onChange={(event) => onEnteredValues("cost", event.target.value)}
             />
           </div>
         </div>
