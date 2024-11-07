@@ -12,12 +12,8 @@ import ForceGraph from './Network/ForceGraph';
 import GeojsonMap from './Mapping/GeojsonMap';
 import bronx from "./Mapping/bronx.json";
 
-import UnitForm from '../UI/Device/UnitForm';
-import BatteryForm from '../UI/Device/BatteryForm';
-import DRloadForm from '../UI/Device/DRloadForm';
-
+import Form from '../UI/Device/Form';
 import { renderToString } from 'react-dom/server';
-
 
 const layers = [
   { id: "react", label: "React" },
@@ -63,21 +59,10 @@ export default function NetworkGraph({margin, data, ...props}) {
   // so, make a deep copy of the dataset 
   const network = JSON.parse(JSON.stringify(data));
 
-  function defineForm (selectedValue, device) {
-    if (selectedValue === "battery") {
-      return <BatteryForm selectedValue={selectedValue} device={device}/>;
-    } else if (selectedValue === "dr_load") {
-      return <DRloadForm selectedValue={selectedValue} device={device}/>;
-    } else {
-      return <UnitForm selectedValue={selectedValue} device={device}/>;
-    }
-  }
-
-
   const deviceTooltip = useCallback((bus) => {
     // Find the device in the network
     let device = network[`${props.selectedValue}`].find(f => f.bus === bus.uid)
-    return renderToString(defineForm(props.selectedValue, device));
+    return renderToString(Form(props.selectedValue, device));
   }, [network, props.selectedValue]);
 
   return(
@@ -109,6 +94,7 @@ export default function NetworkGraph({margin, data, ...props}) {
             linkScale={linkScale}
             colorScale={props.colorScale}
             selectedValue={props.selectedValue}
+            onSelectBus={props.onSelectBus}
           />
         </ChartContainer>
         }

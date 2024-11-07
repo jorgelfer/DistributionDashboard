@@ -33,7 +33,8 @@ export default function ForceGraph(props) {
   }
 
   function node_click(event) {
-    console.log("single click")
+    let d = props.data.bus.find(d => d.uid === event.target.id);
+    props.onSelectBus(d);
   }
 
   // Handlers for click events on nodes
@@ -65,6 +66,10 @@ export default function ForceGraph(props) {
         // add the fixed class
         // d3.select(this).classed("fixed", true);
         event.target.fixed = true;
+
+        // show the symbol
+        d3.select(this).select("image.symbol")
+          .style("display", "block");
         // create the new device
         props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
         // check if the device already exists
