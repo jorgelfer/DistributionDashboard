@@ -32,109 +32,6 @@ export default function Net(props) {
     props.xScale.domain(d3.extent(props.data.bus, d => d.x));
     props.yScale.domain(d3.extent(props.data.bus, d => d.y));
 
-    // Add the tooltip element to the graph
-    const tooltip = document.querySelector("#graph-tooltip");
-    if (!tooltip) {
-      const tooltipDiv = document.createElement("div");
-      tooltipDiv.classList.add(styles.tooltip);
-      tooltipDiv.style.display = "none";
-      tooltipDiv.id = "graph-tooltip";
-      document.body.appendChild(tooltipDiv);
-    }
-    const div = d3.select("#graph-tooltip");
-
-    const addTooltip = (hoverTooltip, event, d) => {
-      div
-        .transition()
-        .duration(200)
-        .style("display", "block");
-      div
-        .html(hoverTooltip(d))
-        .style("left", `${event.x}px`)
-        .style("top", `${event.y - 50}px`);
-    };
-
-    const removeTooltip = () => {
-      div
-        .transition()
-        .duration(200)
-        .style("display", "none");
-    };
-
-    window.onkeydown = function(event) {
-      if (event.key === "Escape") {
-        removeTooltip();
-      } else if (event.key === "Enter") {
-
-        // get updated device
-        const inputBus = d3.select("#bus").property("value");
-        let device = props.data[`${props.selectedValue}`].find(f => f.bus === inputBus);
-
-        // update device information
-        if (props.selectedValue === "battery") {
-          let capacity = d3.select("#capacity").property("value");
-          device.capacity = (typeof(capacity) === "string") ? parseFloat(capacity) : capacity;
-          let charging_limit = d3.select("#charging_limit").property("value");
-          device.charging_limit = (typeof(charging_limit) === "string") ? parseFloat(charging_limit) : charging_limit;
-          let efficiency = d3.select("#efficiency").property("value");
-          device.efficiency = (typeof(efficiency) === "string") ? parseFloat(efficiency) : efficiency;
-          let initial_energy = d3.select("#initial_energy").property("value");
-          device.initial_energy = (typeof(initial_energy) === "string") ? parseFloat(initial_energy) : initial_energy;
-          device.final_energy = (typeof(initial_energy) === "string") ? parseFloat(initial_energy) : initial_energy;
-          let cost = d3.select("#cost").property("value");
-          device.cost = (typeof(cost) === "string") ? parseFloat(cost) : cost;
-          device.revenue = (typeof(cost) === "string") ? parseFloat(cost) : cost;
-
-          // define device phases
-          device.phases = [];
-          device.soc = {};
-          device.terminals.map((terminal) => {
-            const ph_test = d3.select(`#terminal_${terminal}`).property("checked");
-            if (ph_test) {
-              device.phases.push(terminal)
-              device.soc[terminal] = Array(props.data.time.length).fill(0);
-            };
-          });
-        } else if (props.selectedValue === "dr_load"){
-          let response_percent = d3.select("#response_percent").property("value");
-          device.response_percent = (typeof(response_percent) === "string") ? parseFloat(response_percent) : response_percent;
-          let cost = d3.select("#cost").property("value");
-          device.cost = (typeof(cost) === "string") ? parseFloat(cost) : cost;
-
-          // define device phases
-          device.phases = [];
-          device.p = {};
-          device.terminals.map((terminal) => {
-            const ph_test = d3.select(`#terminal_${terminal}`).property("checked");
-            if (ph_test) {
-              device.phases.push(terminal)
-              device.p[terminal] = Array(props.data.time.length).fill(0);
-            };
-          });
-        } else {
-          let power_rating = d3.select("#power_rating").property("value");
-          device.power_rating = (typeof(power_rating) === "string") ? parseFloat(power_rating) : power_rating;
-          let cost = d3.select("#cost").property("value");
-          device.cost = (typeof(cost) === "string") ? parseFloat(cost) : cost;
-
-          // define device phases
-          device.phases = [];
-          device.p = {};
-          device.terminals.map((terminal) => {
-            const ph_test = d3.select(`#terminal_${terminal}`).property("checked");
-            if (ph_test) {
-              device.phases.push(terminal)
-              device.p[terminal] = Array(props.data.time.length).fill(0);
-            };
-          });
-        }
-        // update original data
-        props.onSubmitDevice(props.data);
-        // remove the tooltip
-        removeTooltip();
-      }
-    };
-
     // Append weighted lines for each link in network
     const linkEnter = networkContainer 
       .selectAll('.link')
@@ -159,10 +56,9 @@ export default function Net(props) {
     nodeEnter
       .append('circle')
         .attr('class', 'circle')
-        // .attr("r", props.originalNodeSize)
         .on("click", node_click)
         .on("dblclick", node_dblclick)
-        .attr("r", d => props.originalNodeSize)
+        .attr("r", props.originalNodeSize)
         .style('fill', d => {
           // console.log(d.phases.length);
           if (props.selectedValue === "dr_load") {
@@ -180,11 +76,7 @@ export default function Net(props) {
       .attr("width", 25)
       .attr("height", 25)
       .style("display", d => active_nodes.includes(d.uid) ? "block" : "none")
-      .on("click", (event, d) => {
-        if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
-          addTooltip(props.deviceTooltip, event, d);
-        }
-      });
+      .on("click", device_click);
 
     function tickSimulation() {
       linkEnter
@@ -216,10 +108,16 @@ export default function Net(props) {
       simulation.force("charge", null);
     }
 
+    // Handler for click events on devices
+    function device_click(event, d) {
+      if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
+        let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
+        props.onSelectDevice(device);
+      }
+    }
+
     // Handlers for click events on nodes
     function node_click(event, d) {
-      // d3.select(this).classed("fixed", true);
-      // console.log(d3.select(this));
       props.onSelectBus(d);
     }
 
@@ -233,40 +131,21 @@ export default function Net(props) {
         if (d3.select(this).classed("fixed")) {
           // remove the fixed class
           d3.select(this).classed("fixed", false);
-
           // hide the symbol
           d3.select(this).select("image.symbol")
             .style("display", "none");
-
-          // remove the tooltip
-          removeTooltip();
-
           // Remove the device from array
-          props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
-
+          let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
           // update original data
-          props.updateData(props.data);
-
+          props.onSubmitDevice(device, true);
         } else {
           // add the fixed class
           d3.select(this).classed("fixed", true);
-
           // show the symbol
           d3.select(this).select("image.symbol")
             .style("display", "block");
-
-          // create the new device
-          props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
-
-          // check if the device already exists
-          let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
-          if (device === undefined) {
-            // append new device to the flex_devices array
-            props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d, props.data.time.length));
-          };
-
           // update original data
-          props.updateData(props.data);
+          props.onSubmitDevice(InitDevice(props.selectedValue, d, props.data.time.length),false);
         };
         // ---------------------------------------
       };

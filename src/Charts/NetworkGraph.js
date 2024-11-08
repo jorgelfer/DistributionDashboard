@@ -114,7 +114,6 @@ export default function NetworkGraph({margin, data, ...props}) {
           className="network-graph"
           >
           <ForceGraph
-            onSubmitDevice={handleSubmitDevice}
             deviceTooltip={deviceTooltip}
             innerHeight={innerHeight}
             innerWidth={innerWidth}
@@ -129,6 +128,7 @@ export default function NetworkGraph({margin, data, ...props}) {
             selectedValue={props.selectedValue}
             onSelectBus={props.onSelectBus}
             onSelectDevice={handleSelectDevice}
+            onSubmitDevice={handleSubmitDevice}
           />
         </ChartContainer>
         }
@@ -140,7 +140,6 @@ export default function NetworkGraph({margin, data, ...props}) {
           className="network-graph"
           >
           <Net
-            onSubmitDevice={handleSubmitDevice}
             deviceTooltip={deviceTooltip}
             innerHeight={innerHeight}
             innerWidth={innerWidth}
@@ -154,6 +153,8 @@ export default function NetworkGraph({margin, data, ...props}) {
             colorScale={props.colorScale}
             selectedValue={props.selectedValue}
             onSelectBus={props.onSelectBus}
+            onSelectDevice={handleSelectDevice}
+            onSubmitDevice={handleSubmitDevice}
           />
         </ChartContainer>
         }

@@ -63,7 +63,6 @@ export default function ForceGraph(props) {
         props.onSubmitDevice(device, true);
       } else {
         // add the fixed class
-        // d3.select(this).classed("fixed", true);
         event.target.fixed = true;
         // update original data
         props.onSubmitDevice(InitDevice(props.selectedValue, d, props.data.time.length), false);
