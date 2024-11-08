@@ -1,6 +1,6 @@
 import classes from './Form.module.css';
 
-export default function UnitForm({value, device, onSelected, onEnteredValues, onSubmitted}) {
+export default function UnitForm({selectedValue, device, onSelected, onEnteredValues, onSubmitted}) {
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -11,7 +11,7 @@ export default function UnitForm({value, device, onSelected, onEnteredValues, on
   return (
     <>
       <form className={classes.simple} onSubmit={handleSubmit}>
-        <h2 className={classes["header"]}>{value}</h2>
+        <h2 className={classes["header"]}>{selectedValue}</h2>
 
         <div className={classes["control"]}>
           <label className={classes.label} htmlFor="text">Bus</label>

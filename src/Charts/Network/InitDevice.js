@@ -52,7 +52,7 @@ export default function InitDevice(selectedValue, bus, T) {
               terminals: bus.phases,
               phases: [bus.phases[0]],
               cost: 0.5,
-              response_percent: 100,
+              response_percent: 1,
               pf: 0.9,
               p: vdict,
             };

@@ -1,10 +1,11 @@
 import classes from './Form.module.css';
 
-export default function DRloadForm({selectedValue, device, onSubmitted}) {
+export default function DRloadForm({selectedValue, device, onSelected, onEnteredValues, onSubmitted}) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    onSubmitted(null);
+    onSelected(null);
+    onSubmitted(device, false);
   }
 
   return (
@@ -26,16 +27,14 @@ export default function DRloadForm({selectedValue, device, onSubmitted}) {
 
         <div className={classes["control-row"]}>
           <div className={classes["control"]}>
-            <label className={classes.label} htmlFor="text">Response Percent [0 - 100%]</label>
+            <label className={classes.label} htmlFor="text">Response Percent [0 - 1]</label>
             <input 
             className={classes.input}
             id="response_percent" 
             type="number" 
-            min="0"
-            max="100"
             name="response_percent" 
-            onChange={(event) => console.log(event.target.value)}
             value={device.response_percent}
+            onChange={(event) => onEnteredValues("response_percent", event.target.value)}
             />
           </div>
 
@@ -47,7 +46,7 @@ export default function DRloadForm({selectedValue, device, onSubmitted}) {
             type="number" 
             name="cost" 
             value={device.cost}
-            onChange={(event) => console.log(event.target.value)}
+            onChange={(event) => onEnteredValues("cost", event.target.value)}
             />
           </div>
         </div>

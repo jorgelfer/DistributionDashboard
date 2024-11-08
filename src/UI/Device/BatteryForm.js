@@ -1,10 +1,11 @@
 import classes from './Form.module.css';
 
-export default function BatteryForm({selectedValue, device, onSubmitted}) {
+export default function BatteryForm({selectedValue, device, onSelected, onEnteredValues, onSubmitted}) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    onSubmitted(null);
+    onSelected(null);
+    onSubmitted(device, false);
   }
 
   return (
@@ -30,9 +31,9 @@ export default function BatteryForm({selectedValue, device, onSubmitted}) {
             <input 
               className={classes.input}
               id="capacity" 
-              type="text" 
+              type="number" 
               name="capacity" 
-              onChange={(event) => console.log(event.target.value)}
+              onChange={(event) => onEnteredValues("capacity", event.target.value)}
               value={device.capacity}
             />
           </div>
@@ -42,10 +43,10 @@ export default function BatteryForm({selectedValue, device, onSubmitted}) {
             <input 
             className={classes.input}
             id="charging_limit" 
-            type="text" 
+            type="number" 
             name="charging_limit" 
+            onChange={(event) => onEnteredValues("charging_limit", event.target.value)}
             value={device.charging_limit}
-            onChange={(event) => console.log(event.target.value)}
             />
           </div>
         </div>
@@ -53,39 +54,65 @@ export default function BatteryForm({selectedValue, device, onSubmitted}) {
         <hr />
 
         <div className={classes["control"]}>
-          <label className={classes.label} htmlFor="text">Efficiency</label>
+          <label className={classes.label} htmlFor="text">Efficiency [0-1]</label>
           <input 
           className={classes.input}
           id="efficiency" 
-          type="text" 
+          type="number" 
           name="efficiency" 
+          onChange={(event) => onEnteredValues("efficiency", event.target.value)}
           value={device.efficiency}
-          onChange={(event) => console.log(event.target.value)}
           />
         </div>
 
         <div className={classes["control-row"]}>
           <div className={classes["control"]}>
-            <label className={classes.label} htmlFor="text">Initial Energy [kWh]</label>
+            <label className={classes.label} htmlFor="text">Initial Energy [0-1]</label>
             <input 
             className={classes.input}
             id="initial_energy" 
-            type="text" 
+            type="number" 
             name="initial_energy" 
             value={device.initial_energy}
-            onChange={(event) => console.log(event.target.value)}
+            onChange={(event) => onEnteredValues("initial_energy", event.target.value)}
             />
           </div>
 
+          <div className={classes["control"]}>
+            <label className={classes.label} htmlFor="text">Final Energy [0-1]</label>
+            <input 
+            className={classes.input}
+            id="final_energy" 
+            type="number" 
+            name="final_energy" 
+            value={device.final_energy}
+            onChange={(event) => onEnteredValues("final_energy", event.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className={classes["control-row"]}>
           <div className={classes["control"]}>
             <label className={classes.label} htmlFor="text">Cost [$/kWh]</label>
             <input 
             className={classes.input}
             id="cost" 
-            type="text" 
+            type="number" 
             name="cost" 
             value={device.cost}
-            onChange={(event) => console.log(event.target.value)}
+            onChange={(event) => onEnteredValues("cost", event.target.value)}
+            />
+          </div>
+
+          <div className={classes["control"]}>
+            <label className={classes.label} htmlFor="text">Revenue [$/kWh]</label>
+            <input 
+            className={classes.input}
+            id="revenue" 
+            type="number" 
+            name="revenue" 
+            value={device.revenue}
+            onChange={(event) => onEnteredValues("revenue", event.target.value)}
             />
           </div>
         </div>
