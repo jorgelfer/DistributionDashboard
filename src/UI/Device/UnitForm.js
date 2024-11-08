@@ -68,7 +68,6 @@ export default function UnitForm({selectedValue, device, onSelected, onEnteredVa
         </fieldset>
 
         <p className={classes["form-actions"]}>
-          <button type="reset" className={classes["button button-flat"]}>Remove</button>
           <button className={classes["button"]}>Submit</button>
         </p>
 

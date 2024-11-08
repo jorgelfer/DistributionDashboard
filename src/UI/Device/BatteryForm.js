@@ -13,19 +13,19 @@ export default function BatteryForm({selectedValue, device, onSelected, onEntere
       <form className={classes.simple} onSubmit={handleSubmit}>
         <h2 className={classes["header"]}>{selectedValue}</h2>
 
-        <div className={classes["control"]}>
-          <label className={classes.label} htmlFor="text">Bus</label>
-          <input 
-            className={classes.input}
-            id="bus" 
-            type="text" 
-            name="bus_uid" 
-            value={device.bus}
-            readOnly={true}
-          />
-        </div>
-
         <div className={classes["control-row"]}>
+          <div className={classes["control"]}>
+            <label className={classes.label} htmlFor="text">Bus</label>
+            <input 
+              className={classes.input}
+              id="bus" 
+              type="text" 
+              name="bus_uid" 
+              value={device.bus}
+              readOnly={true}
+            />
+          </div>
+
           <div className={classes["control"]}>
             <label className={classes.label} htmlFor="text">Capacity [kWh]</label>
             <input 
@@ -37,7 +37,9 @@ export default function BatteryForm({selectedValue, device, onSelected, onEntere
               value={device.capacity}
             />
           </div>
+        </div>
 
+        <div className={classes["control-row"]}>
           <div className={classes["control"]}>
             <label className={classes.label} htmlFor="text">Charging Limit [kWh]</label>
             <input 
@@ -49,21 +51,22 @@ export default function BatteryForm({selectedValue, device, onSelected, onEntere
             value={device.charging_limit}
             />
           </div>
+
+          <div className={classes["control"]}>
+            <label className={classes.label} htmlFor="text">Charging Efficiency [0-1]</label>
+            <input 
+            className={classes.input}
+            id="efficiency" 
+            type="number" 
+            name="efficiency" 
+            onChange={(event) => onEnteredValues("efficiency", event.target.value)}
+            value={device.efficiency}
+            />
+          </div>
         </div>
 
         <hr />
-
-        <div className={classes["control"]}>
-          <label className={classes.label} htmlFor="text">Efficiency [0-1]</label>
-          <input 
-          className={classes.input}
-          id="efficiency" 
-          type="number" 
-          name="efficiency" 
-          onChange={(event) => onEnteredValues("efficiency", event.target.value)}
-          value={device.efficiency}
-          />
-        </div>
+        <h3 className={classes["header"]}>Boundary conditions as a factor of capacity</h3>
 
         <div className={classes["control-row"]}>
           <div className={classes["control"]}>
@@ -91,6 +94,7 @@ export default function BatteryForm({selectedValue, device, onSelected, onEntere
           </div>
         </div>
 
+        <hr />
         <div className={classes["control-row"]}>
           <div className={classes["control"]}>
             <label className={classes.label} htmlFor="text">Cost [$/kWh]</label>
@@ -134,7 +138,6 @@ export default function BatteryForm({selectedValue, device, onSelected, onEntere
         </fieldset>
 
         <p className={classes["form-actions"]}>
-          <button type="reset" className={classes["button button-flat"]}>Remove</button>
           <button className={classes["button"]}>Submit</button>
         </p>
 

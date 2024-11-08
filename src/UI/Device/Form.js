@@ -7,7 +7,7 @@ export default function Form(selectedValue, device, handleSelectDevice, handleCh
   switch (selectedValue) {
     case "battery":
       return <BatteryForm 
-      value={selectedValue} 
+      selectedValue={selectedValue} 
       device={device}
       onSelected={handleSelectDevice}
       onEnteredValues={handleChangeDevice}
@@ -15,7 +15,7 @@ export default function Form(selectedValue, device, handleSelectDevice, handleCh
       />;
     case "flex_gen":
       return <UnitForm 
-      value={selectedValue} 
+      selectedValue={selectedValue} 
       device={device}
       onSelected={handleSelectDevice}
       onEnteredValues={handleChangeDevice}
@@ -23,7 +23,7 @@ export default function Form(selectedValue, device, handleSelectDevice, handleCh
       />;
     case "flex_load":
       return <UnitForm 
-      value={selectedValue} 
+      selectedValue={selectedValue} 
       device={device}
       onSelected={handleSelectDevice}
       onEnteredValues={handleChangeDevice}
@@ -31,7 +31,7 @@ export default function Form(selectedValue, device, handleSelectDevice, handleCh
       />;
     case "dr_load":
       return <DRloadForm 
-      value={selectedValue} 
+      selectedValue={selectedValue} 
       device={device}
       onSelected={handleSelectDevice}
       onEnteredValues={handleChangeDevice}
