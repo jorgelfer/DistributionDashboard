@@ -50,6 +50,7 @@ export default function Net(props) {
       .data(props.data.bus)
       .join("g")
         .attr("class", "node")
+        .on("dblclick", node_dblclick)
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append circles for each node in the graph
@@ -57,7 +58,6 @@ export default function Net(props) {
       .append('circle')
         .attr('class', 'circle')
         .on("click", node_click)
-        .on("dblclick", node_dblclick)
         .attr("r", props.originalNodeSize)
         .style('fill', d => {
           // console.log(d.phases.length);
@@ -118,7 +118,7 @@ export default function Net(props) {
 
     // Handlers for click events on nodes
     function node_click(event, d) {
-      props.onSelectBus(d);
+      props.onSelectBus([d]);
     }
 
     // Handlers for dblclick events on nodes
@@ -128,26 +128,29 @@ export default function Net(props) {
           return;
         }
         // ---------------------------------------
-        if (d3.select(this).classed("fixed")) {
-          // remove the fixed class
-          d3.select(this).classed("fixed", false);
+        // check if a device exist in local data 
+        // create the new device
+        props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
+        let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid) || null;
+        if (device) {
           // hide the symbol
           d3.select(this).select("image.symbol")
             .style("display", "none");
-          // Remove the device from array
-          let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
-          // update original data
+          // Remove from local data
+          props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
+          // Remove from original data
           props.onSubmitDevice(device, true);
         } else {
-          // add the fixed class
-          d3.select(this).classed("fixed", true);
           // show the symbol
           d3.select(this).select("image.symbol")
             .style("display", "block");
-          // update original data
+          // Add to local data
+          props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d, props.data.time.length));
+          // Add to original data
           props.onSubmitDevice(InitDevice(props.selectedValue, d, props.data.time.length),false);
         };
         // ---------------------------------------
+        // console.log(props.data[`${props.selectedValue}`]);
       };
     };
 

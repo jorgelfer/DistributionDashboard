@@ -25,13 +25,19 @@ export default function Charts(props) {
   }
 
   // selected buses
-  const [selectedBus, setSelectedBus] = useState(null);
-  function handleSelectBus(bus) {
-    setSelectedBus(bus);
+  const [selectedBuses, setSelectedBuses] = useState({
+    selectedBus: null,
+    buses: [],
+  });
+
+  function handleSelectBus(buses) {
+    setSelectedBuses((prevBuses) => ({
+      ...prevBuses,
+      buses: buses
+    }));
   };
 
-  // console.log(props.data);
-  const [data, y_extent] = updateData(props.data, selectedValue, selectedBus, dateParser);
+  const [data, y_extent] = updateData(props.data, selectedValue, selectedBuses, dateParser);
   return (
     <>
       <Header handleClick={handleClick} selectedValue={selectedValue} />
@@ -45,9 +51,9 @@ export default function Charts(props) {
             selectedValue={selectedValue}
             onSelectBus={handleSelectBus}
           />
-          {selectedBus && 
+          {selectedBuses.buses.length > 0 && 
           <p className="form-actions">
-            <button className="login-button" onClick={() => handleSelectBus(null)}>Release</button>
+            <button className="login-button" onClick={() => handleSelectBus([])}>Release</button>
           </p>}
         </div>
         <div className='two'>

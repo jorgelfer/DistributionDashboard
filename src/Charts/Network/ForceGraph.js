@@ -43,7 +43,7 @@ export default function ForceGraph(props) {
   // Handler for click events on devices
   function node_click(event) {
     let d = props.data.bus.find(d => d.uid === event.target.id);
-    props.onSelectBus(d);
+    props.onSelectBus([d]);
   }
 
   // Handlers for doubleclick events on nodes
@@ -54,16 +54,15 @@ export default function ForceGraph(props) {
         return;
       }
       // ---------------------------------------
-      if (event.target.fixed) {
-        // remove the fixed class
-        event.target.fixed = false;
+      // check if a device is already connected at this bus
+      let device = props.data[`${props.selectedValue}`] && props.data[`${props.selectedValue}`].find(f => f.bus === d.uid) || null;
+      console.log(device);
+      if (device) {
         // Remove the device from array
-        let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
-        // update original data
         props.onSubmitDevice(device, true);
       } else {
-        // add the fixed class
-        event.target.fixed = true;
+        //
+        console.log("should add device");
         // update original data
         props.onSubmitDevice(InitDevice(props.selectedValue, d, props.data.time.length), false);
       };
@@ -101,6 +100,47 @@ export default function ForceGraph(props) {
 
   const [nodes, setNodes] = useState(initNodes);
   const [links, setLinks] = useState(newLinks);
+
+  ////////////////////////////////////
+  // Brush
+  // const brushRef = useRef();
+  // useEffect(() => {
+  //   let nodeBrush = d3.brush()
+  //     .extent([[0, 0], [innerWidth, innerHeight]])
+  //   nodeBrush(d3.select(brushRef.current));
+  //   nodeBrush
+  //     .on('start', function () {
+  //         updatePostDisplay([]);
+  //     })
+
+  //   nodeBrush
+  //     .on('end', function (event) {
+  //       // console.log('event::: ', event);
+  //       // console.log('event.selection::: ', event.selection);
+  //       if (!event.selection) {
+  //         updatePostDisplay([]);
+  //         return;
+  //       }
+  //       let brushedArea = event.selection
+  //       let posts = uniqueNodes.filter(d => {
+  //         let coords = projection([d.longitude, d.latitude]);
+  //         return isBrushed(brushedArea, coords[0], coords[1]);
+  //       }) 
+  //       // console.log(posts)
+  //       updatePostDisplay(posts);
+  //     })
+  // }, [updatePostDisplay, innerWidth, innerHeight, projection]);
+
+  // function isBrushed(brush_coords, cx, cy) {
+  //     if (brush_coords) {
+  //         let x0 = brush_coords[0][0],
+  //             x1 = brush_coords[1][0],
+  //             y0 = brush_coords[0][1],
+  //             y1 = brush_coords[1][1];
+  //         return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
+  //     }
+  // }
+  ////////////////////////////////////
 
   return (
     <>

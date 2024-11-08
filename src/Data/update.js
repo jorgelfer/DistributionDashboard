@@ -1,11 +1,11 @@
 import * as d3 from 'd3';
 
-export function updateData(network, selectedValue, selectedBus, dateParser) {
+export function updateData(network, selectedValue, selectedBuses, dateParser) {
 
     // buses uid
     let buses_uid = network.bus.map(d => d.uid)
-    if (selectedBus !== null) {
-        buses_uid = selectedBus.uid
+    if (selectedBuses.buses.length > 0) {
+        buses_uid = selectedBuses.buses.map(d => d.uid)
     }
 
     // initialize data container

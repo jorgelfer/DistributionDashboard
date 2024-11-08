@@ -49,6 +49,10 @@ export default function NetworkGraph({margin, data, ...props}) {
     }
   };
 
+  // The force simulation mutates links and nodes,
+  // so, make a deep copy of the dataset 
+  var network = JSON.parse(JSON.stringify(data));
+
   const handleSubmitDevice = useCallback((device, remove) => {
     // initialize device container
     data[`${props.selectedValue}`] = data[`${props.selectedValue}`] || [];
@@ -58,11 +62,9 @@ export default function NetworkGraph({margin, data, ...props}) {
     if (!remove) {
       data[`${props.selectedValue}`].push(device);
     }
+    // console.log(data[`${props.selectedValue}`]);
+    network = JSON.parse(JSON.stringify(data));
   }, [data, props.selectedValue]);
-
-  // The force simulation mutates links and nodes,
-  // so, make a deep copy of the dataset 
-  const network = JSON.parse(JSON.stringify(data));
 
   const deviceTooltip = useCallback((bus) => {
     // Find the device in the network
@@ -85,8 +87,6 @@ export default function NetworkGraph({margin, data, ...props}) {
       [identifier]: value
     }))
   };
-
-  console.log(data[`${props.selectedValue}`]);
 
   return(
     <Card>
