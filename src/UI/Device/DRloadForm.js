@@ -59,6 +59,8 @@ export default function DRloadForm({selectedValue, device, onSelected, onEntered
               type="checkbox"
               id={`terminal_${terminal}`}
               name="terminals"
+              checked={device.phases.includes(terminal)}
+              onChange={(event) => onEnteredValues("phases", device.phases.includes(terminal) ? device.phases.filter(f => f !== terminal) : [...device.phases, terminal])}
             />
             <label className={classes.label} htmlFor={terminal}>{terminal}</label>
           </div>
