@@ -129,7 +129,7 @@ export default function Net(props) {
           });
         }
         // update original data
-        props.updateData(props.data);
+        props.onSubmitDevice(props.data);
         // remove the tooltip
         removeTooltip();
       }

@@ -4,7 +4,7 @@ export default function DRloadForm({selectedValue, device, onSubmitted}) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    onSubmitted(false);
+    onSubmitted(null);
   }
 
   return (

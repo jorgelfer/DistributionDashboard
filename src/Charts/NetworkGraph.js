@@ -49,9 +49,15 @@ export default function NetworkGraph({margin, data, ...props}) {
     }
   };
 
-  const updateData = useCallback((network) => {
-    data[`${props.selectedValue}`] = network[`${props.selectedValue}`]; 
-    // console.log(data)
+  const handleSubmitDevice = useCallback((device, remove) => {
+    // initialize device container
+    data[`${props.selectedValue}`] = data[`${props.selectedValue}`] || [];
+    // filter out the devices in case it is already in the network
+    data[`${props.selectedValue}`] = data[`${props.selectedValue}`].filter(f => f.uid !== device.uid);
+    // append the device to the network
+    if (!remove) {
+      data[`${props.selectedValue}`].push(device);
+    }
   }, [data, props.selectedValue]);
 
   // The force simulation mutates links and nodes,
@@ -65,12 +71,14 @@ export default function NetworkGraph({margin, data, ...props}) {
   }, [network, props.selectedValue]);
 
   // selected device
-  const [selectedDevice, setSelectedDevice] = useState(false);
+  const [selectedDevice, setSelectedDevice] = useState(null);
+
+  // handle device selection
   function handleSelectDevice(device) {
     setSelectedDevice(device);
   };
 
-  // handle form submission
+  // handle form change
   function handleChangeDevice(identifier, value) {
     setSelectedDevice(prevDevice => ({
       ...prevDevice,
@@ -78,7 +86,7 @@ export default function NetworkGraph({margin, data, ...props}) {
     }))
   };
 
-  console.log(selectedDevice);
+  console.log(data[`${props.selectedValue}`]);
 
   return(
     <Card>
@@ -90,7 +98,12 @@ export default function NetworkGraph({margin, data, ...props}) {
       />
       {selectedDevice && 
       <div className="device-form">
-        {Form(props.selectedValue, selectedDevice, handleSelectDevice, handleChangeDevice)}
+        {Form(
+          props.selectedValue, 
+          selectedDevice, 
+          handleSelectDevice, 
+          handleChangeDevice,
+          handleSubmitDevice)}
       </div>
       }
       {(activeLayer === "react") &&
@@ -101,7 +114,7 @@ export default function NetworkGraph({margin, data, ...props}) {
           className="network-graph"
           >
           <ForceGraph
-            updateData={updateData}
+            onSubmitDevice={handleSubmitDevice}
             deviceTooltip={deviceTooltip}
             innerHeight={innerHeight}
             innerWidth={innerWidth}
@@ -127,7 +140,7 @@ export default function NetworkGraph({margin, data, ...props}) {
           className="network-graph"
           >
           <Net
-            updateData={updateData}
+            onSubmitDevice={handleSubmitDevice}
             deviceTooltip={deviceTooltip}
             innerHeight={innerHeight}
             innerWidth={innerWidth}

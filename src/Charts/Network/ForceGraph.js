@@ -48,7 +48,6 @@ export default function ForceGraph(props) {
 
   // Handlers for doubleclick events on nodes
   function node_dblclick(event) {
-    console.log(event);
     let d = props.data.bus.find(d => d.uid === event.target.id);
     if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
       if (props.selectedValue === "dr_load" && !dr_nodes.includes(d.uid)) {
@@ -59,28 +58,15 @@ export default function ForceGraph(props) {
         // remove the fixed class
         event.target.fixed = false;
         // Remove the device from array
-        props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
+        let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
         // update original data
-        props.updateData(props.data);
+        props.onSubmitDevice(device, true);
       } else {
         // add the fixed class
         // d3.select(this).classed("fixed", true);
         event.target.fixed = true;
-
-        // show the symbol
-        d3.select(this).select("image.symbol")
-          .style("display", "block");
-        // create the new device
-        props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
-        // check if the device already exists
-        let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid);
-        console.log(device);
-        if (device === undefined) {
-          // append new device to the flex_devices array
-          props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d, props.data.time.length));
-        };
         // update original data
-        props.updateData(props.data);
+        props.onSubmitDevice(InitDevice(props.selectedValue, d, props.data.time.length), false);
       };
       // ---------------------------------------
     };
