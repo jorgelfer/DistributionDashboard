@@ -44,8 +44,12 @@ export default function Net(props) {
         .on('start', dragstarted)
         .on('drag', dragged)
         .on('end', dragended);
+
+    let nodeEnter = networkContainer
+      .append("g")
+      .attr("class", "nodes");
     
-    var nodeEnter = networkContainer
+    let myNodes = nodeEnter
       .selectAll(".node")
       .data(props.data.bus)
       .join("g")
@@ -54,7 +58,7 @@ export default function Net(props) {
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append circles for each node in the graph
-    nodeEnter
+    myNodes
       .append('circle')
         .attr('class', 'circle')
         .on("click", node_click)
@@ -68,7 +72,7 @@ export default function Net(props) {
           }
           });
 
-    nodeEnter
+    myNodes
     .append("image")
       .attr("class", "symbol")
       .attr("xlink:href", Symbol(props.selectedValue))
@@ -85,7 +89,7 @@ export default function Net(props) {
         .attr('x2', d => props.xScale(d.target.x))
         .attr('y2', d => props.yScale(d.target.y));
 
-      nodeEnter
+      myNodes
           .attr('transform', function(d) { return `translate(${props.xScale(d.x)}, ${props.yScale(d.y)})`;});
     }
     
@@ -150,7 +154,6 @@ export default function Net(props) {
           props.onSubmitDevice(InitDevice(props.selectedValue, d, props.data.time.length),false);
         };
         // ---------------------------------------
-        // console.log(props.data[`${props.selectedValue}`]);
       };
     };
 
@@ -176,6 +179,31 @@ export default function Net(props) {
       d.fx = null;
       d.fy = null;
     };
+
+    //////////////////////////////////
+    // Brush
+    let nodeBrush = d3.brush().extent([[0, 0], [props.innerWidth, props.innerHeight]])
+        .on('brush', function (event) {
+            // console.log('event::: ', event);
+            // console.log('event.selection::: ', event.selection);
+            let brushedArea = event.selection
+            let buses = props.data.bus.filter(d => {
+              return isBrushed(brushedArea, props.xScale(d.x), props.yScale(d.y));
+            }) 
+            props.onSelectBus(buses);
+        })
+
+    function isBrushed(brush_coords, cx, cy) {
+        if (brush_coords) {
+            let x0 = brush_coords[0][0],
+                x1 = brush_coords[1][0],
+                y0 = brush_coords[0][1],
+                y1 = brush_coords[1][1];
+            return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
+        }
+    }
+    nodeEnter.call(nodeBrush) // calling a d3 brush
+    //////////////////////////////////
 
   }, [props]);
 

@@ -5,6 +5,8 @@ import Circle from "../../ChartComponents/Circle";
 import Line from "../../ChartComponents/Line";
 import InitDevice from './InitDevice';
 
+import { useEffect, useRef } from "react";
+
 export default function ForceGraph(props) {
 
   const initNodes = props.data.bus.map((d) => {
@@ -101,45 +103,43 @@ export default function ForceGraph(props) {
   const [nodes, setNodes] = useState(initNodes);
   const [links, setLinks] = useState(newLinks);
 
-  ////////////////////////////////////
+  //////////////////////////////////
   // Brush
-  // const brushRef = useRef();
-  // useEffect(() => {
-  //   let nodeBrush = d3.brush()
-  //     .extent([[0, 0], [innerWidth, innerHeight]])
-  //   nodeBrush(d3.select(brushRef.current));
-  //   nodeBrush
-  //     .on('start', function () {
-  //         updatePostDisplay([]);
-  //     })
+  const brushRef = useRef();
+  useEffect(() => {
+    let nodeBrush = d3.brush()
+      .extent([[0, 0], [props.innerWidth, props.innerHeight]])
+    nodeBrush(d3.select(brushRef.current));
+    nodeBrush
+      .on('start', function () {
+          props.onSelectBus([]);
+      })
 
-  //   nodeBrush
-  //     .on('end', function (event) {
-  //       // console.log('event::: ', event);
-  //       // console.log('event.selection::: ', event.selection);
-  //       if (!event.selection) {
-  //         updatePostDisplay([]);
-  //         return;
-  //       }
-  //       let brushedArea = event.selection
-  //       let posts = uniqueNodes.filter(d => {
-  //         let coords = projection([d.longitude, d.latitude]);
-  //         return isBrushed(brushedArea, coords[0], coords[1]);
-  //       }) 
-  //       // console.log(posts)
-  //       updatePostDisplay(posts);
-  //     })
-  // }, [updatePostDisplay, innerWidth, innerHeight, projection]);
+    nodeBrush
+      .on('brush', function (event) {
+        // console.log('event::: ', event);
+        // console.log('event.selection::: ', event.selection);
+        if (!event.selection) {
+          props.onSelectBus([]);
+          return;
+        }
+        let brushedArea = event.selection
+        let buses = props.data.bus.filter(d => {
+          return isBrushed(brushedArea, props.xScale(d.x), props.yScale(d.y));
+        }) 
+        props.onSelectBus(buses);
+      })
+  }, [props]);
 
-  // function isBrushed(brush_coords, cx, cy) {
-  //     if (brush_coords) {
-  //         let x0 = brush_coords[0][0],
-  //             x1 = brush_coords[1][0],
-  //             y0 = brush_coords[0][1],
-  //             y1 = brush_coords[1][1];
-  //         return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
-  //     }
-  // }
+  function isBrushed(brush_coords, cx, cy) {
+      if (brush_coords) {
+          let x0 = brush_coords[0][0],
+              x1 = brush_coords[1][0],
+              y0 = brush_coords[0][1],
+              y1 = brush_coords[1][1];
+          return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
+      }
+  }
   ////////////////////////////////////
 
   return (
@@ -183,6 +183,7 @@ export default function ForceGraph(props) {
           </image>
         </g>
       ))}
+      <g className="brush" ref={brushRef} />
     </>
   );
 }
