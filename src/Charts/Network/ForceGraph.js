@@ -5,9 +5,23 @@ import Circle from "../../ChartComponents/Circle";
 import Line from "../../ChartComponents/Line";
 import InitDevice from './InitDevice';
 
+import ActionIcons from "../../Interactions/ActionIcons";
 import { useEffect, useRef } from "react";
 
 export default function ForceGraph(props) {
+
+  const [selectedAction, setSelectedAction] = useState('cursor');
+  function handleSelectedAction(selectedIcon) {
+    if (selectedAction !== selectedIcon) {
+      setSelectedAction(selectedIcon);
+    }
+  }
+
+  let actions = [
+    { value:"cursor" , label:"Cursor"},
+    { value:"plus" , label:"Add/Remove"},
+    { value:"brush" , label:"Brush"},
+  ];
 
   const initNodes = props.data.bus.map((d) => {
     return {
@@ -19,6 +33,14 @@ export default function ForceGraph(props) {
       ...d,
     };
   });
+
+  // available actions
+  if (["flow", "vsource"].includes(props.selectedValue)) {
+    actions = actions.filter(f => f.value !== "plus");
+    actions = actions.filter(f => f.value !== "brush");
+  } else if (["vm", "load", "mismatch"].includes(props.selectedValue)) {
+    actions = actions.filter(f => f.value !== "plus");
+  } 
 
   // active nodes
   var active_nodes = [];
@@ -142,8 +164,23 @@ export default function ForceGraph(props) {
   }
   ////////////////////////////////////
 
+  console.log(selectedAction);
+
   return (
     <>
+      {actions.map((action, i) => (
+        <image
+          key={action.value}
+          x={-props.margin.left} 
+          y={10 + i * 35} 
+          className="interaction"
+          heigth={25}
+          width={25}
+          href={ActionIcons(action.value)}
+          onClick={() => handleSelectedAction(action.value)}
+          >
+        </image>
+      ))}
       {links.map((d, i) => (
         <Line
           key={d.uid}
@@ -165,8 +202,8 @@ export default function ForceGraph(props) {
             cy={props.yScale(d.y)}
             r={props.originalNodeSize}
             fill={props.colorScale(d.phases.length)}
-            onClick={node_click}
-            onDoubleClick={node_dblclick}
+            onClick={selectedAction === "cursor" ? node_click : null}
+            onDoubleClick={selectedAction === "plus" ? node_dblclick: null}
           />
           <image
             x={props.xScale(d.x)} 
@@ -183,7 +220,7 @@ export default function ForceGraph(props) {
           </image>
         </g>
       ))}
-      <g className="brush" ref={brushRef} />
+      {selectedAction === "brush" && <g className="brush" ref={brushRef} />}
     </>
   );
 }
