@@ -10,13 +10,6 @@ import { useEffect, useRef } from "react";
 
 export default function ForceGraph(props) {
 
-  const [selectedAction, setSelectedAction] = useState('cursor');
-  function handleSelectedAction(selectedIcon) {
-    if (selectedAction !== selectedIcon) {
-      setSelectedAction(selectedIcon);
-    }
-  }
-
   let actions = [
     { value:"cursor" , label:"Cursor"},
     { value:"plus" , label:"Add/Remove"},
@@ -79,7 +72,7 @@ export default function ForceGraph(props) {
       }
       // ---------------------------------------
       // check if a device is already connected at this bus
-      let device = props.data[`${props.selectedValue}`] && props.data[`${props.selectedValue}`].find(f => f.bus === d.uid) || null;
+      let device = (props.data[`${props.selectedValue}`]) && (props.data[`${props.selectedValue}`].find(f => f.bus === d.uid) || null);
       console.log(device);
       if (device) {
         // Remove the device from array
@@ -164,8 +157,6 @@ export default function ForceGraph(props) {
   }
   ////////////////////////////////////
 
-  console.log(selectedAction);
-
   return (
     <>
       {actions.map((action, i) => (
@@ -174,10 +165,11 @@ export default function ForceGraph(props) {
           x={-props.margin.left} 
           y={10 + i * 35} 
           className="interaction"
+          opacity={props.selectedAction === action.value ? 1 : 0.6}
           heigth={25}
           width={25}
           href={ActionIcons(action.value)}
-          onClick={() => handleSelectedAction(action.value)}
+          onClick={() => props.onSelectedAction(action.value)}
           >
         </image>
       ))}
@@ -202,8 +194,8 @@ export default function ForceGraph(props) {
             cy={props.yScale(d.y)}
             r={props.originalNodeSize}
             fill={props.colorScale(d.phases.length)}
-            onClick={selectedAction === "cursor" ? node_click : null}
-            onDoubleClick={selectedAction === "plus" ? node_dblclick: null}
+            onClick={props.selectedAction === "cursor" ? node_click : null}
+            onDoubleClick={props.selectedAction === "plus" ? node_dblclick: null}
           />
           <image
             x={props.xScale(d.x)} 
@@ -220,7 +212,7 @@ export default function ForceGraph(props) {
           </image>
         </g>
       ))}
-      {selectedAction === "brush" && <g className="brush" ref={brushRef} />}
+      {props.selectedAction === "brush" && <g className="brush" ref={brushRef} />}
     </>
   );
 }

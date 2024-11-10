@@ -13,7 +13,6 @@ import GeojsonMap from './Mapping/GeojsonMap';
 import bronx from "./Mapping/bronx.json";
 
 import Form from '../UI/Device/Form';
-import { renderToString } from 'react-dom/server';
 
 const layers = [
   { id: "react", label: "React" },
@@ -66,12 +65,6 @@ export default function NetworkGraph({margin, data, ...props}) {
     network = JSON.parse(JSON.stringify(data));
   }, [data, props.selectedValue]);
 
-  const deviceTooltip = useCallback((bus) => {
-    // Find the device in the network
-    let device = network[`${props.selectedValue}`].find(f => f.bus === bus.uid)
-    return renderToString(Form(props.selectedValue, device));
-  }, [network, props.selectedValue]);
-
   // selected device
   const [selectedDevice, setSelectedDevice] = useState(null);
 
@@ -87,6 +80,14 @@ export default function NetworkGraph({margin, data, ...props}) {
       [identifier]: value
     }))
   };
+
+  // handle network interactions
+  const [selectedAction, setSelectedAction] = useState('cursor');
+  function handleSelectedAction(selectedIcon) {
+    if (selectedAction !== selectedIcon) {
+      setSelectedAction(selectedIcon);
+    }
+  }
 
   return(
     <Card>
@@ -114,7 +115,6 @@ export default function NetworkGraph({margin, data, ...props}) {
           className="network-graph"
           >
           <ForceGraph
-            deviceTooltip={deviceTooltip}
             innerHeight={innerHeight}
             innerWidth={innerWidth}
             margin={margin}
@@ -126,9 +126,11 @@ export default function NetworkGraph({margin, data, ...props}) {
             linkScale={linkScale}
             colorScale={props.colorScale}
             selectedValue={props.selectedValue}
+            selectedAction={selectedAction}
             onSelectBus={props.onSelectBus}
             onSelectDevice={handleSelectDevice}
             onSubmitDevice={handleSubmitDevice}
+            onSelectedAction={handleSelectedAction}
           />
         </ChartContainer>
         }
@@ -140,7 +142,6 @@ export default function NetworkGraph({margin, data, ...props}) {
           className="network-graph"
           >
           <Net
-            deviceTooltip={deviceTooltip}
             innerHeight={innerHeight}
             innerWidth={innerWidth}
             margin={margin}
@@ -153,8 +154,10 @@ export default function NetworkGraph({margin, data, ...props}) {
             colorScale={props.colorScale}
             selectedValue={props.selectedValue}
             onSelectBus={props.onSelectBus}
+            selectedAction={selectedAction}
             onSelectDevice={handleSelectDevice}
             onSubmitDevice={handleSubmitDevice}
+            onSelectedAction={handleSelectedAction}
           />
         </ChartContainer>
         }

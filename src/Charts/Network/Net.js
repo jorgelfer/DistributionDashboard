@@ -2,15 +2,22 @@ import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import Symbol from './Symbol';
 import InitDevice from './InitDevice';
-import styles from './Net.module.css';
+
+import ActionIcons from "../../Interactions/ActionIcons";
 
 export default function Net(props) {
 
+  let actions = [
+    { value:"cursor" , label:"Cursor"},
+    { value:"plus" , label:"Add/Remove"},
+    { value:"brush" , label:"Brush"},
+  ];
+
   const networkRef = useRef();
   useEffect(() => {
+    // d3.selectAll(".nodes").remove();
     d3.selectAll(".node").remove();
     d3.selectAll(".link").remove();
-    d3.selectAll("#graph-tooltip").remove();
 
     const networkContainer = d3.select(networkRef.current);
 
@@ -54,14 +61,14 @@ export default function Net(props) {
       .data(props.data.bus)
       .join("g")
         .attr("class", "node")
-        .on("dblclick", node_dblclick)
+        .on("dblclick", props.selectedAction === "plus"? node_dblclick : null)
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append circles for each node in the graph
     myNodes
       .append('circle')
         .attr('class', 'circle')
-        .on("click", node_click)
+        .on("click", props.selectedAction === "cursor"? node_click : null)
         .attr("r", props.originalNodeSize)
         .style('fill', d => {
           // console.log(d.phases.length);
@@ -202,14 +209,32 @@ export default function Net(props) {
             return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
         }
     }
-    nodeEnter.call(nodeBrush) // calling a d3 brush
+    if (props.selectedAction === "brush") {
+      nodeEnter.call(nodeBrush) // calling a d3 brush
+    }
     //////////////////////////////////
 
   }, [props]);
 
     return (
-      <g 
-      ref={networkRef}
-      />
+      <>
+        {actions.map((action, i) => (
+          <image
+            key={action.value}
+            x={-props.margin.left} 
+            y={10 + i * 35} 
+            className="interaction"
+            opacity={props.selectedAction === action.value ? 1 : 0.6}
+            heigth={25}
+            width={25}
+            href={ActionIcons(action.value)}
+            onClick={() => props.onSelectedAction(action.value)}
+            >
+          </image>
+        ))}
+        <g 
+        ref={networkRef}
+        />
+      </>
     );
 };
