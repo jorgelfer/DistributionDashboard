@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import * as d3 from 'd3';
 
 import Card from '../UI/Card/Card';
@@ -24,7 +24,6 @@ const layers = [
 
 export default function NetworkGraph({margin, data, ...props}) {
 
-  const [activeLayer, setActiveLayer] = useState("react");
   const width = 700;
   const height = 500;
   const innerWidth = width - margin.left - margin.right;
@@ -42,11 +41,6 @@ export default function NetworkGraph({margin, data, ...props}) {
     .domain(d3.extent(data.branch, d => d.f_connections.length))
     .range([2, 6]);
 
-  function layerSelectionHandler(id) {
-    if (activeLayer !== id) {
-      setActiveLayer(id);
-    }
-  };
 
   // The force simulation mutates links and nodes,
   // so, make a deep copy of the dataset 
@@ -65,9 +59,17 @@ export default function NetworkGraph({margin, data, ...props}) {
     network = JSON.parse(JSON.stringify(data));
   }, [data, props.selectedValue]);
 
+  // active layer
+  const [activeLayer, setActiveLayer] = useState("react");
+  // handle layer selection
+  function layerSelectionHandler(id) {
+    if (activeLayer !== id) {
+      setActiveLayer(id);
+    }
+  };
+
   // selected device
   const [selectedDevice, setSelectedDevice] = useState(null);
-
   // handle device selection
   function handleSelectDevice(device) {
     setSelectedDevice(device);
@@ -88,6 +90,12 @@ export default function NetworkGraph({margin, data, ...props}) {
       setSelectedAction(selectedIcon);
     }
   }
+
+  // change action to default when a layer changes or 
+  // when a value is selected
+  useEffect(() => {
+    setSelectedAction('cursor');
+  }, [activeLayer, props.selectedValue]);
 
   return(
     <Card>
