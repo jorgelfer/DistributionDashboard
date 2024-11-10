@@ -64,22 +64,31 @@ export default function ForceGraph(props) {
   }
 
   // Handlers for doubleclick events on nodes
-  function node_dblclick(event) {
+  function group_click(event) {
     let d = props.data.bus.find(d => d.uid === event.target.id);
     if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
       if (props.selectedValue === "dr_load" && !dr_nodes.includes(d.uid)) {
         return;
       }
       // ---------------------------------------
-      // check if a device is already connected at this bus
-      let device = (props.data[`${props.selectedValue}`]) && (props.data[`${props.selectedValue}`].find(f => f.bus === d.uid) || null);
-      console.log(device);
+      // check if a device exist in local data 
+      // create the new device
+      props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`] || [];
+      let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid) || null;
       if (device) {
-        // Remove the device from array
+        // hide the symbol
+        d3.select(event.target.nextElementSibling)
+          .style("display", "none");
+        // Remove from local data
+        props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
+        // Remove device from original data
         props.onSubmitDevice(device, true);
       } else {
-        //
-        console.log("should add device");
+        // show the symbol
+        d3.select(event.target.nextElementSibling)
+          .style("display", "block");
+        // Add to local data
+        props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d, props.data.time.length));
         // update original data
         props.onSubmitDevice(InitDevice(props.selectedValue, d, props.data.time.length), false);
       };
@@ -186,7 +195,12 @@ export default function ForceGraph(props) {
         />
       ))}
       {nodes.map((d, i) => (
-        <g key={d.uid} className="node">
+        <g 
+          key={d.uid} 
+          id={d.uid}
+          className="node"
+          onClick={props.selectedAction === "plus" ? group_click: null}
+        >
           <Circle
             class="circle"
             id={d.uid}
@@ -195,7 +209,6 @@ export default function ForceGraph(props) {
             r={props.originalNodeSize}
             fill={props.colorScale(d.phases.length)}
             onClick={props.selectedAction === "cursor" ? node_click : null}
-            onDoubleClick={props.selectedAction === "plus" ? node_dblclick: null}
           />
           <image
             x={props.xScale(d.x)} 

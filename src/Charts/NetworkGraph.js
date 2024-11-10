@@ -41,7 +41,6 @@ export default function NetworkGraph({margin, data, ...props}) {
     .domain(d3.extent(data.branch, d => d.f_connections.length))
     .range([2, 6]);
 
-
   // The force simulation mutates links and nodes,
   // so, make a deep copy of the dataset 
   var network = JSON.parse(JSON.stringify(data));

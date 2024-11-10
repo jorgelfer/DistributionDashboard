@@ -61,7 +61,7 @@ export default function Net(props) {
       .data(props.data.bus)
       .join("g")
         .attr("class", "node")
-        .on("dblclick", props.selectedAction === "plus"? node_dblclick : null)
+        .on("click", props.selectedAction === "plus"? group_click : null)
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append circles for each node in the graph
@@ -132,8 +132,8 @@ export default function Net(props) {
       props.onSelectBus([d]);
     }
 
-    // Handlers for dblclick events on nodes
-    function node_dblclick(event, d) {
+    // Handlers for click events on node groups
+    function group_click(event, d) {
       if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
         if (props.selectedValue === "dr_load" && !dr_nodes.includes(d.uid)) {
           return;
