@@ -15,11 +15,12 @@ import bronx from "./Mapping/bronx.json";
 import Form from '../UI/Device/Form';
 
 const layers = [
-  { id: "react", label: "React" },
-  { id: "coordinates", label: "Coordinates" },
-  { id: "force", label: "Force" },
-  { id: "nodebreaker", label: "Node Breaker" },
-  { id: "geojson", label: "Geojson" },
+  { id: "react", label: "React.js" },
+  { id: "coordinates", label: "D3.js" },
+  // { id: "coordinates", label: "Coordinates" },
+  // { id: "force", label: "Force" },
+  // { id: "nodebreaker", label: "Node Breaker" },
+  // { id: "geojson", label: "Geojson" },
 ];
 
 export default function NetworkGraph({margin, data, ...props}) {

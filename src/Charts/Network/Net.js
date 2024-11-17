@@ -13,6 +13,14 @@ export default function Net(props) {
     { value:"brush" , label:"Brush"},
   ];
 
+  // available actions
+  if (["flow", "vsource"].includes(props.selectedValue)) {
+    actions = actions.filter(f => f.value !== "plus");
+    actions = actions.filter(f => f.value !== "brush");
+  } else if (["vm", "load", "mismatch"].includes(props.selectedValue)) {
+    actions = actions.filter(f => f.value !== "plus");
+  } 
+
   const networkRef = useRef();
   useEffect(() => {
     // d3.selectAll(".nodes").remove();
@@ -190,7 +198,7 @@ export default function Net(props) {
     //////////////////////////////////
     // Brush
     let nodeBrush = d3.brush().extent([[0, 0], [props.innerWidth, props.innerHeight]])
-        .on('brush', function (event) {
+        .on('end', function (event) {
             // console.log('event::: ', event);
             // console.log('event.selection::: ', event.selection);
             let brushedArea = event.selection

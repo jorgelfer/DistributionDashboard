@@ -16,6 +16,8 @@ export default function ForceGraph(props) {
     { value:"brush" , label:"Brush"},
   ];
 
+  const [showSymbol, setShowSymbol] = useState(false);
+
   const initNodes = props.data.bus.map((d) => {
     return {
       ...d,
@@ -63,7 +65,7 @@ export default function ForceGraph(props) {
     props.onSelectBus([d]);
   }
 
-  // Handlers for doubleclick events on nodes
+  // Handlers for click events on node groups
   function group_click(event) {
     let d = props.data.bus.find(d => d.uid === event.target.id);
     if (["battery", "dr_load", "flex_gen", "flex_load"].includes(props.selectedValue)) {
@@ -77,16 +79,14 @@ export default function ForceGraph(props) {
       let device = props.data[`${props.selectedValue}`].find(f => f.bus === d.uid) || null;
       if (device) {
         // hide the symbol
-        d3.select(event.target.nextElementSibling)
-          .style("display", "none");
+        setShowSymbol(!showSymbol);
         // Remove from local data
         props.data[`${props.selectedValue}`] = props.data[`${props.selectedValue}`].filter(f => f.bus !== d.uid);
         // Remove device from original data
         props.onSubmitDevice(device, true);
       } else {
         // show the symbol
-        d3.select(event.target.nextElementSibling)
-          .style("display", "block");
+        setShowSymbol(!showSymbol);
         // Add to local data
         props.data[`${props.selectedValue}`].push(InitDevice(props.selectedValue, d, props.data.time.length));
         // update original data
@@ -140,7 +140,7 @@ export default function ForceGraph(props) {
       })
 
     nodeBrush
-      .on('brush', function (event) {
+      .on('end', function (event) {
         // console.log('event::: ', event);
         // console.log('event.selection::: ', event.selection);
         if (!event.selection) {
@@ -216,7 +216,7 @@ export default function ForceGraph(props) {
             className="symbol"
             id={d.uid}
             transform="translate(5,5)"
-            display={active_nodes.includes(d.uid) ? "block" : "none"}
+            display={(active_nodes.includes(d.uid) && showSymbol) ? "block" : "none"}
             heigth={25}
             width={25}
             href={Symbol(props.selectedValue)}
