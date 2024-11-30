@@ -8,48 +8,49 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
         buses_uid = selectedBuses.buses.map(d => d.uid)
     }
 
+    // voltage data
+    let vdata = [] 
+    network.bus.forEach((d, i) => {
+        if (buses_uid.includes(d.uid)) {
+            d["phases"].forEach((d2, i2) => {
+                vdata.push(d.vm[d2.toString()].map((d3, i3) =>({
+                    "time": dateParser(network["time"][i3]),
+                    "val": +d3 / (+d.kV_base * 1000),
+                    "phase": d2.toString(),
+                    "bus": d.uid,
+                    "uid": d.uid + "." + d2.toString(),
+                })));
+            })
+        };
+    })
+    // push lower limit 
+    const vm_lb = 1 - (isNaN(network["ansi"]) ? 0.05 : +network["ansi"])
+    network["time"].forEach((d, i) => {
+        vdata.push({
+            "time": dateParser(d),
+            "val":  vm_lb,
+            "phase": "0",
+            "uid": "lb.0",
+        });
+    })
+    // push upper limit 
+    const vm_ub = 1 + (isNaN(network["ansi"]) ? 0.05 : +network["ansi"])
+    network["time"].forEach((d, i) => {
+        vdata.push({
+            "time": dateParser(d),
+            "val": vm_ub,
+            "phase": "4",
+            "uid": "ub.0",
+        });
+    })
+
+    let vextent = [vm_lb-0.05, vm_ub+0.05]
+
     // initialize data container
     let data = []
     switch (selectedValue) {
-        case "vm":
-            // organize data
-            network.bus.forEach((d, i) => {
-                if (buses_uid.includes(d.uid)) {
-                    d["phases"].forEach((d2, i2) => {
-                        data.push(d.vm[d2.toString()].map((d3, i3) =>({
-                            "time": dateParser(network["time"][i3]),
-                            "val": +d3 / (+d.kV_base * 1000),
-                            "phase": d2.toString(),
-                            "bus": d.uid,
-                            "uid": d.uid + "." + d2.toString(),
-                        })));
-                    })
-                };
-            })
-            // push lower limit 
-            const vm_lb = 1 - (isNaN(network["ansi"]) ? 0.05 : +network["ansi"])
-            network["time"].forEach((d, i) => {
-                data.push({
-                    "time": dateParser(d),
-                    "val":  vm_lb,
-                    "phase": "0",
-                    "uid": "lb.0",
-                });
-            })
-            // push upper limit 
-            const vm_ub = 1 + (isNaN(network["ansi"]) ? 0.05 : +network["ansi"])
-            network["time"].forEach((d, i) => {
-                data.push({
-                    "time": dateParser(d),
-                    "val": vm_ub,
-                    "phase": "4",
-                    "uid": "ub.0",
-                });
-            })
-            return [data, [vm_lb-0.05, vm_ub+0.05]];
-
         case "flow":  
-            return [data, [0,0]];
+            return [vdata, vextent, data, [0,0]];
 
         case "vsource":   
             // organize data
@@ -68,7 +69,7 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
                     })
                 }
             })
-            return [data, [0, d3.max(data.flat().map(d=>d.s))]];
+            return [vdata, vextent, data, [0, d3.max(data.flat().map(d=>d.s))]];
 
         case "load":   
             // organize data
@@ -87,7 +88,7 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
                     })
                 }
             });
-            return [data, [0, d3.max(data.flat().map(d=>d.s))]];
+            return [vdata, vextent, data, [0, d3.max(data.flat().map(d=>d.s))]];
 
         case "battery":
             // organize data
@@ -97,7 +98,9 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
                     d["phases"].forEach((d2, i2) => {
                         data.push(d.soc[d2.toString()].map((d3, i3) =>({
                             "time": dateParser(network["time"][i3]),
-                            "val": +d3,
+                            "soc": +d3,
+                            "p_bsc": +d.p_bsc[d2.toString()][i3],
+                            "p_bsd": +d.p_bsd[d2.toString()][i3],
                             "phase": d2.toString(),
                             "bus": d.bus,
                             "uid": d.uid + "." + d2.toString(),
@@ -105,7 +108,7 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
                     })
                 }
             });
-            return [data, [0, d3.max(data.flat().map(d=>d["val"]))]];
+            return [vdata, vextent, data, [0, d3.max(data.flat().map(d=>d["val"]))]];
 
         case "dr_load":   
             // organize data
@@ -125,7 +128,7 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
                     })
                 }
             });
-            return [data, [0, d3.max(data.flat().map(d=>d.s))]];
+            return [vdata, vextent, data, [0, d3.max(data.flat().map(d=>d.s))]];
 
         case "flex_gen":   
             const flex_gen = (network["flex_gen"] || [])
@@ -144,7 +147,7 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
                     })
                 }
             })
-            return [data, [0, d3.max(data.flat().map(d=>d.p))]];
+            return [vdata, vextent, data, [0, d3.max(data.flat().map(d=>d.p))]];
 
         case "flex_load":   
             const flex_load = (network["flex_load"] || [])
@@ -163,7 +166,7 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
                     })
                 }
             })
-            return [data, [0, d3.max(data.flat().map(d=>d.p))]];
+            return [vdata, vextent, data, [0, d3.max(data.flat().map(d=>d.p))]];
 
         case "mismatch":   
             // organize data
@@ -184,10 +187,10 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
             })
 
             // vertical scale
-            return [data, d3.extent(data.flat().map(d=>d.s))];
+            return [vdata, vextent, data, d3.extent(data.flat().map(d=>d.s))];
 
         default:  
-            return [data, [0,0]];
+            return [vdata, vextent, data, [0,0]];
     };
 
 };

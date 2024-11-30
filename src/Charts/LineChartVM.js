@@ -7,15 +7,10 @@ import Curve from '../ChartComponents/Curve';
 import Axis from '../ChartComponents/Axis';
 
 export default function LineChartVM(props) {
-  const width = 700;
-  const height = 500;
+  const width = 500;
+  const height = 250;
   const innerWidth = width - props.margin.left - props.margin.right;
   const innerHeight = height - props.margin.top - props.margin.bottom;
-
-  let title = "Voltage Magnitude [p.u.]";
-  if (props.selectedValue === "battery") {
-    title = "Battery State of Charge [kWh]";
-  }
 
   // group data
   const sumstat = d3.group(props.data.flat(), d => d.uid);
@@ -35,7 +30,7 @@ export default function LineChartVM(props) {
 
   return(
     <Card>
-      <h2>Operation Values</h2>
+      <h2>Voltage Magnitude</h2>
       <ChartContainer
         width={width}
         height={height}
@@ -57,7 +52,7 @@ export default function LineChartVM(props) {
           scale={yScale}
           innerWidth={innerWidth}
           innerHeight={innerHeight}
-          label={title}
+          label="Voltage Magnitude [p.u.]"
         />
         {uids.map((uid, i) => (
           <g key={`line-${uid}`}>

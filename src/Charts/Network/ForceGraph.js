@@ -62,6 +62,7 @@ export default function ForceGraph(props) {
   // Handler for click events on devices
   function node_click(event) {
     let d = props.data.bus.find(d => d.uid === event.target.id);
+    console.log(d);
     props.onSelectBus([d]);
   }
 
@@ -216,7 +217,7 @@ export default function ForceGraph(props) {
             className="symbol"
             id={d.uid}
             transform="translate(5,5)"
-            display={(active_nodes.includes(d.uid) && showSymbol) ? "block" : "none"}
+            display={(active_nodes.includes(d.uid) || (active_nodes.includes(d.uid) && showSymbol)) ? "block" : "none"}
             heigth={25}
             width={25}
             href={Symbol(props.selectedValue)}

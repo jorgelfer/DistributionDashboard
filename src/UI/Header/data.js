@@ -6,20 +6,15 @@ import loadImg from "../../assets/load.png";
 import mismatchImg from "../../assets/mismatch.png";
 import pvImg from "../../assets/pv_system.png";
 import substationImg from "../../assets/substation.png";
-import vmImg from "../../assets/voltage.png";
 
 export const DATADISPLAY = {
-  vm: {
-    image: vmImg,
-    title: 'Voltage Magnitude',
+  vsource: {
+    image: substationImg,
+    title: 'Substation',
   },
   flow:{
     image: flowImg,
     title: 'Power Flow',
-  },
-  vsource: {
-    image: substationImg,
-    title: 'Substation',
   },
   load: {
     image: loadImg,

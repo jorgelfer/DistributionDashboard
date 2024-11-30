@@ -2,14 +2,17 @@ import "./Axis.css";
 
 const AxisTimeBottom = props => {
 
+  const numberOfTicks = (props.innerWidth / 50);
+  const ticks = props.scale.ticks(numberOfTicks);
+
   return (
     <g className="axis" transform={`translate(0, ${props.innerHeight})`} >
       <line x1={0} y1={0} x2={props.innerWidth} y2={0} />
-      {props.time.map(time => (
-        <g key={time} transform={`translate(${props.scale(props.dateParser(time))}, 0)`}>
+      {ticks.map(time => (
+        <g key={time} transform={`translate(${props.scale(time)}, 0)`}>
           <line x1={0} y1={0} x2={0} y2={5} />
           <text x={0} y={20} textAnchor="middle" >
-            {props.formatTime(props.dateParser(time))}
+            {props.formatTime(time)}
           </text>
         </g>
       ))}

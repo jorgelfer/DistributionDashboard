@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import Header from "../UI/Header/Header";
 import LineChartVM from './LineChartVM';
 import LineChartPQS from './LineChartPQS';
+import LineChartBSS from './LineChartBSS';
 import NetworkGraph from './NetworkGraph';
 import { updateData } from "../Data/update";
 
@@ -17,7 +18,7 @@ export default function Charts(props) {
   const dateParser = d3.timeParse("%Y-%m-%dT%H:%M");
 
   // Header
-  const [selectedValue, setSelectedValue] = useState('vm');
+  const [selectedValue, setSelectedValue] = useState('vsource');
   function handleClick(selectedButton) {
     if (selectedValue !== selectedButton) {
       setSelectedValue(selectedButton);
@@ -37,7 +38,7 @@ export default function Charts(props) {
     }));
   };
 
-  const [data, y_extent] = updateData(props.data, selectedValue, selectedBuses, dateParser);
+  const [vdata, vextent, data, y_extent] = updateData(props.data, selectedValue, selectedBuses, dateParser);
   return (
     <>
       <Header handleClick={handleClick} selectedValue={selectedValue} />
@@ -56,26 +57,39 @@ export default function Charts(props) {
             <button className="login-button" onClick={() => handleSelectBus([])}>Release</button>
           </p>}
         </div>
-        <div className='two'>
-          {["vm", "battery"].includes(selectedValue) &&
-          <LineChartVM 
-            margin={margin} 
-            data={data} 
-            y_extent={y_extent} 
-            colorScale={colorScale}
-            time={props.data["time"]}
-            dateParser={dateParser}
-            selectedValue={selectedValue}
-          />}
-          {["vsource", "load", "dr_load", "flex_gen", "flex_load", "mismatch"].includes(selectedValue) &&
-          <LineChartPQS 
-            margin={margin} 
-            data={data} 
-            y_extent={y_extent} 
-            colorScale={colorScale}
-            time={props.data["time"]}
-            dateParser={dateParser}
-          />}
+        <div className='row'>
+          <div className='two'>
+            <LineChartVM 
+              margin={margin} 
+              data={vdata} 
+              y_extent={vextent} 
+              colorScale={colorScale}
+              time={props.data["time"]}
+              dateParser={dateParser}
+              selectedValue={selectedValue}
+            />
+          </div>
+          <div className='three'>
+            {["battery"].includes(selectedValue) &&
+            <LineChartBSS 
+              margin={margin} 
+              data={data} 
+              y_extent={y_extent} 
+              colorScale={colorScale}
+              time={props.data["time"]}
+              dateParser={dateParser}
+              selectedValue={selectedValue}
+            />}
+            {["vsource", "load", "dr_load", "flex_gen", "flex_load", "mismatch"].includes(selectedValue) &&
+            <LineChartPQS 
+              margin={margin} 
+              data={data} 
+              y_extent={y_extent} 
+              colorScale={colorScale}
+              time={props.data["time"]}
+              dateParser={dateParser}
+            />}
+          </div>
         </div>
       </div>
     </>

@@ -1,5 +1,5 @@
 #main-header {
-    background: linear-gradient(180deg, #0c4a70, #1a1d1d);
+    background:#0c4a70; /*linear-gradient(180deg, #0c4a70, #1a1d1d); */
     height: 100px;
     width: 100%;
     display: block;
@@ -14,7 +14,7 @@
 }
 
 .main-tab {
-    width: 11.1%;
+    width: 12.5%;
     float: left;
     display: inline-block;
     vertical-align: top;

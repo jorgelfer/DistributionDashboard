@@ -8,14 +8,14 @@ import Curve from '../ChartComponents/Curve';
 import Axis from '../ChartComponents/Axis';
 
 const powers = [
-  { id: "p", label: "Active" },
-  { id: "q", label: "Reactive" },
-  { id: "s", label: "Aparent" },
+  { id: "soc", label: "SOC" },
+  { id: "charge", label: "Charge" },
+  { id: "discharge", label: "Discharge" },
 ];
 
-export default function LineChartPQS(props) {
+export default function LineChartBSS(props) {
 
-  const [activePower, setActivePower] = useState("p");
+  const [activeValue, setActiveValue] = useState("soc");
 
   const width = 500;
   const height = 300;
@@ -29,8 +29,8 @@ export default function LineChartPQS(props) {
   var uids = Array.from(sumstat.keys()); // list of group names
 
   // scales 
-  const xScale = d3.scaleTime()   
-    .domain(d3.extent(props.time, d => props.dateParser(d)))   
+  const xScale = d3.scaleTime() 
+    .domain(d3.extent(props.time, d => props.dateParser(d)))
     .range([0, innerWidth]);
 
   const formatTime = d3.timeFormat("%H")
@@ -39,22 +39,22 @@ export default function LineChartPQS(props) {
     .domain(props.y_extent)
     .range([innerHeight, 0]);
 
-  function powerSelectionHandler(id) {
-    if (activePower !== id) {
-      setActivePower(id);
+  function valueSelectionHandler(id) {
+    if (activeValue !== id) {
+      setActiveValue(id);
     }
   };
 
   function y_label(d) {
-    switch(activePower) {
-      case "p":
-        return "Power [kW]";
-      case "q":
-        return "Power [kvar]";
-      case "s":
-        return "Power [kVA]";
+    switch(activeValue) {
+      case "SOC":
+        return "SOC [kW]";
+      case "charge":
+        return "Power Charge [kW]";
+      case "discharge":
+        return "Power Discharge [kW]";
       default:
-        return "Power [kW]";
+        return "SOC [kWh]";
     }
   }
 
@@ -63,8 +63,8 @@ export default function LineChartPQS(props) {
       <h2>Operation Values</h2>
       <Buttons
         buttons={powers}
-        activeButton={activePower}
-        onButtonSelection={powerSelectionHandler}
+        activeButton={activeValue}
+        onButtonSelection={valueSelectionHandler}
       />
       <ChartContainer
         width={width}
@@ -96,7 +96,7 @@ export default function LineChartPQS(props) {
               xScale={xScale}
               yScale={yScale}
               xAccessor="time"
-              yAccessor={activePower}
+              yAccessor={activeValue}
               stroke={props.colorScale(sumstat.get(uid)[0].phase)}
               strokeWidth={2}
             />

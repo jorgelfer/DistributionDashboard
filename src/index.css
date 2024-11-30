@@ -99,20 +99,10 @@ a:hover, a:focus {
   /* calculate the height. Header is 30px */
 }
 
-.sidebar{
-  width: 200px;
-}
-
-.content {
-  background-color: #fff;
-  flex: 1 0 auto;
-  /* enable grow, disable shrink */
-}
-
 .wrapper {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2px;
+  /* gap: -10px; */
   grid-auto-rows: minmax(100px, auto);
   place-items: center;
   justify-content: center; 
@@ -126,11 +116,40 @@ a:hover, a:focus {
   max-width: 700px;
 }
 
-.two {
+.row {
   grid-column: 2;
   grid-row: 1;
+  display: flex;
+  flex-wrap: wrap;
+  /* gap: -10px; */
   width: 100%;
-  max-width: 700px;
+  max-width: 500px;
+  /* margin-left: -10px;
+  margin-right: -10px; */
+  /* max-width: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-left: -10px;
+  margin-right: -10px; */
+}
+
+.two {
+  /* grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  max-width: 500px; */
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.three {
+  /* grid-column: 2;
+  grid-row: 2;
+  width: 100%;
+  max-width: 500px; */
+  flex: 0 0 100%;
+  max-width: 100%;
 }
 
 .link {
