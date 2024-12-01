@@ -116,14 +116,14 @@ a:hover, a:focus {
   max-width: 700px;
 }
 
-.row {
-  grid-column: 2;
+/* .row { */
+  /* grid-column: 2;
   grid-row: 1;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; */
   /* gap: -10px; */
-  width: 100%;
-  max-width: 500px;
+  /* width: 100%; */
+  /* max-width: 500px; */
   /* margin-left: -10px;
   margin-right: -10px; */
   /* max-width: 500px;
@@ -132,7 +132,7 @@ a:hover, a:focus {
   justify-content: center;
   margin-left: -10px;
   margin-right: -10px; */
-}
+/* } */
 
 .two {
   /* grid-column: 2;
@@ -143,6 +143,11 @@ a:hover, a:focus {
   max-width: 100%;
 }
 
+.main-title {
+  justify-content: center;
+  text-align: center
+}
+
 .three {
   /* grid-column: 2;
   grid-row: 2;
@@ -150,6 +155,52 @@ a:hover, a:focus {
   max-width: 500px; */
   flex: 0 0 100%;
   max-width: 100%;
+}
+.row {
+  place-items: center;
+  justify-content: center; 
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: -10px;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+.col,
+[class^="col-"],
+[class*=" col-"] {
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 10px;
+  padding-left: 10px;
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+}
+.col-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+.col-9 {
+  flex: 0 0 65%;
+  max-width: 75%;
+}
+.col-8 {
+  flex: 0 0 66.67%;
+  max-width: 66.67%;
+}
+.col-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+.col-4 {
+  flex: 0 0 33.33%;
+  max-width: 33.33%;
+}
+.col-3 {
+  margin-top: -5px;
+  flex: 0 0 25%;
+  max-width: 25%;
 }
 
 .link {

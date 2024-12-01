@@ -9,16 +9,16 @@ import Axis from '../ChartComponents/Axis';
 
 const powers = [
   { id: "soc", label: "SOC" },
-  { id: "charge", label: "Charge" },
-  { id: "discharge", label: "Discharge" },
+  { id: "p_bsc", label: "Charge" },
+  { id: "p_bsd", label: "Discharge" },
 ];
 
 export default function LineChartBSS(props) {
 
   const [activeValue, setActiveValue] = useState("soc");
 
-  const width = 500;
-  const height = 300;
+  const width = 400;
+  const height = 245;
   const innerWidth = width - props.margin.left - props.margin.right;
   const innerHeight = height - props.margin.top - props.margin.bottom;
 
@@ -47,11 +47,11 @@ export default function LineChartBSS(props) {
 
   function y_label(d) {
     switch(activeValue) {
-      case "SOC":
+      case "soc":
         return "SOC [kW]";
-      case "charge":
+      case "p_bsc":
         return "Power Charge [kW]";
-      case "discharge":
+      case "p_bsd":
         return "Power Discharge [kW]";
       default:
         return "SOC [kWh]";
@@ -60,7 +60,7 @@ export default function LineChartBSS(props) {
 
   return(
     <Card>
-      <h2>Operation Values</h2>
+      <h2>Operation Values: {props.selectedValue}</h2>
       <Buttons
         buttons={powers}
         activeButton={activeValue}

@@ -7,8 +7,8 @@ import Curve from '../ChartComponents/Curve';
 import Axis from '../ChartComponents/Axis';
 
 export default function LineChartVM(props) {
-  const width = 500;
-  const height = 250;
+  const width = 400;
+  const height = 245;
   const innerWidth = width - props.margin.left - props.margin.right;
   const innerHeight = height - props.margin.top - props.margin.bottom;
 

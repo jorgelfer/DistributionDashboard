@@ -42,9 +42,9 @@ export default function Charts(props) {
   return (
     <>
       <Header handleClick={handleClick} selectedValue={selectedValue} />
-      <h1>Distribution Dashboard</h1>
-      <div className='wrapper'>
-        <div className='one'>
+      <h1 className='main-title'>Distribution System Dashboard</h1>
+      <div className='row'>
+        <div className='col-9'>
           <NetworkGraph 
             margin={margin} 
             data={props.data} 
@@ -57,38 +57,41 @@ export default function Charts(props) {
             <button className="login-button" onClick={() => handleSelectBus([])}>Release</button>
           </p>}
         </div>
-        <div className='row'>
-          <div className='two'>
-            <LineChartVM 
-              margin={margin} 
-              data={vdata} 
-              y_extent={vextent} 
-              colorScale={colorScale}
-              time={props.data["time"]}
-              dateParser={dateParser}
-              selectedValue={selectedValue}
-            />
-          </div>
-          <div className='three'>
-            {["battery"].includes(selectedValue) &&
-            <LineChartBSS 
-              margin={margin} 
-              data={data} 
-              y_extent={y_extent} 
-              colorScale={colorScale}
-              time={props.data["time"]}
-              dateParser={dateParser}
-              selectedValue={selectedValue}
-            />}
-            {["vsource", "load", "dr_load", "flex_gen", "flex_load", "mismatch"].includes(selectedValue) &&
-            <LineChartPQS 
-              margin={margin} 
-              data={data} 
-              y_extent={y_extent} 
-              colorScale={colorScale}
-              time={props.data["time"]}
-              dateParser={dateParser}
-            />}
+        <div className='col-3'>
+          <div className='row'>
+            <div className='col-12'>
+              <LineChartVM 
+                margin={margin} 
+                data={vdata} 
+                y_extent={vextent} 
+                colorScale={colorScale}
+                time={props.data["time"]}
+                dateParser={dateParser}
+                selectedValue={selectedValue}
+              />
+            </div>
+            <div className='col-12'>
+              {["battery"].includes(selectedValue) &&
+              <LineChartBSS 
+                margin={margin} 
+                data={data} 
+                y_extent={y_extent} 
+                colorScale={colorScale}
+                time={props.data["time"]}
+                dateParser={dateParser}
+                selectedValue={selectedValue}
+              />}
+              {["vsource", "load", "dr_load", "flex_gen", "flex_load", "mismatch"].includes(selectedValue) &&
+              <LineChartPQS 
+                margin={margin} 
+                data={data} 
+                y_extent={y_extent} 
+                colorScale={colorScale}
+                time={props.data["time"]}
+                dateParser={dateParser}
+                selectedValue={selectedValue}
+              />}
+            </div>
           </div>
         </div>
       </div>

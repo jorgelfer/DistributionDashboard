@@ -108,7 +108,7 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
                     })
                 }
             });
-            return [vdata, vextent, data, [0, d3.max(data.flat().map(d=>d["val"]))]];
+            return [vdata, vextent, data, [0, d3.max(data.flat().map(d=>d["soc"]))]];
 
         case "dr_load":   
             // organize data
@@ -171,19 +171,21 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
         case "mismatch":   
             // organize data
             network.bus.forEach((d, i) => {
-                d["phases"].forEach((d2, i2) => {
-                    if (d["p_i"] !== undefined) {
-                        data.push(d.p_i[d2.toString()].map((d3, i3) =>({
-                            "time": dateParser(network["time"][i3]),
-                            "p": +d3,
-                            "q": +d.q_i[d2.toString()][i3],
-                            "s": Math.sqrt(Math.pow(+d3,2) + Math.pow(+d.q_i[d2.toString()][i3],2)),
-                            "phase": d2.toString(),
-                            "bus": d.bus,
-                            "uid": d.uid + "." + d2.toString(),
-                        })));
-                    }
-                })
+                if (buses_uid.includes(d.uid)) {
+                    d["phases"].forEach((d2, i2) => {
+                        if (d["p_i"] !== undefined) {
+                            data.push(d.p_i[d2.toString()].map((d3, i3) =>({
+                                "time": dateParser(network["time"][i3]),
+                                "p": +d3,
+                                "q": +d.q_i[d2.toString()][i3],
+                                "s": Math.sqrt(Math.pow(+d3,2) + Math.pow(+d.q_i[d2.toString()][i3],2)),
+                                "phase": d2.toString(),
+                                "bus": d.bus,
+                                "uid": d.uid + "." + d2.toString(),
+                            })));
+                        }
+                    })
+                }
             })
 
             // vertical scale

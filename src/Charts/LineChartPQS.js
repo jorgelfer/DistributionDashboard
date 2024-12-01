@@ -17,8 +17,8 @@ export default function LineChartPQS(props) {
 
   const [activePower, setActivePower] = useState("p");
 
-  const width = 500;
-  const height = 300;
+  const width = 400;
+  const height = 245;
   const innerWidth = width - props.margin.left - props.margin.right;
   const innerHeight = height - props.margin.top - props.margin.bottom;
 
@@ -60,7 +60,7 @@ export default function LineChartPQS(props) {
 
   return(
     <Card>
-      <h2>Operation Values</h2>
+      <h2>Operation Values: {props.selectedValue}</h2>
       <Buttons
         buttons={powers}
         activeButton={activePower}

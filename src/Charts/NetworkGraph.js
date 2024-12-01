@@ -25,8 +25,8 @@ const layers = [
 
 export default function NetworkGraph({margin, data, ...props}) {
 
-  const width = 700;
-  const height = 500;
+  const width = 1000;
+  const height = 542;
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
   const originalNodeSize = 6;
