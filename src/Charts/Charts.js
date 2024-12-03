@@ -39,11 +39,12 @@ export default function Charts(props) {
   };
 
   const [vdata, vextent, data, y_extent] = updateData(props.data, selectedValue, selectedBuses, dateParser);
+
   return (
     <>
       <Header handleClick={handleClick} selectedValue={selectedValue} />
       <h1 className='main-title'>Distribution System Dashboard</h1>
-      <div className='row'>
+      <div ref={props.printRef} className='row'>
         <div className='col-9'>
           <NetworkGraph 
             margin={margin} 

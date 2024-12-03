@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Button from "../UI/Button";
 import { fetchQstsData } from './https';
 import DisplayScheduling from './DisplayScheduling';
@@ -6,12 +6,8 @@ import useFetch from './useFetch';
 import Charts from '../Charts/Charts';
 import Error from '../UI/Error/Error';
 
-
-// import ReactPDF from '@react-pdf/renderer';
-import { PDFViewer } from '@react-pdf/renderer';
-import MyDocument from '../UI/Report/MyDocument';
-
-
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 export default function Fetching({networkModel, inFile1}) {
 
@@ -26,9 +22,22 @@ export default function Fetching({networkModel, inFile1}) {
   }
 
   const [isReporting, setIsReporting] = useState(false);
-  function handleReport() {
-    setIsReporting((curIsReporting) => !curIsReporting);
-  }
+
+  const printRef = useRef();
+  const handleDownloadPdf = async () => {
+    const element = printRef.current;
+    const canvas = await html2canvas(element);
+    const data = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF();
+    const imgProperties = pdf.getImageProperties(data);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight =
+      (imgProperties.height * pdfWidth) / imgProperties.width;
+
+    pdf.addImage(data, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('print.pdf');
+  };
 
   const qstsURL = `http://127.0.0.1:5000/qsts/${networkModel}/${inFile1}`;
   const {loading, data, error} = useFetch(fetchQstsData, qstsURL);
@@ -42,7 +51,7 @@ export default function Fetching({networkModel, inFile1}) {
       {!isReporting && !isScheduling && <>
           {loading && <div className="loading">Loading...</div>}
           {!loading && <>
-            <Charts data={data} />
+            <Charts data={data} printRef={printRef}/>
           </>}
        </>}
       {!isReporting && isScheduling && schedulingData === null && <>
@@ -54,11 +63,6 @@ export default function Fetching({networkModel, inFile1}) {
       {!isReporting && isScheduling && schedulingData !== null && <>
         <Charts data={schedulingData} />
       </>}
-      {isReporting && <div className='report'>
-        <PDFViewer>
-          <MyDocument />
-        </PDFViewer>
-      </div>}
       <div className="buttons">
         <Button
           id="qsts"
@@ -74,7 +78,7 @@ export default function Fetching({networkModel, inFile1}) {
         />
       </div>
       <p className="form-actions">
-        <button className="login-button" onClick={() => handleReport()}>Report</button>
+        <button className="login-button" onClick={handleDownloadPdf}>Report</button>
       </p>
     </>
   );
