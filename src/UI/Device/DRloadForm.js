@@ -60,7 +60,15 @@ export default function DRloadForm({selectedValue, device, onSelected, onEntered
               id={`terminal_${terminal}`}
               name="terminals"
               checked={device.phases.includes(terminal)}
-              onChange={(event) => onEnteredValues("phases", device.phases.includes(terminal) ? device.phases.filter(f => f !== terminal) : [...device.phases, terminal])}
+              onChange={(event) => {
+                if (device.phases.includes(terminal)) {
+                  onEnteredValues("phases", device.phases.includes(terminal) ? device.phases.filter(f => f !== terminal) : [...device.phases, terminal])
+                  onEnteredValues("p", Object.fromEntries(Object.entries(device.p).filter(([key, value]) => key !== terminal.toString())));
+                } else {
+                  onEnteredValues("phases", [...device.phases, terminal])
+                  onEnteredValues("p", {...device.p, [terminal.toString()]: Array(24).fill(0)});
+                }
+              }}
             />
             <label className={classes.label} htmlFor={terminal}>{terminal}</label>
           </div>

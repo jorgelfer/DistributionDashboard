@@ -29,7 +29,7 @@ export default function InitDevice(selectedValue, bus, T) {
               bus: bus.uid,
               terminals: bus.phases,
               phases: [bus.phases[0]],
-              cost: 0.1,
+              cost: 0.01,
               power_rating: 10,
               p: vdict,
             };

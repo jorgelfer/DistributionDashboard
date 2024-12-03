@@ -130,7 +130,19 @@ export default function BatteryForm({selectedValue, device, onSelected, onEntere
               id={`terminal_${terminal}`}
               name="terminals"
               checked={device.phases.includes(terminal)}
-              onChange={(event) => onEnteredValues("phases", device.phases.includes(terminal) ? device.phases.filter(f => f !== terminal) : [...device.phases, terminal])}
+              onChange={(event) => {
+                if (device.phases.includes(terminal)) {
+                  onEnteredValues("phases", device.phases.filter(f => f !== terminal));
+                  onEnteredValues("soc", Object.fromEntries(Object.entries(device.soc).filter(([key, value]) => key !== terminal.toString())));
+                  onEnteredValues("p_bsc", Object.fromEntries(Object.entries(device.p_bsc).filter(([key, value]) => key !== terminal.toString())));
+                  onEnteredValues("p_bsd", Object.fromEntries(Object.entries(device.p_bsd).filter(([key, value]) => key !== terminal.toString())));
+                } else {
+                  onEnteredValues("phases", [...device.phases, terminal]);
+                  onEnteredValues("soc", {...device.soc, [terminal.toString()]: Array(24).fill(0)});
+                  onEnteredValues("p_bsc", {...device.p_bsc, [terminal.toString()]: Array(24).fill(0)});
+                  onEnteredValues("p_bsd", {...device.p_bsd, [terminal.toString()]: Array(24).fill(0)});
+                }
+            }}
             />
             <label className={classes.label} htmlFor={terminal}>{terminal}</label>
           </div>
