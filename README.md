@@ -65,27 +65,16 @@ Ensure the following are installed:
    cd test_dashboard
    ```
 
-2. Navigate to the `src` folder:
-   ```bash
-   cd src
-   ```
-
-3. Install Node.js dependencies:
+2. Install Node.js dependencies:
    ```bash
    npm install
-   ```
-
-4. Start local server:
-   ```bash
-   npm run start
    ```
 
 ---
 
 ## Execution Instructions
 
-1. **Run the Front-End**:
-   - Open a new terminal in the `src` folder and execute:
+1. **Run the React application**:
      ```bash
      npm run start
      ```
@@ -131,9 +120,11 @@ Ensure the following are installed:
 ## Detailed Explanations
 
 ### Interactive Visualization
+
 The web-based user interface features a case selection mechanism where users specify the test case (e.g., distribution feeder) to analyze via an input form. The data collected through this form is parsed to construct a GET request for the Quasi-Static Time Series (QSTS) module, i.e., a module for chronological time series AC distribution power flow. It is exposed as a RESTful API endpoint designed to handle GET requests from the client. Upon receiving the request, the endpoint processes it and extracts the necessary information to define and execute the specified test case. Internally, the QSTS module maintains a library of test cases that can be run to produce QSTS simulations. Once the simulation is complete, the API endpoint returns the results as a JavaScript Object Notation (JSON) object. This JSON object is then interpreted and visualized via the interactive user interface.
 
 From the interactive visualization component of the user interface, an operator can specify active buses by assigning a flexible generator or flexible load to a specific connection site. Then, it can send a POST request to the scheduling module, with the QSTS simulation data as payload. The scheduling module is designed to execute a linearized version of a three-phase unbalanced multi-period optimal power flow for a day-ahead scheduling horizon. This module generates a solution that enforces grid-level constraints while computing the maximum allowable power injection (operating envelopes) at the specified active buses for the given scenario. The computed solution is then returned to the user interface module, where the interactive visualization component enables operators to analyze and interpret the results effectively.
+
 ---
 
 ## Technologies Used
