@@ -60,7 +60,7 @@ export default function LineChartPQS(props) {
 
   return(
     <Card>
-      <h2>Operation Values: {props.selectedValue}</h2>
+      <h2>Operating envelopes: {props.selectedValue}</h2>
       <Buttons
         buttons={powers}
         activeButton={activePower}
