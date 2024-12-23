@@ -11,9 +11,8 @@ This dashboard provides interactive tools for operations planning visualization 
 5. [Execution Instructions](#execution-instructions)
 6. [Usage Guide](#usage-guide)
 7. [Detailed Explanations](#detailed-explanations)
-8. [Additional Notes](#additional-notes)
-9. [Technologies Used](#technologies-used)
-10. [Acknowledgments](#acknowledgments)
+8. [Technologies Used](#technologies-used)
+9. [Acknowledgments](#acknowledgments)
 
 ---
 
