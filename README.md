@@ -18,7 +18,7 @@ This dashboard provides interactive tools for operations planning visualization 
 
 ## Overview
 
-Distribution system visualization is challenging due to the need to analyze complex spatio-temporal relationships from multiple interconnected devices that arise from operations planning studies (e.g., Operating Envelopes). This project creates an interactive web visualization tool supported by backend processing modules for supporting distribution system analysis.
+Distribution system visualization is challenging due to the need to analyze complex spatio-temporal relationships from multiple interconnected devices when conducting operations planning studies (e.g., Operating Envelopes). This project creates an interactive web visualization tool supported by backend processing modules for supporting distribution system analysis.
 
 ---
 
@@ -26,7 +26,7 @@ Distribution system visualization is challenging due to the need to analyze comp
 
 1. **Interactive Visualization**:
    - Case selection mechanism where users specify the test case (e.g., distribution feeder) to analyze via an input form.
-   - The data collected through this form is parsed to construct a GET request for the Quasi-Static Time Series (QSTS) module, i.e., a module for chronological time series AC distribution power flow.
+   - The data collected through this form is parsed to construct a GET request for a Quasi-Static Time Series (QSTS) module, i.e., a module for chronological time series AC distribution power flow.
    - As a response, the QSTS module returns a JavaScript Object Notation (JSON) object.
    - This JSON object is then interpreted and visualized via the interactive user interface.
    - Interactions include filtering by device, select a bus an visualize its operational values, brush several buses and display their operational values for visual comparison, the ability to add/modify/remove distributed energy resources from the network. 
@@ -39,7 +39,7 @@ Distribution system visualization is challenging due to the need to analyze comp
 App/Fetching/
 ├── Charts/
 ├───────── Header/              # Header with filters by network device
-├───────── NetworkGraph/        # Network visualization
+├───────── NetworkGraph/        # Network graph
 ├───────── LineChartVM/         # Line chart for voltage magnitude
 ├───────── LineChartPQS/        # Line chart for power cuantities
 ├───────── QSTS Button          # Toggle button for visualizing QSTS results
@@ -78,7 +78,7 @@ Ensure the following are installed:
      npm run start
      ```
 
-3. **Access the Application**:
+3. **Access the application**:
    - Open your browser to the provided localhost URL.
 
 ---
