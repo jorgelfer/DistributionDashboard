@@ -50,11 +50,26 @@ App/Fetching/
 
 ## Setup and Installation
 
-### Prerequisites
-Ensure the following are installed: 
-- Node.js ([Install Here](https://nodejs.org/en/download/package-manager))
-- Git
-- Dependencies (detailed below)
+### Docker installation for Windows
+- Install WSL and reboot ([Install Here](https://learn.microsoft.com/en-us/windows/wsl/install))
+  ```bash (admin privileges required)
+  wsl --install
+  ```
+- Install Docker and reboot ([Install Here](https://docs.docker.com/desktop/setup/install/windows-install/))
+
+### Node installation
+- Install Node.js ([Install Here](https://nodejs.org/en/download/package-manager))
+
+### Processing dependencies
+1. Run custom qsts container. It will pull the image from DockerHub (Open source by GT, track code: OI2025-0062) 
+  ```bash
+  docker run -dp 5000:5000 jlfernandez87/custom_qsts
+  ```
+
+1. Run energy scheduling container, this might take a few minutes, check docker desktop. It will pull the image from DockerHub (Open source by GT, track code: OI2025-0062)
+  ```bash
+  docker run -dp 8000:8000 jlfernandez87/energy_scheduling
+  ```
 
 ### Visualization dependencies
 
