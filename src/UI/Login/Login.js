@@ -8,6 +8,7 @@ export default function Login({values, onEnteredValues, onSubmitted}) {
     { value:"123Bus" , label:"123Bus", inFile1: "IEEE123Master.dss"},
     { value:"secondary" , label:"secondary", inFile1: "Master.dss"},
     { value:"8500Node" , label:"8500Node", inFile1: "Master-unbal.dss"},
+    { value:"center_tapped" , label:"center_tapped", inFile1: "center_tap_xfmr.dss"},
   ];
 
   function handleSubmit(event) {

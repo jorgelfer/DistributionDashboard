@@ -3,6 +3,9 @@ import * as d3 from 'd3';
 import Symbol from './Symbol';
 import InitDevice from './InitDevice';
 
+import { zoom } from "d3-zoom";
+import { select } from "d3-selection";
+
 import ActionIcons from "../../Interactions/ActionIcons";
 
 export default function Net(props) {
@@ -221,6 +224,16 @@ export default function Net(props) {
       nodeEnter.call(nodeBrush) // calling a d3 brush
     }
     //////////////////////////////////
+
+    // Handle zoom
+    const zoomHandler = zoom()
+      .on("zoom", (e) => {
+        networkContainer.attr("transform", e.transform);
+    });
+
+    select(".network-graph")
+      .call(zoomHandler)
+      .on("dblclick.zoom", null);
 
   }, [props]);
 

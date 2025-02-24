@@ -22,6 +22,7 @@ export default function App() {
     "123Bus": "IEEE123Master.dss",
     "secondary": "Master.dss",
     "8500Node": "Master-unbal.dss",
+    "center_tapped": "center_tap_xfmr.dss",
     };
 
   function handleInputChange(identifier, value) {
