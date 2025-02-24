@@ -29,7 +29,6 @@ export default function NetworkGraph({margin, data, ...props}) {
   const height = 542;
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
-  const originalNodeSize = 6;
 
   const xScale = d3.scaleLinear()
     .range([0, innerWidth]);
@@ -128,7 +127,7 @@ export default function NetworkGraph({margin, data, ...props}) {
             margin={margin}
             data={network}
             activeLayer={activeLayer}
-            originalNodeSize={originalNodeSize}
+            originalNodeSize={props.nodeSize}
             xScale={xScale}
             yScale={yScale}
             linkScale={linkScale}
@@ -155,7 +154,7 @@ export default function NetworkGraph({margin, data, ...props}) {
             margin={margin}
             data={network}
             activeLayer={activeLayer}
-            originalNodeSize={originalNodeSize}
+            originalNodeSize={props.nodeSize}
             xScale={xScale}
             yScale={yScale}
             linkScale={linkScale}
@@ -180,7 +179,7 @@ export default function NetworkGraph({margin, data, ...props}) {
             margin={margin}
             data={network}
             activeLayer={activeLayer}
-            originalNodeSize={originalNodeSize}
+            originalNodeSize={props.nodeSize}
             xScale={xScale}
             yScale={yScale}
             linkScale={linkScale}

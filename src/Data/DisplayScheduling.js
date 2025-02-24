@@ -3,7 +3,7 @@ import Charts from '../Charts/Charts';
 import Error from '../UI/Error/Error';
 import { fetchSchedulingData } from './https';
 
-export default function DisplayScheduling({payload, onSchedulingData}) {
+export default function DisplayScheduling({payload, printRef, onSchedulingData, nodeSize}) {
   console.log("payload", payload);
   const {loading, data, error} = useFetch(fetchSchedulingData, payload);
 
@@ -17,7 +17,11 @@ export default function DisplayScheduling({payload, onSchedulingData}) {
     <>
       {loading && <div className="loading">Loading...</div>}
       {!loading && <>
-        <Charts data={data} />
+        <Charts 
+          data={data} 
+          printRef={printRef} 
+          nodeSize={nodeSize}
+        />
       </>}
     </>
   ) 

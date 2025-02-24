@@ -12,17 +12,17 @@ export default function App() {
 
   const [enteredCase, setEnteredCase] = useState({
     networkModel: "13Bus",
-    inFile1: "IEEE13Nodeckt.dss"
+    inFile1: "IEEE13Nodeckt.dss",
   });
-
 
   const infile1_map = { 
     "3Bus" : "case3_unbalanced.dss",
     "4Bus" : "4Bus-DY.dss",
     "13Bus": "IEEE13Nodeckt.dss",
-    "123Bus": "IEEE123Master.dss"
+    "123Bus": "IEEE123Master.dss",
+    "secondary": "Master.dss",
+    "8500Node": "Master-unbal.dss",
     };
-  
 
   function handleInputChange(identifier, value) {
     setEnteredCase(prevCase => ({
@@ -33,7 +33,7 @@ export default function App() {
     if (identifier === "networkModel") {
       setEnteredCase(prevCase => ({
         ...prevCase,
-        inFile1: infile1_map[value]
+        inFile1: infile1_map[value],
       }))
     } 
   }

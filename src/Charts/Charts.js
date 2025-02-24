@@ -52,6 +52,7 @@ export default function Charts(props) {
             colorScale={colorScale}
             selectedValue={selectedValue}
             onSelectBus={handleSelectBus}
+            nodeSize={props.nodeSize}
           />
           {selectedBuses.buses.length > 0 && 
           <p className="form-actions">

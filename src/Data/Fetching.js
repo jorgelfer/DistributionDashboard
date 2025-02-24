@@ -51,17 +51,27 @@ export default function Fetching({networkModel, inFile1}) {
       {!isReporting && !isScheduling && <>
           {loading && <div className="loading">Loading...</div>}
           {!loading && <>
-            <Charts data={data} printRef={printRef}/>
+            <Charts 
+            data={data} 
+            printRef={printRef} 
+            nodeSize={networkModel === "8500Node" ? 2 : 5}
+            />
           </>}
        </>}
       {!isReporting && isScheduling && schedulingData === null && <>
       <DisplayScheduling 
         payload={data}
+        printRef={printRef} 
         onSchedulingData={handleSchedulingData}
+        nodeSize={networkModel === "8500Node" ? 2 : 5}
       />
       </>}
       {!isReporting && isScheduling && schedulingData !== null && <>
-        <Charts data={schedulingData} />
+        <Charts 
+          data={schedulingData} 
+          printRef={printRef} 
+          nodeSize={networkModel === "8500Node" ? 2 : 5}
+          />
       </>}
       <div className="buttons">
         <Button

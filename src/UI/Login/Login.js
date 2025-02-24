@@ -6,6 +6,8 @@ export default function Login({values, onEnteredValues, onSubmitted}) {
     { value:"3Bus" , label:"3Bus", inFile1: "3Bus-DY.dss"},
     { value:"4Bus" , label:"4Bus", inFile1: "4Bus-DY.dss"},
     { value:"123Bus" , label:"123Bus", inFile1: "IEEE123Master.dss"},
+    { value:"secondary" , label:"secondary", inFile1: "Master.dss"},
+    { value:"8500Node" , label:"8500Node", inFile1: "Master-unbal.dss"},
   ];
 
   function handleSubmit(event) {
