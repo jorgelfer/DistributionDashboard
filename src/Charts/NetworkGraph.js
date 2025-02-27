@@ -58,6 +58,50 @@ export default function NetworkGraph({margin, data, ...props}) {
     network = JSON.parse(JSON.stringify(data));
   }, [data, props.selectedValue]);
 
+  const handleDeleteBuses = useCallback(buses => {
+
+    // delete the buses from the data
+    data['bus'] = data['bus'].filter(f => !buses.includes(f.uid));
+    // data['bus'] = data['bus'].filter(f => console.log(f.uid));
+
+    // delete associated branches
+    data['branch'] = data['branch'].filter(f => !buses.includes(f.source) && !buses.includes(f.target));
+
+    // delete isolated buses
+    data['bus'] = data['bus'].filter(f => {
+      return data['branch'].some(d => d.source === f.uid || d.target === f.uid);
+    });
+
+    // delete associated loads
+    data['load'] = data['load'].filter(f => !buses.includes(f.bus));
+
+    // delete associated capacitors
+    data['capacitor'] = data['capacitor'].filter(f => !buses.includes(f.bus));
+
+    // delete asocciated batteries
+    if (data['battery']) {
+      data['battery'] = data['battery'].filter(f => !buses.includes(f.bus));
+    }
+
+    // delete associated dr_load
+    if (data['dr_load']) {
+      data['dr_load'] = data['dr_load'].filter(f => !buses.includes(f.bus));
+    }
+
+    // delete associated flex_gen
+    if (data['flex_gen']) {
+      data['flex_gen'] = data['flex_gen'].filter(f => !buses.includes(f.bus));
+    }
+
+    // delete associated flex_load
+    if (data['flex_load']) {
+      data['flex_load'] = data['flex_load'].filter(f => !buses.includes(f.bus));
+    }
+
+    // update network data
+    network = JSON.parse(JSON.stringify(data));
+  }, [data, props.selectedValue]);
+
   // active layer
   const [activeLayer, setActiveLayer] = useState("react");
   // handle layer selection
@@ -137,6 +181,7 @@ export default function NetworkGraph({margin, data, ...props}) {
             onSelectBus={props.onSelectBus}
             onSelectDevice={handleSelectDevice}
             onSubmitDevice={handleSubmitDevice}
+            onDeleteBuses={handleDeleteBuses}
             onSelectedAction={handleSelectedAction}
           />
         </ChartContainer>

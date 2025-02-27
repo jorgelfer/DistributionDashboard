@@ -30,10 +30,10 @@ export default function ForceGraph(props) {
   });
 
   // available actions
-  if (["flow", "vsource"].includes(props.selectedValue)) {
+  if (["flow"].includes(props.selectedValue)) {
     actions = actions.filter(f => f.value !== "plus");
     actions = actions.filter(f => f.value !== "brush");
-  } else if (["vm", "load", "mismatch"].includes(props.selectedValue)) {
+  } else if (["vsource", "load", "mismatch"].includes(props.selectedValue)) {
     actions = actions.filter(f => f.value !== "plus");
   } 
 
@@ -65,6 +65,7 @@ export default function ForceGraph(props) {
     console.log(d);
     props.onSelectBus([d]);
   }
+
 
   // Handlers for click events on node groups
   function group_click(event) {
@@ -153,6 +154,13 @@ export default function ForceGraph(props) {
           return isBrushed(brushedArea, props.xScale(d.x), props.yScale(d.y));
         }) 
         props.onSelectBus(buses);
+
+        window.onkeydown = function(event) {
+          if (event.key === "Delete") {
+            // console.log(buses.map(d => d.uid));
+            props.onDeleteBuses(buses.map(d => d.uid));
+          }
+        };
       })
   }, [props]);
 
@@ -166,6 +174,7 @@ export default function ForceGraph(props) {
       }
   }
   ////////////////////////////////////
+
 
   return (
     <>
