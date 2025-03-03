@@ -54,7 +54,7 @@ export default function Fetching({networkModel, inFile1}) {
             <Charts 
             data={data} 
             printRef={printRef} 
-            nodeSize={networkModel === "8500Node" ? 2 : 5}
+            nodeSize={networkModel.includes("8500Node") ? 2 : 5}
             />
           </>}
        </>}
@@ -63,14 +63,14 @@ export default function Fetching({networkModel, inFile1}) {
         payload={data}
         printRef={printRef} 
         onSchedulingData={handleSchedulingData}
-        nodeSize={networkModel === "8500Node" ? 2 : 5}
+        nodeSize={networkModel.includes("8500Node") ? 2 : 5}
       />
       </>}
       {!isReporting && isScheduling && schedulingData !== null && <>
         <Charts 
           data={schedulingData} 
           printRef={printRef} 
-          nodeSize={networkModel === "8500Node" ? 2 : 5}
+          nodeSize={networkModel.includes("8500Node") ? 2 : 5}
           />
       </>}
       <div className="buttons">

@@ -24,7 +24,7 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
         };
     })
     // push lower limit 
-    const vm_lb = 1 - (isNaN(network["ansi"]) ? 0.05 : +network["ansi"])
+    const vm_lb = 1 - (isNaN(network["ansi"]) ? 0.07 : +network["ansi"])
     network["time"].forEach((d, i) => {
         vdata.push({
             "time": dateParser(d),
@@ -34,7 +34,7 @@ export function updateData(network, selectedValue, selectedBuses, dateParser) {
         });
     })
     // push upper limit 
-    const vm_ub = 1 + (isNaN(network["ansi"]) ? 0.05 : +network["ansi"])
+    const vm_ub = 1 + (isNaN(network["ansi"]) ? 0.07 : +network["ansi"])
     network["time"].forEach((d, i) => {
         vdata.push({
             "time": dateParser(d),

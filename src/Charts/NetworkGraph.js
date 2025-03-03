@@ -60,6 +60,7 @@ export default function NetworkGraph({margin, data, ...props}) {
 
   const handleDeleteBuses = useCallback(buses => {
 
+    console.log(buses);
     // delete the buses from the data
     data['bus'] = data['bus'].filter(f => !buses.includes(f.uid));
     // data['bus'] = data['bus'].filter(f => console.log(f.uid));

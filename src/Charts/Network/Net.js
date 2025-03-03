@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import Symbol from './Symbol';
 import InitDevice from './InitDevice';
+import d3Tip from 'd3-tip'
 
 import { zoom } from "d3-zoom";
 import { select } from "d3-selection";
@@ -31,6 +32,18 @@ export default function Net(props) {
     d3.selectAll(".link").remove();
 
     const networkContainer = d3.select(networkRef.current);
+
+    //////////////////////////////////
+    // tooltip
+    let toolTip = d3Tip()
+        .attr("class", "d3-tip")
+        .offset([-12, 0])
+        .html(function (event, d) {
+            return "<h5>" + d['uid'] + "</h5>";
+        });
+
+    // Call tooltip to initialize it to document and svg
+    networkContainer.call(toolTip)
 
     // active nodes
     var active_nodes = [];
@@ -73,6 +86,8 @@ export default function Net(props) {
       .join("g")
         .attr("class", "node")
         .on("click", props.selectedAction === "plus"? group_click : null)
+        .on('mouseover', toolTip.show) // Add mouse hover tooltip listeners
+        .on('mouseout', toolTip.hide)
         .call(drag); // Call drag object to setup all drag listeners for nodes
 
     // Append circles for each node in the graph
@@ -223,8 +238,9 @@ export default function Net(props) {
     if (props.selectedAction === "brush") {
       nodeEnter.call(nodeBrush) // calling a d3 brush
     }
-    //////////////////////////////////
 
+
+    //////////////////////////////////
     // Handle zoom
     const zoomHandler = zoom()
       .on("zoom", (e) => {
@@ -234,6 +250,7 @@ export default function Net(props) {
     select(".network-graph")
       .call(zoomHandler)
       .on("dblclick.zoom", null);
+
 
   }, [props]);
 
