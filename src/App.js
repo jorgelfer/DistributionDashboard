@@ -24,6 +24,7 @@ export default function App() {
     "8500Node": "Master-unbal.dss",
     "8500Node_120": "Master-unbal_120.dss",
     "8500Node_1ph": "Master.dss",
+    "8500Node_441": "Master.dss",
     "center_tapped": "center_tap_xfmr.dss",
     };
 
