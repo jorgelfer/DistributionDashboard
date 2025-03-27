@@ -41,6 +41,7 @@ export default function Fetching({networkModel, inFile1}) {
 
   const qstsURL = `http://127.0.0.1:5000/qsts/${networkModel}/${inFile1}`;
   const {loading, data, error} = useFetch(fetchQstsData, qstsURL);
+  console.log("data", data);
 
   if (error) {
     return <Error title="An error occurred during QSTS fetching!" message={error.message} />;

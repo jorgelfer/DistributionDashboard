@@ -17,7 +17,7 @@ export default function App() {
 
   const infile1_map = { 
     "3Bus" : "case3_unbalanced.dss",
-    "4Bus" : "4Bus-DY.dss",
+    "4Bus" : "4Bus-DY-reg.dss",
     "13Bus": "IEEE13Nodeckt.dss",
     "123Bus": "IEEE123Master.dss",
     "secondary": "Master.dss",
