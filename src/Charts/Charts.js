@@ -38,7 +38,7 @@ export default function Charts(props) {
     }));
   };
 
-  const [vdata, vextent, data, y_extent] = updateData(props.data, selectedValue, selectedBuses, dateParser);
+  const [vdata, vextent, data, y_extent] = updateData(props.data, selectedValue, selectedBuses, dateParser, props.vm_base);
 
   return (
     <>

@@ -55,6 +55,7 @@ export default function Fetching({networkModel, inFile1}) {
             data={data} 
             printRef={printRef} 
             nodeSize={networkModel.includes("8500Node") ? 2 : 5}
+            vm_base={networkModel.includes("8500Node") ? 0.07 : 0.05}
             />
           </>}
        </>}
@@ -64,6 +65,7 @@ export default function Fetching({networkModel, inFile1}) {
         printRef={printRef} 
         onSchedulingData={handleSchedulingData}
         nodeSize={networkModel.includes("8500Node") ? 2 : 5}
+        vm_base={networkModel.includes("8500Node") ? 0.07 : 0.05}
       />
       </>}
       {!isReporting && isScheduling && schedulingData !== null && <>
@@ -71,6 +73,7 @@ export default function Fetching({networkModel, inFile1}) {
           data={schedulingData} 
           printRef={printRef} 
           nodeSize={networkModel.includes("8500Node") ? 2 : 5}
+          vm_base={networkModel.includes("8500Node") ? 0.07 : 0.05}
           />
       </>}
       <div className="buttons">
