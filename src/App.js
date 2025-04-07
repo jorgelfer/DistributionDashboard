@@ -22,9 +22,10 @@ export default function App() {
     "123Bus": "IEEE123Master.dss",
     "secondary": "Master.dss",
     "8500Node": "Master-unbal.dss",
-    "8500Node_120": "Master-unbal_120.dss",
+    "8500Node_120": "Master-unbal.dss",
     "8500Node_1ph": "Master.dss",
     "8500Node_441": "Master.dss",
+    "8500Node_510": "Master-unbal.dss",
     "center_tapped": "center_tap_xfmr.dss",
     };
 

@@ -41,6 +41,7 @@ export default function Fetching({networkModel, inFile1}) {
 
   const qstsURL = `http://127.0.0.1:5000/qsts/${networkModel}/${inFile1}`;
   const {loading, data, error} = useFetch(fetchQstsData, qstsURL);
+  console.log("data", data);
 
   if (error) {
     return <Error title="An error occurred during QSTS fetching!" message={error.message} />;
@@ -54,8 +55,8 @@ export default function Fetching({networkModel, inFile1}) {
             <Charts 
             data={data} 
             printRef={printRef} 
-            nodeSize={networkModel.includes("8500Node") ? 2 : 5}
-            vm_base={networkModel.includes("8500Node") ? 0.07 : 0.05}
+            nodeSize={networkModel.includes("8500Node") ? 3 : 5}
+            vm_base={networkModel.includes("8500Node") ? 0.05 : 0.05}
             />
           </>}
        </>}
