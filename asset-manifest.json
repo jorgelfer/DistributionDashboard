@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/DistributionDashboard/static/css/main.85a7708c.css",
+    "main.js": "/DistributionDashboard/static/js/main.cf8a5562.js",
+    "static/js/213.60aabf5a.chunk.js": "/DistributionDashboard/static/js/213.60aabf5a.chunk.js",
+    "static/js/732.f8794d09.chunk.js": "/DistributionDashboard/static/js/732.f8794d09.chunk.js",
+    "static/js/453.dd9112b5.chunk.js": "/DistributionDashboard/static/js/453.dd9112b5.chunk.js",
+    "static/media/brush.png": "/DistributionDashboard/static/media/brush.dbef956edef8c57c7cb5.png",
+    "static/media/cursor.png": "/DistributionDashboard/static/media/cursor.c998a5320f2ddd59c5bd.png",
+    "index.html": "/DistributionDashboard/index.html",
+    "main.85a7708c.css.map": "/DistributionDashboard/static/css/main.85a7708c.css.map",
+    "main.cf8a5562.js.map": "/DistributionDashboard/static/js/main.cf8a5562.js.map",
+    "213.60aabf5a.chunk.js.map": "/DistributionDashboard/static/js/213.60aabf5a.chunk.js.map",
+    "732.f8794d09.chunk.js.map": "/DistributionDashboard/static/js/732.f8794d09.chunk.js.map",
+    "453.dd9112b5.chunk.js.map": "/DistributionDashboard/static/js/453.dd9112b5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.85a7708c.css",
+    "static/js/main.cf8a5562.js"
+  ]
+}
