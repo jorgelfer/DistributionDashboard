@@ -5,15 +5,10 @@ import Charts from "../Charts/Charts";
 import Error from "../UI/Error/Error";
 import { useQuery } from "@tanstack/react-query";
 
-// import { fetchOpenDSSData, fetchSchedulingData, fetchFBSData } from "./https";
+import { fetchOpenDSSData } from "./https";
 
 import { defineFetch } from "./defineFetch";
-
-// const solve_layers = [
-//   { id: "opendss_qsts", label: "OpenDSS QSTS" },
-//   { id: "fbs_qsts", label: "FBS QSTS" },
-//   { id: "energy_scheduling", label: "Energy Scheduling" },
-// ];
+import ShowScheduling from "./ShowScheduling";
 
 export default function Fetching({
   networkModel,
@@ -21,37 +16,10 @@ export default function Fetching({
   enteredCase,
   onActiveData,
 }) {
-  // const [enteredCase, setEnteredCase] = useState({
-  //   activeLayer: "opendss_qsts",
-  //   activeData: null,
-  // });
-
-  // // handle layer selection
-  // function layerSelectionHandler(id) {
-  //   if (enteredCase.activeLayer !== id) {
-  //     setEnteredCase((prevState) => ({
-  //       ...prevState,
-  //       activeLayer: id,
-  //     }));
-  //   }
-  // }
-
-  // function activeDataHandler(data) {
-  //   setEnteredCase((prevState) => ({
-  //     ...prevState,
-  //     activeData: data,
-  //   }));
-  // }
-
-  let { payload, qkey, fetchFn } = defineFetch(
-    enteredCase,
-    networkModel,
-    inFile1
-  );
-
+  let qstsURL = `http://127.0.0.1:5000/qsts/${networkModel}/${inFile1}`;
   let { data, isPending, isError, error } = useQuery({
-    queryKey: qkey,
-    queryFn: () => fetchFn(payload),
+    queryKey: ["qstsData", networkModel, inFile1],
+    queryFn: () => fetchOpenDSSData(qstsURL),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
@@ -79,15 +47,17 @@ export default function Fetching({
     );
   }
 
-  // onActiveData(data);
   return (
     <>
-      {content}
-      {/* <Buttons
-        buttons={solve_layers}
-        activeButton={enteredCase.activeLayer}
-        onButtonSelection={layerSelectionHandler}
-      /> */}
+      {enteredCase.activeLayer === "opendss_qsts" && content}
+      {enteredCase.activeLayer === "energy_scheduling" && (
+        <ShowScheduling
+          networkModel={networkModel}
+          inFile1={inFile1}
+          data={data}
+          onActiveData={onActiveData}
+        />
+      )}
     </>
   );
 }
