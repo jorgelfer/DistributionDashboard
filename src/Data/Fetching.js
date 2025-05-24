@@ -43,8 +43,43 @@ export default function Fetching({
   //   }));
   // }
 
-  let content = defineFetch(enteredCase, networkModel, inFile1);
+  let { payload, qkey, fetchFn } = defineFetch(
+    enteredCase,
+    networkModel,
+    inFile1
+  );
 
+  let { data, isPending, isError, error } = useQuery({
+    queryKey: qkey,
+    queryFn: () => fetchFn(payload),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  let content;
+  if (isPending) {
+    content = <div className="loading">Loading...</div>;
+  }
+
+  if (isError) {
+    content = (
+      <Error
+        title={`An error occurred during ${enteredCase.activeLayer} fetching!`}
+        message={error.info?.message || "Failed to fetch the data"}
+      />
+    );
+  }
+
+  if (data) {
+    content = (
+      <Charts
+        data={data}
+        nodeSize={networkModel.includes("8500Node") ? 3 : 5}
+        vm_base={networkModel.includes("8500Node") ? 0.05 : 0.05}
+      />
+    );
+  }
+
+  // onActiveData(data);
   return (
     <>
       {content}
