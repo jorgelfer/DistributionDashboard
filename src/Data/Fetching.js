@@ -4,12 +4,26 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchOpenDSSData } from "./https";
 import ShowScheduling from "./ShowScheduling";
 
-export default function Fetching({
-  networkModel,
-  inFile1,
-  enteredCase,
-  onActiveData,
-}) {
+import { useState } from "react";
+import Buttons from "../Interactions/Buttons";
+
+const solve_layers = [
+  { id: "opendss_qsts", label: "OpenDSS QSTS" },
+  { id: "fbs_qsts", label: "FBS QSTS" },
+  { id: "energy_scheduling", label: "Energy Scheduling" },
+];
+
+export default function Fetching({ networkModel, inFile1 }) {
+  // active layer
+  const [activeLayer, setActiveLayer] = useState("opendss_qsts");
+
+  // handle layer selection
+  function layerSelectionHandler(id) {
+    if (activeLayer !== id) {
+      setActiveLayer(id);
+    }
+  }
+
   let qstsURL = `http://127.0.0.1:5000/qsts/${networkModel}/${inFile1}`;
   let { data, isPending, isError, error } = useQuery({
     queryKey: ["qstsData", networkModel, inFile1],
@@ -25,7 +39,7 @@ export default function Fetching({
   if (isError) {
     content = (
       <Error
-        title={`An error occurred during ${enteredCase.activeLayer} fetching!`}
+        title={`An error occurred during ${activeLayer} fetching!`}
         message={error.info?.message || "Failed to fetch the data"}
       />
     );
@@ -43,16 +57,21 @@ export default function Fetching({
 
   return (
     <>
-      {enteredCase.activeLayer === "opendss_qsts" ? (
+      {activeLayer === "opendss_qsts" ? (
         content
       ) : (
         <ShowScheduling
           networkModel={networkModel}
           inFile1={inFile1}
           openDSSData={data}
-          enteredCase={enteredCase}
+          activeLayer={activeLayer}
         />
       )}
+      <Buttons
+        buttons={solve_layers}
+        activeButton={activeLayer}
+        onButtonSelection={layerSelectionHandler}
+      />
     </>
   );
 }

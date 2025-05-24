@@ -1,8 +1,8 @@
 import { fetchSchedulingData, fetchFBSData } from "./https";
 
-export function defineFetch(enteredCase, networkModel, inFile1) {
+export function defineFetch(activeLayer, networkModel, inFile1) {
   let qkey, fetchFn;
-  switch (enteredCase.activeLayer) {
+  switch (activeLayer) {
     case "fbs_qsts":
       qkey = ["fbsQSTSData", networkModel, inFile1];
       fetchFn = fetchFBSData;

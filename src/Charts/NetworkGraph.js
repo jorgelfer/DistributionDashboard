@@ -1,18 +1,18 @@
-import { useState, useCallback, useEffect } from 'react';
-import * as d3 from 'd3';
+import { useState, useCallback, useEffect } from "react";
+import * as d3 from "d3";
 
-import Card from '../UI/Card/Card';
-import ChartContainer from '../ChartComponents/ChartContainer';
-import Buttons from '../Interactions/Buttons';
+import Card from "../UI/Card/Card";
+import ChartContainer from "../ChartComponents/ChartContainer";
+import Buttons from "../Interactions/Buttons";
 
-import NodeBreaker from './Network/NodeBreaker';
-import Net from './Network/Net';
-import ForceGraph from './Network/ForceGraph';
+import NodeBreaker from "./Network/NodeBreaker";
+import Net from "./Network/Net";
+import ForceGraph from "./Network/ForceGraph";
 
-import GeojsonMap from './Mapping/GeojsonMap';
+import GeojsonMap from "./Mapping/GeojsonMap";
 import bronx from "./Mapping/bronx.json";
 
-import Form from '../UI/Device/Form';
+import Form from "../UI/Device/Form";
 
 const layers = [
   { id: "react", label: "React.js" },
@@ -23,85 +23,100 @@ const layers = [
   { id: "geojson", label: "Geojson" },
 ];
 
-export default function NetworkGraph({margin, data, ...props}) {
-
+export default function NetworkGraph({ margin, data, ...props }) {
   const width = 1000;
   const height = 542;
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
-  const xScale = d3.scaleLinear()
-    .range([0, innerWidth]);
+  const xScale = d3.scaleLinear().range([0, innerWidth]);
 
-  const yScale = d3.scaleLinear()
-    .range([innerHeight, 0]);
+  const yScale = d3.scaleLinear().range([innerHeight, 0]);
 
   // scales
-  const linkScale = d3.scaleSqrt()
-    .domain(d3.extent(data.branch, d => d.f_connections.length))
+  const linkScale = d3
+    .scaleSqrt()
+    .domain(d3.extent(data.branch, (d) => d.f_connections.length))
     .range([2, 6]);
 
   // The force simulation mutates links and nodes,
-  // so, make a deep copy of the dataset 
+  // so, make a deep copy of the dataset
   var network = JSON.parse(JSON.stringify(data));
 
-  const handleSubmitDevice = useCallback((device, remove) => {
-    // initialize device container
-    data[`${props.selectedValue}`] = data[`${props.selectedValue}`] || [];
-    // filter out the devices in case it is already in the network
-    data[`${props.selectedValue}`] = data[`${props.selectedValue}`].filter(f => f.uid !== device.uid);
-    // append the device to the network
-    if (!remove) {
-      data[`${props.selectedValue}`].push(device);
-    }
-    // console.log(data[`${props.selectedValue}`]);
-    network = JSON.parse(JSON.stringify(data));
-  }, [data, props.selectedValue]);
+  const handleSubmitDevice = useCallback(
+    (device, remove) => {
+      // initialize device container
+      data[`${props.selectedValue}`] = data[`${props.selectedValue}`] || [];
+      // filter out the devices in case it is already in the network
+      data[`${props.selectedValue}`] = data[`${props.selectedValue}`].filter(
+        (f) => f.uid !== device.uid
+      );
+      // append the device to the network
+      if (!remove) {
+        data[`${props.selectedValue}`].push(device);
+      }
+      // console.log(data[`${props.selectedValue}`]);
+      network = JSON.parse(JSON.stringify(data));
+    },
+    [data, props.selectedValue]
+  );
 
-  const handleDeleteBuses = useCallback(buses => {
+  const handleDeleteBuses = useCallback(
+    (buses) => {
+      console.log(buses);
+      // delete the buses from the data
+      data["bus"] = data["bus"].filter((f) => !buses.includes(f.uid));
+      // data['bus'] = data['bus'].filter(f => console.log(f.uid));
 
-    console.log(buses);
-    // delete the buses from the data
-    data['bus'] = data['bus'].filter(f => !buses.includes(f.uid));
-    // data['bus'] = data['bus'].filter(f => console.log(f.uid));
+      // delete associated branches
+      data["branch"] = data["branch"].filter(
+        (f) => !buses.includes(f.source) && !buses.includes(f.target)
+      );
 
-    // delete associated branches
-    data['branch'] = data['branch'].filter(f => !buses.includes(f.source) && !buses.includes(f.target));
+      // delete isolated buses
+      data["bus"] = data["bus"].filter((f) => {
+        return data["branch"].some(
+          (d) => d.source === f.uid || d.target === f.uid
+        );
+      });
 
-    // delete isolated buses
-    data['bus'] = data['bus'].filter(f => {
-      return data['branch'].some(d => d.source === f.uid || d.target === f.uid);
-    });
+      // delete associated loads
+      data["load"] = data["load"].filter((f) => !buses.includes(f.bus));
 
-    // delete associated loads
-    data['load'] = data['load'].filter(f => !buses.includes(f.bus));
+      // delete associated capacitors
+      data["capacitor"] = data["capacitor"].filter(
+        (f) => !buses.includes(f.bus)
+      );
 
-    // delete associated capacitors
-    data['capacitor'] = data['capacitor'].filter(f => !buses.includes(f.bus));
+      // delete asocciated batteries
+      if (data["battery"]) {
+        data["battery"] = data["battery"].filter((f) => !buses.includes(f.bus));
+      }
 
-    // delete asocciated batteries
-    if (data['battery']) {
-      data['battery'] = data['battery'].filter(f => !buses.includes(f.bus));
-    }
+      // delete associated dr_load
+      if (data["dr_load"]) {
+        data["dr_load"] = data["dr_load"].filter((f) => !buses.includes(f.bus));
+      }
 
-    // delete associated dr_load
-    if (data['dr_load']) {
-      data['dr_load'] = data['dr_load'].filter(f => !buses.includes(f.bus));
-    }
+      // delete associated flex_gen
+      if (data["flex_gen"]) {
+        data["flex_gen"] = data["flex_gen"].filter(
+          (f) => !buses.includes(f.bus)
+        );
+      }
 
-    // delete associated flex_gen
-    if (data['flex_gen']) {
-      data['flex_gen'] = data['flex_gen'].filter(f => !buses.includes(f.bus));
-    }
+      // delete associated flex_load
+      if (data["flex_load"]) {
+        data["flex_load"] = data["flex_load"].filter(
+          (f) => !buses.includes(f.bus)
+        );
+      }
 
-    // delete associated flex_load
-    if (data['flex_load']) {
-      data['flex_load'] = data['flex_load'].filter(f => !buses.includes(f.bus));
-    }
-
-    // update network data
-    network = JSON.parse(JSON.stringify(data));
-  }, [data, props.selectedValue]);
+      // update network data
+      network = JSON.parse(JSON.stringify(data));
+    },
+    [data, props.selectedValue]
+  );
 
   // active layer
   const [activeLayer, setActiveLayer] = useState("react");
@@ -110,38 +125,38 @@ export default function NetworkGraph({margin, data, ...props}) {
     if (activeLayer !== id) {
       setActiveLayer(id);
     }
-  };
+  }
 
   // selected device
   const [selectedDevice, setSelectedDevice] = useState(null);
   // handle device selection
   function handleSelectDevice(device) {
     setSelectedDevice(device);
-  };
+  }
 
   // handle form change
   function handleChangeDevice(identifier, value) {
-    setSelectedDevice(prevDevice => ({
+    setSelectedDevice((prevDevice) => ({
       ...prevDevice,
-      [identifier]: value
-    }))
-  };
+      [identifier]: value,
+    }));
+  }
 
   // handle network interactions
-  const [selectedAction, setSelectedAction] = useState('cursor');
+  const [selectedAction, setSelectedAction] = useState("cursor");
   function handleSelectedAction(selectedIcon) {
     if (selectedAction !== selectedIcon) {
       setSelectedAction(selectedIcon);
     }
   }
 
-  // change action to default when a layer changes or 
+  // change action to default when a layer changes or
   // when a value is selected
   useEffect(() => {
-    setSelectedAction('cursor');
+    setSelectedAction("cursor");
   }, [activeLayer, props.selectedValue]);
 
-  return(
+  return (
     <Card>
       <h2>Network</h2>
       <Buttons
@@ -149,23 +164,24 @@ export default function NetworkGraph({margin, data, ...props}) {
         activeButton={activeLayer}
         onButtonSelection={layerSelectionHandler}
       />
-      {selectedDevice && 
-      <div className="device-form">
-        {Form(
-          props.selectedValue, 
-          selectedDevice, 
-          handleSelectDevice, 
-          handleChangeDevice,
-          handleSubmitDevice)}
-      </div>
-      }
-      {(activeLayer === "react") &&
+      {selectedDevice && (
+        <div className="device-form">
+          {Form(
+            props.selectedValue,
+            selectedDevice,
+            handleSelectDevice,
+            handleChangeDevice,
+            handleSubmitDevice
+          )}
+        </div>
+      )}
+      {activeLayer === "react" && (
         <ChartContainer
           width={width}
           height={height}
           margin={margin}
           className="network-graph"
-          >
+        >
           <ForceGraph
             innerHeight={innerHeight}
             innerWidth={innerWidth}
@@ -186,14 +202,14 @@ export default function NetworkGraph({margin, data, ...props}) {
             onSelectedAction={handleSelectedAction}
           />
         </ChartContainer>
-        }
-      {["coordinates", "force"].includes(activeLayer) &&
+      )}
+      {["coordinates", "force"].includes(activeLayer) && (
         <ChartContainer
           width={width}
           height={height}
           margin={margin}
           className="network-graph"
-          >
+        >
           <Net
             innerHeight={innerHeight}
             innerWidth={innerWidth}
@@ -213,14 +229,14 @@ export default function NetworkGraph({margin, data, ...props}) {
             onSelectedAction={handleSelectedAction}
           />
         </ChartContainer>
-        }
-      {activeLayer === "nodebreaker" && 
+      )}
+      {activeLayer === "nodebreaker" && (
         <ChartContainer
           width={width}
           height={height}
           margin={margin}
           className="network-graph"
-          >
+        >
           <NodeBreaker
             margin={margin}
             data={network}
@@ -233,14 +249,14 @@ export default function NetworkGraph({margin, data, ...props}) {
             selectedValue={props.selectedValue}
           />
         </ChartContainer>
-      }
-      {activeLayer === "geojson" &&
+      )}
+      {activeLayer === "geojson" && (
         <ChartContainer
           width={width}
           height={height}
           margin={margin}
           className="map-container"
-          >
+        >
           <GeojsonMap
             width={innerWidth}
             height={innerHeight}
@@ -251,7 +267,7 @@ export default function NetworkGraph({margin, data, ...props}) {
             selectedValue={props.selectedValue}
           />
         </ChartContainer>
-      }
+      )}
     </Card>
   );
 }

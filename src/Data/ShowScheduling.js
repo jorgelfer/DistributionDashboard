@@ -8,9 +8,9 @@ export default function ShowScheduling({
   networkModel,
   inFile1,
   openDSSData,
-  enteredCase,
+  activeLayer,
 }) {
-  const { qkey, fetchFn } = defineFetch(enteredCase, networkModel, inFile1);
+  const { qkey, fetchFn } = defineFetch(activeLayer, networkModel, inFile1);
   let { data, isPending, isError, error } = useQuery({
     queryKey: qkey,
     queryFn: () => fetchFn(openDSSData),
