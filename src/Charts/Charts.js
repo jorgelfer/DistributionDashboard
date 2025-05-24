@@ -50,7 +50,7 @@ export default function Charts(props) {
     <>
       <Header handleClick={handleClick} selectedValue={selectedValue} />
       <h1 className="main-title">Distribution System Dashboard</h1>
-      <div ref={props.printRef} className="row">
+      <div className="row">
         <div className="col-9">
           <NetworkGraph
             margin={margin}

@@ -1,80 +1,58 @@
-import { useState, useRef } from "react";
-import Button from "../UI/Button";
-import { fetchQstsData } from "./https";
-import DisplayScheduling from "./DisplayScheduling";
-import useFetch from "./useFetch";
-import Charts from "../Charts/Charts";
-import Error from "../UI/Error/Error";
+import { useState } from "react";
 import Buttons from "../Interactions/Buttons";
 
-const solve_layers = [
-  { id: "opendss_qsts", label: "OpenDSS QSTS" },
-  { id: "fbs_qsts", label: "FBS QSTS" },
-  { id: "energy_scheduling", label: "Energy Scheduling" },
-];
+import Charts from "../Charts/Charts";
+import Error from "../UI/Error/Error";
+import { useQuery } from "@tanstack/react-query";
 
-export default function Fetching({ networkModel, inFile1 }) {
-  const [enteredCase, setEnteredCase] = useState({
-    activeLayer: "opendss_qsts",
-    activeData: null,
-  });
+// import { fetchOpenDSSData, fetchSchedulingData, fetchFBSData } from "./https";
 
-  const qstsURL = `http://127.0.0.1:5000/qsts/${networkModel}/${inFile1}`;
-  const { loading, data, error } = useFetch(fetchQstsData, qstsURL);
-  console.log("data", data);
+import { defineFetch } from "./defineFetch";
 
-  if (error) {
-    return (
-      <Error
-        title="An error occurred during QSTS fetching!"
-        message={error.message}
-      />
-    );
-  }
+// const solve_layers = [
+//   { id: "opendss_qsts", label: "OpenDSS QSTS" },
+//   { id: "fbs_qsts", label: "FBS QSTS" },
+//   { id: "energy_scheduling", label: "Energy Scheduling" },
+// ];
+
+export default function Fetching({
+  networkModel,
+  inFile1,
+  enteredCase,
+  onActiveData,
+}) {
+  // const [enteredCase, setEnteredCase] = useState({
+  //   activeLayer: "opendss_qsts",
+  //   activeData: null,
+  // });
+
+  // // handle layer selection
+  // function layerSelectionHandler(id) {
+  //   if (enteredCase.activeLayer !== id) {
+  //     setEnteredCase((prevState) => ({
+  //       ...prevState,
+  //       activeLayer: id,
+  //     }));
+  //   }
+  // }
+
+  // function activeDataHandler(data) {
+  //   setEnteredCase((prevState) => ({
+  //     ...prevState,
+  //     activeData: data,
+  //   }));
+  // }
+
+  let content = defineFetch(enteredCase, networkModel, inFile1);
 
   return (
     <>
-      {!isReporting && !isScheduling && (
-        <>
-          {loading && <div className="loading">Loading...</div>}
-          {!loading && (
-            <>
-              <Charts
-                data={data}
-                printRef={printRef}
-                nodeSize={networkModel.includes("8500Node") ? 3 : 5}
-                vm_base={networkModel.includes("8500Node") ? 0.05 : 0.05}
-              />
-            </>
-          )}
-        </>
-      )}
-      {!isReporting && isScheduling && schedulingData === null && (
-        <>
-          <DisplayScheduling
-            payload={data}
-            printRef={printRef}
-            onSchedulingData={handleSchedulingData}
-            nodeSize={networkModel.includes("8500Node") ? 2 : 5}
-            vm_base={networkModel.includes("8500Node") ? 0.07 : 0.05}
-          />
-        </>
-      )}
-      {!isReporting && isScheduling && schedulingData !== null && (
-        <>
-          <Charts
-            data={schedulingData}
-            printRef={printRef}
-            nodeSize={networkModel.includes("8500Node") ? 2 : 5}
-            vm_base={networkModel.includes("8500Node") ? 0.07 : 0.05}
-          />
-        </>
-      )}
-      <Buttons
+      {content}
+      {/* <Buttons
         buttons={solve_layers}
-        activeButton={activeLayer}
+        activeButton={enteredCase.activeLayer}
         onButtonSelection={layerSelectionHandler}
-      />
+      /> */}
     </>
   );
 }

@@ -4,6 +4,7 @@
   "homepage": "https://jorgelfer.github.io/DistributionDashboard",
   "private": true,
   "dependencies": {
+    "@tanstack/react-query": "^5.76.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
