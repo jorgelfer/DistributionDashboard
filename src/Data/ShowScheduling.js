@@ -10,10 +10,20 @@ export default function ShowScheduling({
   openDSSData,
   activeLayer,
 }) {
+  // add kVA_base and formulation for running the scheduling
+  let kVA_base = 100.0;
+  let formulation = "FBS";
+  let payload = {
+    networkModel: networkModel,
+    inFile1: inFile1,
+    openDSSData: openDSSData,
+    kVA_base: kVA_base,
+    formulation: formulation,
+  };
   const { qkey, fetchFn } = defineFetch(activeLayer, networkModel, inFile1);
   let { data, isPending, isError, error } = useQuery({
     queryKey: qkey,
-    queryFn: () => fetchFn(openDSSData),
+    queryFn: () => fetchFn(payload),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
   let content;
