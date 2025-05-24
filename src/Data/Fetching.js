@@ -1,13 +1,7 @@
-import { useState } from "react";
-import Buttons from "../Interactions/Buttons";
-
 import Charts from "../Charts/Charts";
 import Error from "../UI/Error/Error";
 import { useQuery } from "@tanstack/react-query";
-
 import { fetchOpenDSSData } from "./https";
-
-import { defineFetch } from "./defineFetch";
 import ShowScheduling from "./ShowScheduling";
 
 export default function Fetching({
@@ -49,12 +43,14 @@ export default function Fetching({
 
   return (
     <>
-      {enteredCase.activeLayer === "opendss_qsts" && content}
-      {enteredCase.activeLayer === "energy_scheduling" && (
+      {enteredCase.activeLayer === "opendss_qsts" ? (
+        content
+      ) : (
         <ShowScheduling
           networkModel={networkModel}
           inFile1={inFile1}
           openDSSData={data}
+          enteredCase={enteredCase}
         />
       )}
     </>

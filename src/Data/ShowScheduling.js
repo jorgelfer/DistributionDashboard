@@ -1,13 +1,19 @@
-import { fetchSchedulingData } from "./https";
 import Charts from "../Charts/Charts";
 import Error from "../UI/Error/Error";
 import { useQuery } from "@tanstack/react-query";
 
-export default function ShowScheduling({ networkModel, inFile1, openDSSData }) {
-  console.log(openDSSData);
+import { defineFetch } from "./defineFetch";
+
+export default function ShowScheduling({
+  networkModel,
+  inFile1,
+  openDSSData,
+  enteredCase,
+}) {
+  const { qkey, fetchFn } = defineFetch(enteredCase, networkModel, inFile1);
   let { data, isPending, isError, error } = useQuery({
-    queryKey: ["energySchedulingData", networkModel, inFile1],
-    queryFn: () => fetchSchedulingData(openDSSData),
+    queryKey: qkey,
+    queryFn: () => fetchFn(openDSSData),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
   let content;
@@ -33,8 +39,6 @@ export default function ShowScheduling({ networkModel, inFile1, openDSSData }) {
       />
     );
   }
-
-  // onDataFetch(data);
 
   return content;
 }

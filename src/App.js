@@ -2,9 +2,6 @@ import { useState } from "react";
 import Login from "./UI/Login/Login";
 import Fetching from "./Data/Fetching";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-
-import ShowOpenDSS from "./Data/ShowOpenDSS";
-import ShowScheduling from "./Data/ShowScheduling";
 import Buttons from "./Interactions/Buttons";
 
 const infile1_map = {
