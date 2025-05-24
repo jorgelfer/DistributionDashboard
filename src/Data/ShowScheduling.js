@@ -3,15 +3,11 @@ import Charts from "../Charts/Charts";
 import Error from "../UI/Error/Error";
 import { useQuery } from "@tanstack/react-query";
 
-export default function ShowScheduling({
-  networkModel,
-  inFile1,
-  enteredCase,
-  onDataFetch,
-}) {
+export default function ShowScheduling({ networkModel, inFile1, openDSSData }) {
+  console.log(openDSSData);
   let { data, isPending, isError, error } = useQuery({
     queryKey: ["energySchedulingData", networkModel, inFile1],
-    queryFn: () => fetchSchedulingData(enteredCase.activeData),
+    queryFn: () => fetchSchedulingData(openDSSData),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
   let content;
@@ -36,9 +32,9 @@ export default function ShowScheduling({
         vm_base={networkModel.includes("8500Node") ? 0.05 : 0.05}
       />
     );
-
-    onDataFetch(data);
   }
+
+  // onDataFetch(data);
 
   return content;
 }

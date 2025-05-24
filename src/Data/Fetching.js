@@ -54,8 +54,7 @@ export default function Fetching({
         <ShowScheduling
           networkModel={networkModel}
           inFile1={inFile1}
-          data={data}
-          onActiveData={onActiveData}
+          openDSSData={data}
         />
       )}
     </>
