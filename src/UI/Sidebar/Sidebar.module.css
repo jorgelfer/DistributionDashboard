@@ -1,0 +1,23 @@
+/* Adjust the sidebar container */
+.sidebar {
+  width: 50px; /* Initially closed */
+}
+
+.sidebar.open {
+  width: 16%; /* Expanded width */
+  height: 100vh; /* Ensure it spans the full height of the viewport */
+  background-color: #06273b; /* Keep the existing background color */
+  color: white; /* Text color */
+  padding: 1rem; /* Add padding for better spacing */
+  overflow-y: auto; /* Enable scrolling for overflow content */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+}
+
+/* Adjust the title inside the sidebar */
+.sidebar-text {
+  font-size: 1.5rem; /* Increase font size */
+  margin-bottom: 1rem;
+  text-align: center; /* Center the title */
+  color: #d9e2f1; /* Use a lighter text color */
+  font-weight: bold;
+}

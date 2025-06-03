@@ -1,4 +1,4 @@
-const Button = props => {
+const Button = (props) => {
   return (
     <button
       className={`button ${props.isActive ? "active" : ""}`}

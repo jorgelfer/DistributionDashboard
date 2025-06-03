@@ -3,6 +3,7 @@ import Error from "../UI/Error/Error";
 import { useQuery } from "@tanstack/react-query";
 
 import { defineFetch } from "./defineFetch";
+import Sidebar from "../UI/Sidebar/Sidebar";
 
 export default function ShowScheduling({
   networkModel,
@@ -10,20 +11,13 @@ export default function ShowScheduling({
   openDSSData,
   activeLayer,
 }) {
-  // add kVA_base and formulation for running the scheduling
-  let kVA_base = 100.0;
-  let formulation = "FBS";
-  let payload = {
-    networkModel: networkModel,
-    inFile1: inFile1,
-    openDSSData: openDSSData,
-    kVA_base: kVA_base,
-    formulation: formulation,
-  };
+  // energy scheduling data
+  openDSSData["kVA_base"] = 100.0;
+  openDSSData["formulation"] = "fbs";
   const { qkey, fetchFn } = defineFetch(activeLayer, networkModel, inFile1);
   let { data, isPending, isError, error } = useQuery({
     queryKey: qkey,
-    queryFn: () => fetchFn(payload),
+    queryFn: () => fetchFn(openDSSData),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
   let content;
@@ -50,5 +44,12 @@ export default function ShowScheduling({
     );
   }
 
-  return content;
+  return (
+    <>
+      <div className="page">
+        <div className="content">{content}</div>
+        <Sidebar />
+      </div>
+    </>
+  );
 }
