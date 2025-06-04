@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { defineFetch } from "./defineFetch";
 // import Sidebar from "../UI/Sidebar/Sidebar";
 import Collapsible from "../UI/Collapsible/Collapsible";
+import EnergyScheduling from "../UI/Configuration/EnergyScheduling";
+import { useState } from "react";
 
 export default function ShowScheduling({
   networkModel,
@@ -11,9 +13,31 @@ export default function ShowScheduling({
   openDSSData,
   activeLayer,
 }) {
-  // energy scheduling data
-  openDSSData["kVA_base"] = 100.0;
-  openDSSData["formulation"] = "fbs";
+  // configuration submission
+  const [isConfSubmitted, setConfSubmitted] = useState(false);
+
+  function handleSubmitted() {
+    setConfSubmitted((curIsConfSubmitted) => !curIsConfSubmitted);
+  }
+
+  const [enteredConf, setEnteredConf] = useState({
+    formulation: "fbs",
+    kVA_base: 100.0,
+  });
+
+  function handleInputChange(identifier, value) {
+    setEnteredConf((prevCase) => ({
+      ...prevCase,
+      [identifier]: value,
+    }));
+  }
+
+  console.log(enteredConf);
+
+  // energy scheduling call
+  openDSSData["kVA_base"] = enteredConf.kVA_base;
+  openDSSData["formulation"] = enteredConf.formulation;
+
   const { qkey, fetchFn } = defineFetch(activeLayer, networkModel, inFile1);
   let { data, isPending, isError, error } = useQuery({
     queryKey: qkey,
@@ -42,19 +66,12 @@ export default function ShowScheduling({
           nodeSize={networkModel.includes("8500Node") ? 3 : 5}
           vm_base={networkModel.includes("8500Node") ? 0.05 : 0.05}
         />
-        <Collapsible
-          open={false}
-          title="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-        >
-          Consectetur adipiscing elit pellentesque habitant morbi tristique.
-          Pulvinar pellentesque habitant morbi tristique. Vel quam elementum
-          pulvinar etiam. Pulvinar pellentesque habitant morbi tristique
-          senectus et netus et. Elementum integer enim neque volutpat. Faucibus
-          in ornare quam viverra orci sagittis. Amet volutpat consequat mauris
-          nunc congue nisi vitae suscipit. Dui accumsan sit amet nulla. Proin
-          sagittis nisl rhoncus mattis. Enim nulla aliquet porttitor lacus. Arcu
-          odio ut sem nulla pharetra diam sit amet. Gravida rutrum quisque non
-          tellus orci ac auctor augue
+        <Collapsible open={false} title="Configuration">
+          <EnergyScheduling
+            values={enteredConf}
+            onEnteredValues={handleInputChange}
+            onSubmitted={handleSubmitted}
+          />
         </Collapsible>
       </>
     );
