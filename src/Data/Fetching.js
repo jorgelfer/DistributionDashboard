@@ -57,11 +57,6 @@ export default function Fetching({ networkModel, inFile1 }) {
 
   return (
     <>
-      <Buttons
-        buttons={solve_layers}
-        activeButton={activeLayer}
-        onButtonSelection={layerSelectionHandler}
-      />
       {activeLayer === "opendss_qsts" ? (
         content
       ) : (
@@ -72,6 +67,11 @@ export default function Fetching({ networkModel, inFile1 }) {
           activeLayer={activeLayer}
         />
       )}
+      <Buttons
+        buttons={solve_layers}
+        activeButton={activeLayer}
+        onButtonSelection={layerSelectionHandler}
+      />
     </>
   );
 }

@@ -96,54 +96,11 @@ a:focus {
   animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.65, 0.52) forwards;
 }
 
-.one {
-  place-self: center;
-  grid-column: 1;
-  grid-row: 1;
-  width: 100%;
-  max-width: 700px;
-}
-
-/* .row { */
-/* grid-column: 2;
-  grid-row: 1;
-  display: flex;
-  flex-wrap: wrap; */
-/* gap: -10px; */
-/* width: 100%; */
-/* max-width: 500px; */
-/* margin-left: -10px;
-  margin-right: -10px; */
-/* max-width: 500px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-left: -10px;
-  margin-right: -10px; */
-/* } */
-
-.two {
-  /* grid-column: 2;
-  grid-row: 1;
-  width: 100%;
-  max-width: 500px; */
-  flex: 0 0 100%;
-  max-width: 100%;
-}
-
 .main-title {
   justify-content: center;
   text-align: center;
 }
 
-.three {
-  /* grid-column: 2;
-  grid-row: 2;
-  width: 100%;
-  max-width: 500px; */
-  flex: 0 0 100%;
-  max-width: 100%;
-}
 .row {
   place-items: center;
   justify-content: center;
@@ -169,6 +126,12 @@ a:focus {
   flex: 0 0 100%;
   max-width: 100%;
 }
+
+.col-10 {
+  flex: 0 0 90%;
+  max-width: 90%;
+}
+
 .col-9 {
   flex: 0 0 65%;
   max-width: 75%;

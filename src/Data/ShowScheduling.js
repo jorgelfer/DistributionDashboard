@@ -43,7 +43,7 @@ export default function ShowScheduling({
           vm_base={networkModel.includes("8500Node") ? 0.05 : 0.05}
         />
         <Collapsible
-          open
+          open={false}
           title="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
         >
           Consectetur adipiscing elit pellentesque habitant morbi tristique.
