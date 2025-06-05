@@ -8,7 +8,7 @@ export default function EnergyScheduling({
   const formulations = [
     { value: "fbs", label: "Foward Backward Sweep (Linearization)" },
     { value: "bfm_polar", label: "Branch Flow Model (Exact)" },
-    { value: "bim_rect", label: "Bus Injection Model (Exact)" },
+    { value: "bim_polar", label: "Bus Injection Model (Exact)" },
   ];
 
   function handleSubmit(event) {

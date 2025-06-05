@@ -6,6 +6,7 @@ import { defineFetch } from "./defineFetch";
 import Collapsible from "../UI/Collapsible/Collapsible";
 import EnergyScheduling from "../UI/Configuration/EnergyScheduling";
 import { useState } from "react";
+import ReShowScheduling from "./ReShowScheduling";
 
 export default function ShowScheduling({
   networkModel,
@@ -20,10 +21,13 @@ export default function ShowScheduling({
     setConfSubmitted((curIsConfSubmitted) => !curIsConfSubmitted);
   }
 
-  const [enteredConf, setEnteredConf] = useState({
+  const initConf = {
     formulation: "fbs",
     kVA_base: 100.0,
-  });
+  };
+
+  // handle change in configuration
+  const [enteredConf, setEnteredConf] = useState(initConf);
 
   function handleInputChange(identifier, value) {
     setEnteredConf((prevCase) => ({
@@ -32,18 +36,23 @@ export default function ShowScheduling({
     }));
   }
 
-  console.log(enteredConf);
-
   // energy scheduling call
-  openDSSData["kVA_base"] = enteredConf.kVA_base;
-  openDSSData["formulation"] = enteredConf.formulation;
+  openDSSData["kVA_base"] = initConf.kVA_base;
+  openDSSData["formulation"] = initConf.formulation;
 
-  const { qkey, fetchFn } = defineFetch(activeLayer, networkModel, inFile1);
+  const { qkey, fetchFn } = defineFetch(
+    initConf,
+    activeLayer,
+    networkModel,
+    inFile1
+  );
+
   let { data, isPending, isError, error } = useQuery({
     queryKey: qkey,
     queryFn: () => fetchFn(openDSSData),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
+
   let content;
   if (isPending) {
     content = <div className="loading">Loading...</div>;
@@ -60,22 +69,48 @@ export default function ShowScheduling({
 
   if (data) {
     content = (
-      <>
-        <Charts
-          data={data}
-          nodeSize={networkModel.includes("8500Node") ? 3 : 5}
-          vm_base={networkModel.includes("8500Node") ? 0.05 : 0.05}
-        />
-        <Collapsible open={false} title="Configuration">
-          <EnergyScheduling
-            values={enteredConf}
-            onEnteredValues={handleInputChange}
-            onSubmitted={handleSubmitted}
-          />
-        </Collapsible>
-      </>
+      <Charts
+        data={data}
+        nodeSize={networkModel.includes("8500Node") ? 3 : 5}
+        vm_base={networkModel.includes("8500Node") ? 0.05 : 0.05}
+      />
     );
   }
 
-  return content;
+  // return (
+  //   <>
+  //     {content}
+  //     <Collapsible open={false} title="Configuration">
+  //       <EnergyScheduling
+  //         values={enteredConf}
+  //         onEnteredValues={handleInputChange}
+  //         onSubmitted={handleSubmitted}
+  //       />
+  //     </Collapsible>
+  //   </>
+  // );
+
+  return (
+    <>
+      {!isConfSubmitted ? (
+        content
+      ) : (
+        <ReShowScheduling
+          networkModel={networkModel}
+          inFile1={inFile1}
+          openDSSData={openDSSData}
+          activeLayer={activeLayer}
+          enteredConf={enteredConf}
+          isConfSubmitted={isConfSubmitted}
+        />
+      )}
+      <Collapsible open={false} title="Configuration">
+        <EnergyScheduling
+          values={enteredConf}
+          onEnteredValues={handleInputChange}
+          onSubmitted={handleSubmitted}
+        />
+      </Collapsible>
+    </>
+  );
 }
