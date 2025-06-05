@@ -1,10 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Lato:wght@400;700&display=swap");
 
-* {
-  box-sizing: border-box;
-}
-
-form {
+.form {
   width: 90%;
   max-width: 40rem;
   margin: 3rem auto;
@@ -23,11 +19,11 @@ fieldset {
   margin-bottom: 1rem;
 }
 
-.control.no-margin {
+.control-no-margin {
   margin-bottom: 0.2rem;
 }
 
-.control label {
+.control-label {
   display: block;
   font-size: 0.8rem;
   margin-bottom: 0.2rem;
@@ -36,7 +32,7 @@ fieldset {
   font-weight: bold;
 }
 
-.control input {
+.control-input {
   display: block;
   width: 100%;
   max-width: 15rem;
@@ -48,7 +44,7 @@ fieldset {
   color: #142020;
 }
 
-.control select {
+.control-select {
   display: block;
   width: 100%;
   max-width: 15rem;
@@ -120,6 +116,13 @@ fieldset {
 }
 
 .button-flat {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: none;
+  background-color: #1a1d1d;
+  color: #d9e2f1;
+  cursor: pointer;
   background-color: transparent;
   color: #9cbaba;
 }

@@ -6,7 +6,6 @@ import { defineFetch } from "./defineFetch";
 import Collapsible from "../UI/Collapsible/Collapsible";
 import EnergyScheduling from "../UI/Configuration/EnergyScheduling";
 import { useState } from "react";
-import ReShowScheduling from "./ReShowScheduling";
 
 export default function ShowScheduling({
   networkModel,
@@ -14,20 +13,11 @@ export default function ShowScheduling({
   openDSSData,
   activeLayer,
 }) {
-  // configuration submission
-  const [isConfSubmitted, setConfSubmitted] = useState(false);
-
-  function handleSubmitted() {
-    setConfSubmitted((curIsConfSubmitted) => !curIsConfSubmitted);
-  }
-
-  const initConf = {
+  // handle change in configuration
+  const [enteredConf, setEnteredConf] = useState({
     formulation: "fbs",
     kVA_base: 100.0,
-  };
-
-  // handle change in configuration
-  const [enteredConf, setEnteredConf] = useState(initConf);
+  });
 
   function handleInputChange(identifier, value) {
     setEnteredConf((prevCase) => ({
@@ -37,11 +27,14 @@ export default function ShowScheduling({
   }
 
   // energy scheduling call
-  openDSSData["kVA_base"] = initConf.kVA_base;
-  openDSSData["formulation"] = initConf.formulation;
+  openDSSData["kVA_base"] =
+    typeof enteredConf.kVA_base === "string"
+      ? parseFloat(enteredConf.kVA_base)
+      : enteredConf.kVA_base;
+  openDSSData["formulation"] = enteredConf.formulation;
 
   const { qkey, fetchFn } = defineFetch(
-    initConf,
+    enteredConf,
     activeLayer,
     networkModel,
     inFile1
@@ -77,38 +70,13 @@ export default function ShowScheduling({
     );
   }
 
-  // return (
-  //   <>
-  //     {content}
-  //     <Collapsible open={false} title="Configuration">
-  //       <EnergyScheduling
-  //         values={enteredConf}
-  //         onEnteredValues={handleInputChange}
-  //         onSubmitted={handleSubmitted}
-  //       />
-  //     </Collapsible>
-  //   </>
-  // );
-
   return (
     <>
-      {!isConfSubmitted ? (
-        content
-      ) : (
-        <ReShowScheduling
-          networkModel={networkModel}
-          inFile1={inFile1}
-          openDSSData={openDSSData}
-          activeLayer={activeLayer}
-          enteredConf={enteredConf}
-          isConfSubmitted={isConfSubmitted}
-        />
-      )}
+      {content}
       <Collapsible open={false} title="Configuration">
         <EnergyScheduling
           values={enteredConf}
           onEnteredValues={handleInputChange}
-          onSubmitted={handleSubmitted}
         />
       </Collapsible>
     </>

@@ -1,4 +1,4 @@
-import "./Login.css";
+import styles from "./Login.module.css";
 
 export default function Login({ values, onEnteredValues, onSubmitted }) {
   const networks = [
@@ -32,12 +32,15 @@ export default function Login({ values, onEnteredValues, onSubmitted }) {
   }
 
   return (
-    <form name="login_form" onSubmit={handleSubmit}>
-      <h2 className="login-header">CASE DEFINITION</h2>
-      <div className="control-row">
-        <div className="control no-margin">
-          <label htmlFor="dropdown">Network Model</label>
+    <form className={styles.form} name="login_form" onSubmit={handleSubmit}>
+      <h2 className={styles["login-header"]}>CASE DEFINITION</h2>
+      <div className={styles["control-row"]}>
+        <div className={styles["control-no-margin"]}>
+          <label htmlFor="dropdown" className={styles["control-label"]}>
+            Network Model
+          </label>
           <select
+            className={styles["control-select"]}
             id="network-model"
             value={values.networkModel}
             onChange={(event) =>
@@ -52,9 +55,12 @@ export default function Login({ values, onEnteredValues, onSubmitted }) {
             ))}
           </select>
         </div>
-        <div className="control no-margin">
-          <label htmlFor="text">InFile1</label>
+        <div className={styles["control-no-margin"]}>
+          <label htmlFor="text" className={styles["control-label"]}>
+            InFile1
+          </label>
           <input
+            className={styles["control-input"]}
             id="infile1"
             type="text"
             name="infile1"
@@ -63,11 +69,11 @@ export default function Login({ values, onEnteredValues, onSubmitted }) {
           />
         </div>
       </div>
-      <p className="form-actions">
-        <button type="reset" className="login-button button-flat">
+      <p className={styles["form-actions"]}>
+        <button type="reset" className={styles["button-flat"]}>
           Reset
         </button>
-        <button className="login-button">Run qsts</button>
+        <button className={styles["login-button"]}>Run qsts</button>
       </p>
     </form>
   );
